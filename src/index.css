@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap")
 layer(base);
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
 
 @import "tailwindcss";
 
@@ -8,6 +9,7 @@ layer(base);
 @theme {
   --font-*: initial;
   --font-outfit: Outfit, sans-serif;
+  --font-plus-jakarta: "Plus Jakarta Sans", sans-serif;
 
   --breakpoint-*: initial;
   --breakpoint-2xsm: 375px;
@@ -137,6 +139,22 @@ layer(base);
 
   --color-theme-purple-500: #7a5af8;
 
+  --color-global-1: #f8fafc;
+  --color-global-2: #f1f5f9;
+  --color-global-3: #e2e8f0;
+  --color-global-4: #cbd5e1;
+  --color-global-5: #94a3b8;
+  --color-global-6: #64748b;
+  --color-global-7: #475569;
+  --color-global-8: #334155;
+  --color-global-9: #1e293b;
+  --color-global-10: #0f172a;
+  --color-global-11: #ffffff;
+  --color-global-12: #084d9d;
+
+  --color-button-background1: #f07f44;
+  --color-button-background1Hover: #e06d32;
+
   --shadow-theme-md: 0px 4px 8px -2px rgba(16, 24, 40, 0.1),
     0px 2px 4px -2px rgba(16, 24, 40, 0.06);
   --shadow-theme-lg: 0px 12px 16px -4px rgba(16, 24, 40, 0.08),
@@ -187,6 +205,36 @@ layer(base);
   }
   body {
     @apply relative font-normal font-outfit z-1 bg-gray-50;
+  }
+}
+
+@layer components {
+  .nav-link-base {
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 500;
+    transition: opacity 0.2s ease-in-out;
+  }
+  .nav-link-base:hover {
+    opacity: 0.8;
+  }
+  @media (min-width: 768px) {
+    .nav-link-base {
+      font-size: 1rem;
+      line-height: 1.5rem;
+    }
+  }
+  .nav-link-default {
+    color: #625b71e5;
+  }
+  .nav-link-active {
+    color: #f07f44;
+    font-weight: 600;
+  }
+  .nav-link-register {
+    text-decoration: underline;
+    color: #625b71bf;
   }
 }
 

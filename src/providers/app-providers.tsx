@@ -1,4 +1,3 @@
-import { ReactQueryProvider } from './react-query-provider';
 import { AuthProvider } from '../context/auth/auth-context.provider';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../components/common/ErrorFallback';
@@ -10,9 +9,7 @@ interface IAppProviders {
 export function AppProviders({ children }: IAppProviders) {
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
-      <ReactQueryProvider>
-        <AuthProvider>{children}</AuthProvider>
-      </ReactQueryProvider>
+      <AuthProvider>{children}</AuthProvider>
     </ErrorBoundary>
   );
 }

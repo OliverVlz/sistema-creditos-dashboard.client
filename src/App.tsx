@@ -1,10 +1,8 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 
-// Layout principal del Template
 import AppLayout from "./layout/AppLayout";
 import { ScrollToTop } from "./components/common/ScrollToTop";
 
-// --- Páginas del Template ---
 import Home from "./pages/Dashboard/Home";
 import UserProfiles from "./pages/UserProfiles";
 import Calendar from "./pages/Calendar";
@@ -19,41 +17,41 @@ import Images from "./pages/UiElements/Images";
 import Videos from "./pages/UiElements/Videos";
 import LineChart from "./pages/Charts/LineChart";
 import BarChart from "./pages/Charts/BarChart";
-import SignIn from "./pages/AuthPages/SignIn";
-import SignUp from "./pages/AuthPages/SignUp";
 import NotFound from "./pages/OtherPage/NotFound";
 
-// --- Páginas de Tu Aplicación ---
 import RebuiltDashboard from "./pages/Dashboard/RebuiltDashboard";
 import ClientsPage from "./pages/ClientsPage";
 
-
-// Placeholder simple para la página de login de tu app
-function CustomLoginPage() {
-  return (
-    <div style={{ padding: "20px" }}>
-      <h1>Login de Sistema de Créditos</h1>
-      <a href="/dashboard">Ir al Dashboard</a>
-    </div>
-  );
-}
+import LandingLayout from "./components/layout/LandingLayout";
+import HomePage from "./modules/landing/pages/HomePage";
+import ServicesPage from "./modules/landing/pages/ServicesPage";
+import AboutPage from "./modules/landing/pages/AboutPage";
+import RegisterPage from "./modules/landing/pages/RegisterPage";
+import LoginPage from "./modules/landing/pages/LoginPage";
+import EjercitoNacionalPage from "./modules/landing/pages/EjercitoNacionalPage";
+import ArmadaNacionalPage from "./modules/landing/pages/ArmadaNacionalPage";
+import FuerzaAeroespacialPage from "./modules/landing/pages/FuerzaAeroespacialPage";
+import PoliciaNacionalPage from "./modules/landing/pages/PoliciaNacionalPage";
 
 export default function App() {
   return (
     <>
       <ScrollToTop />
       <Routes>
-        {/* --- Rutas de Autenticación (Públicas) --- */}
-        <Route path="/signin" element={<SignIn />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/login" element={<CustomLoginPage />} />
+        <Route element={<LandingLayout />}>
+          <Route index element={<HomePage />} />
+          <Route path="/inicio" element={<Navigate to="/" replace />} />
+          <Route path="/servicios" element={<ServicesPage />} />
+          <Route path="/sobre-nosotros" element={<AboutPage />} />
+          <Route path="/ejercito-nacional" element={<EjercitoNacionalPage />} />
+          <Route path="/armada-nacional" element={<ArmadaNacionalPage />} />
+          <Route path="/fuerza-aeroespacial" element={<FuerzaAeroespacialPage />} />
+          <Route path="/policia-nacional" element={<PoliciaNacionalPage />} />
+          <Route path="/registro" element={<RegisterPage />} />
+          <Route path="/login" element={<LoginPage />} />
+        </Route>
 
-        {/* --- Rutas dentro del Layout Principal --- */}
         <Route element={<AppLayout />}>
-          {/* Ruta principal del template */}
-          <Route index path="/" element={<Navigate to="/dashboard" replace />} />
-
-          {/* --- Rutas del Sistema de Créditos --- */}
           <Route path="/dashboard" element={<RebuiltDashboard />} />
           <Route path="/dashboard/clients" element={<ClientsPage />} />
           <Route path="/dashboard/loan-application" element={<Blank />} />
@@ -65,7 +63,6 @@ export default function App() {
           <Route path="/dashboard/settings" element={<Blank />} />
           <Route path="/dashboard/reports" element={<Blank />} />
 
-          {/* --- Páginas del Template --- */}
           <Route path="/dashboard/profile" element={<UserProfiles />} />
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/ecommerce" element={<Home />} />
@@ -82,7 +79,6 @@ export default function App() {
           <Route path="/bar-chart" element={<BarChart />} />
         </Route>
 
-        {/* Fallback Route */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
