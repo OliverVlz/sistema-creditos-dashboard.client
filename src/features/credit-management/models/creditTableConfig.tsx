@@ -1,62 +1,22 @@
 import { Column, Action } from '@share/components/table/DataTable.types'
+import { StatusBadge, LoansIndicator } from './creditTableBadges'
 
-export interface Client {
+export interface Credit {
   id: number
   firstName: string
   lastName: string
-  documentType: 'CC' | 'CE' | 'PA'
+  documentType: string
   documentNumber: string
   email: string
   phone: string
   branch: string
   rank: string
-  status: 'active' | 'inactive' | 'suspended'
+  status: string
   registrationDate: string
   loansCount: number
 }
 
-export const StatusBadge = ({ status }: { status: Client['status'] }) => {
-  const config = {
-    active: { color: 'green', label: 'Activo' },
-    inactive: { color: 'gray', label: 'Inactivo' },
-    suspended: { color: 'red', label: 'Suspendido' }
-  }
-
-  const { color, label } = config[status]
-
-  return (
-    <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-${color}-100 text-${color}-800`}>
-      <div className={`w-1.5 h-1.5 bg-${color}-400 rounded-full mr-1.5`}></div>
-      {label}
-    </span>
-  )
-}
-
-export const LoansIndicator = ({ count }: { count: number }) => {
-  let colorClass = 'text-gray-600 bg-gray-50'
-  if (count > 0) colorClass = 'text-blue-600 bg-blue-50'
-  if (count > 2) colorClass = 'text-purple-600 bg-purple-50'
-
-  return (
-    <span className={`inline-flex items-center justify-center w-8 h-8 rounded-full text-sm font-semibold ${colorClass}`}>
-      {count}
-    </span>
-  )
-}
-
-export const getBranchLabel = (branch: Client['branch']) => {
-  const labels: Record<Client['branch'], string> = {
-    ejercito: 'Ejército Nacional',
-    armada: 'Armada Nacional',
-    fuerza_aerea: 'Fuerza Aérea',
-    policia: 'Policía Nacional',
-    pensionado: 'Pensionado',
-    otro: 'Otro'
-  }
-  return labels[branch]
-}
-
-export const clientColumns: Column<Client>[] = [
+export const creditColumns: Column<Credit>[] = [
   {
     field: 'id',
     header: 'ID',
@@ -104,7 +64,8 @@ export const clientColumns: Column<Client>[] = [
     sortable: true,
     render: (row) => (
       <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-purple-50 text-purple-700 border border-purple-200">
-        {getBranchLabel(row.branch)}
+        {/* {getBranchLabel(row.branch)} */}
+        {row.branch}
       </span>
     )
   },
@@ -132,33 +93,31 @@ export const clientColumns: Column<Client>[] = [
   }
 ]
 
-// ========== CONFIGURACIÓN DE ACCIONES ==========
-
-export const clientActions: Action<Client>[] = [
+export const creditActions: Action<Credit>[] = [
   {
     icon: 'pi pi-eye',
     label: 'Ver Detalles',
     color: 'blue',
-    onClick: (client) => console.log('Ver cliente:', client.id)
+    onClick: (credit) => console.log('Ver crédito:', credit.id)
   },
   {
     icon: 'pi pi-pencil',
     label: 'Editar',
     color: 'green',
-    onClick: (client) => console.log('Editar cliente:', client.id),
-    show: (client) => client.status !== 'suspended' // Solo si no está suspendido
+    onClick: (credit) => console.log('Editar crédito:', credit.id),
+    /* show: (client) => client.status !== 'Rechazado' */
   },
   {
-    icon: 'pi pi-file-text',
+    icon: 'pi pi-list',
     label: 'Ver Solicitudes',
     color: 'purple',
-    onClick: (client) => console.log('Ver solicitudes:', client.id)
+    onClick: (credit) => console.log('Ver solicitudes:', credit.id)
   },
   {
     icon: 'pi pi-ban',
     label: 'Suspender',
     color: 'red',
-    onClick: (client) => console.log('Suspender:', client.id),
-    show: (client) => client.status === 'active' // Solo si está activo
+    onClick: (credit) => console.log('Suspender:', credit.id),
+    /* show: (user) => user.status === 'active' */
   }
 ]

@@ -2,9 +2,9 @@
 
 import { useState, useMemo } from 'react'
 import { Button } from 'primereact/button'
-import { Dropdown } from 'primereact/dropdown'
 import { DataTableProps, DataTableState } from './DataTable.types'
 import Pagination from './Pagination'
+import Dropdown, { DropdownOption } from '../../../components/ui/Dropdown'
 
 export default function DataTable<T extends { id: number | string }>({
   data,
@@ -29,7 +29,7 @@ export default function DataTable<T extends { id: number | string }>({
     selectedRows: []
   })
 
-  const itemsPerPageOptions = [
+  const itemsPerPageOptions: DropdownOption[] = [
     { label: '5', value: 5 },
     { label: '10', value: 10 },
     { label: '15', value: 15 },
@@ -127,8 +127,8 @@ export default function DataTable<T extends { id: number | string }>({
   }
 
   return (
-    <div className={`bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden ${className}`}>
-      <div className="overflow-x-auto">
+    <div className={`bg-white rounded-2xl shadow-xl border border-gray-100 ${className}`}>
+      <div className="overflow-x-auto rounded-t-2xl">
         <table className="w-full">
           {/* HEADER */}
           <thead className="bg-gray-50 border-b border-gray-200">
@@ -220,7 +220,7 @@ export default function DataTable<T extends { id: number | string }>({
 
       {/* FOOTER CON PAGINACIÓN */}
       {showPagination && sortedData.length > 0 && (
-        <div className="bg-gray-50 px-8 py-4 border-t border-gray-200">
+        <div className="bg-gray-50 px-8 py-4 border-t border-gray-200 rounded-b-2xl overflow-visible">
           <div className="flex items-center justify-between">
             {/* Items por página */}
             <div className="flex items-center gap-2">
@@ -228,7 +228,7 @@ export default function DataTable<T extends { id: number | string }>({
               <Dropdown
                 value={state.itemsPerPage}
                 options={itemsPerPageOptions}
-                onChange={(e) => handleItemsPerPageChange(e.value)}
+                onChange={(value) => handleItemsPerPageChange(value as number)}
                 className="w-20"
               />
             </div>

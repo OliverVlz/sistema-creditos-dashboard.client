@@ -1,10 +1,19 @@
-import React from 'react'
-import ClientsPage from '../components/ClientsPage'
+import UserTable from '../components/userTable'
+import PageBreadcrumb from '../../../components/common/PageBreadCrumb'
+import SearchClient from '../components/SearchClient'
+
 const UserManagementComponent = () => {
   return (
     <div>
-        <h1>User Managementaaa</h1>
-        <ClientsPage />
+      <PageBreadcrumb 
+        pageTitle="Gestión de Usuarios"
+        items={[
+          { label: "Home", path: "/dashboard" },
+          { label: "Gestión de Usuarios" }
+        ]}
+      />
+      <SearchClient />
+      <UserTable />
     </div>
   );
 };

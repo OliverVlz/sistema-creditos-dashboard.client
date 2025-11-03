@@ -21,7 +21,6 @@ import NotFound from "./pages/OtherPage/NotFound";
 
 import RebuiltDashboard from "./pages/Dashboard/RebuiltDashboard";
 import ClientsPage from "./pages/ClientsPage";
-
 import LandingLayout from "./components/layout/LandingLayout";
 import HomePage from "./modules/landing/pages/HomePage";
 import ServicesPage from "./modules/landing/pages/ServicesPage";
@@ -33,6 +32,7 @@ import ArmadaNacionalPage from "./modules/landing/pages/ArmadaNacionalPage";
 import FuerzaAeroespacialPage from "./modules/landing/pages/FuerzaAeroespacialPage";
 import PoliciaNacionalPage from "./modules/landing/pages/PoliciaNacionalPage";
 import UserManagementComponent from "./features/user-management/pages/user-management.component";
+import CreditManagementComponent from "./features/credit-management/pages/credit-managment";   
 
 export default function App() {
   return (
@@ -54,6 +54,7 @@ export default function App() {
 
         <Route element={<AppLayout />}>
           <Route path="/dashboard/gestion-de-usuarios" element={<UserManagementComponent />} />
+          <Route path="/dashboard/gestion-de-creditos" element={<CreditManagementComponent />} />
           <Route path="/dashboard" element={<RebuiltDashboard />} />
           <Route path="/dashboard/clients" element={<ClientsPage />} />
           <Route path="/dashboard/loan-application" element={<Blank />} />

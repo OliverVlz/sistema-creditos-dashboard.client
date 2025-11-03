@@ -11,6 +11,7 @@ interface SelectProps {
   onChange: (value: string) => void;
   className?: string;
   defaultValue?: string;
+  value?: string; // Prop para controlar el valor desde fuera
 }
 
 const Select: React.FC<SelectProps> = ({
@@ -19,13 +20,21 @@ const Select: React.FC<SelectProps> = ({
   onChange,
   className = "",
   defaultValue = "",
+  value: controlledValue,
 }) => {
-  // Manage the selected value
-  const [selectedValue, setSelectedValue] = useState<string>(defaultValue);
+  // Manage the selected value (solo si no está controlado)
+  const [internalValue, setInternalValue] = useState<string>(defaultValue);
+  
+  // Si se proporciona value, es controlado; si no, usa el estado interno
+  // Manejar null/undefined como cadena vacía
+  const isControlled = controlledValue !== undefined && controlledValue !== null;
+  const selectedValue = isControlled ? (controlledValue || "") : internalValue;
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
-    setSelectedValue(value);
+    if (!isControlled) {
+      setInternalValue(value);
+    }
     onChange(value); // Trigger parent handler
   };
 
@@ -36,7 +45,7 @@ const Select: React.FC<SelectProps> = ({
           ? "text-gray-800 dark:text-white/90"
           : "text-gray-400 dark:text-gray-400"
       } ${className}`}
-      value={selectedValue}
+      value={selectedValue || ""}
       onChange={handleChange}
     >
       {/* Placeholder option */}

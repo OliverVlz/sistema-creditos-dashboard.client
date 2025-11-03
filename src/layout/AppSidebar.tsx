@@ -15,6 +15,7 @@ import {
   DocsIcon,
   TaskIcon,
   BoltIcon,
+  DollarLineIcon,
 } from "../icons";
 import { useSidebar } from "../context/SidebarContext";
 
@@ -31,6 +32,11 @@ const aplicacionItems: NavItem[] = [
     icon: <UserCircleIcon />,
     name: "Gestión de Usuarios",
     path: "/dashboard/gestion-de-usuarios",
+  },
+  {
+    icon: <DollarLineIcon />, 
+    name: "Gestión de Créditos",
+    path: "/dashboard/gestion-de-creditos",
   },
   {
     icon: <GridIcon />,
