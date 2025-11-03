@@ -28,6 +28,11 @@ type NavItem = {
 // --- SECCIÓN APLICACIÓN ---
 const aplicacionItems: NavItem[] = [
   {
+    icon: <UserCircleIcon />,
+    name: "Gestión de Usuarios",
+    path: "/dashboard/gestion-de-usuarios",
+  },
+  {
     icon: <GridIcon />,
     name: "Mi Dashboard",
     path: "/dashboard",

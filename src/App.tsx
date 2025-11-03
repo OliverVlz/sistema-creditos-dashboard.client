@@ -32,6 +32,7 @@ import EjercitoNacionalPage from "./modules/landing/pages/EjercitoNacionalPage";
 import ArmadaNacionalPage from "./modules/landing/pages/ArmadaNacionalPage";
 import FuerzaAeroespacialPage from "./modules/landing/pages/FuerzaAeroespacialPage";
 import PoliciaNacionalPage from "./modules/landing/pages/PoliciaNacionalPage";
+import UserManagementComponent from "./features/user-management/pages/user-management.component";
 
 export default function App() {
   return (
@@ -52,6 +53,7 @@ export default function App() {
         </Route>
 
         <Route element={<AppLayout />}>
+          <Route path="/dashboard/gestion-de-usuarios" element={<UserManagementComponent />} />
           <Route path="/dashboard" element={<RebuiltDashboard />} />
           <Route path="/dashboard/clients" element={<ClientsPage />} />
           <Route path="/dashboard/loan-application" element={<Blank />} />
