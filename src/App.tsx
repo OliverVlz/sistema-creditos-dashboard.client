@@ -33,10 +33,13 @@ import FuerzaAeroespacialPage from "./modules/landing/pages/FuerzaAeroespacialPa
 import PoliciaNacionalPage from "./modules/landing/pages/PoliciaNacionalPage";
 import UserManagementComponent from "./features/user-management/pages/user-management.component";
 import CreditManagementComponent from "./features/credit-management/pages/credit-managment";   
+import FormCreateUser from "./features/user-management/pages/form-create-user";
+import { store } from "./store";
+import { Provider } from "react-redux";
 
 export default function App() {
   return (
-    <>
+    <Provider store={store}>
       <ScrollToTop />
       <Routes>
         <Route element={<LandingLayout />}>
@@ -54,7 +57,11 @@ export default function App() {
 
         <Route element={<AppLayout />}>
           <Route path="/dashboard/gestion-de-usuarios" element={<UserManagementComponent />} />
+          <Route path="/dashboard/crear-usuario" element={<FormCreateUser />} />
           <Route path="/dashboard/gestion-de-creditos" element={<CreditManagementComponent />} />
+
+
+
           <Route path="/dashboard" element={<RebuiltDashboard />} />
           <Route path="/dashboard/clients" element={<ClientsPage />} />
           <Route path="/dashboard/loan-application" element={<Blank />} />
@@ -84,6 +91,6 @@ export default function App() {
 
         <Route path="*" element={<NotFound />} />
       </Routes>
-    </>
+    </Provider>
   );
 }

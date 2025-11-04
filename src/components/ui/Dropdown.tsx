@@ -65,30 +65,30 @@ const Dropdown: React.FC<DropdownProps> = ({
     <div className={`relative ${className}`} ref={dropdownRef}>
       <div
         className={`
-          relative w-full h-11 rounded-lg border border-gray-300 
-          bg-white px-4 py-2.5 pr-10 
-          text-sm text-gray-800 
+          relative w-full h-11 rounded-lg border border-gray-300 dark:border-gray-600 
+          bg-white dark:bg-gray-800 px-4 py-2.5 pr-10 
+          text-sm text-gray-800 dark:text-gray-200 
           transition-colors duration-200 
           focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
-          ${disabled ? 'bg-gray-100 cursor-not-allowed opacity-50' : 'cursor-pointer hover:border-gray-400'}
+          ${disabled ? 'bg-gray-100 dark:bg-gray-700 cursor-not-allowed opacity-50' : 'cursor-pointer hover:border-gray-400 dark:hover:border-gray-500'}
           ${isOpen ? 'ring-2 ring-blue-500 border-blue-500' : ''}
         `}
         onClick={() => !disabled && setIsOpen(!isOpen)}
       >
-        <span className={value ? 'text-gray-800' : 'text-gray-400'}>
+        <span className={value ? 'text-gray-800 dark:text-gray-200' : 'text-gray-400 dark:text-gray-500'}>
           {selectedOption ? selectedOption.label : placeholder}
         </span>
         <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1">
           {showClear && value && (
             <span
-              className="text-gray-400 hover:text-gray-600 cursor-pointer"
+              className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 cursor-pointer"
               onClick={handleClear}
             >
               ×
             </span>
           )}
           <svg 
-            className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} 
+            className={`w-4 h-4 text-gray-400 dark:text-gray-500 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} 
             fill="none" 
             stroke="currentColor" 
             viewBox="0 0 24 24"
@@ -98,7 +98,7 @@ const Dropdown: React.FC<DropdownProps> = ({
         </div>
       </div>
       {isOpen && !disabled && (
-        <div className="absolute top-full left-0 right-0 z-50 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+        <div className="absolute top-full left-0 right-0 z-50 mt-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg max-h-60 overflow-y-auto">
           {options.map((option, index) => {
             const isSelected = option.value === value;
             return (
@@ -107,8 +107,8 @@ const Dropdown: React.FC<DropdownProps> = ({
                 className={`
                   px-4 py-2.5 cursor-pointer transition-colors
                   ${isSelected 
-                    ? 'bg-blue-500 text-white' 
-                    : 'text-gray-800 hover:bg-blue-50'
+                    ? 'bg-blue-500 dark:bg-blue-600 text-white' 
+                    : 'text-gray-800 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-gray-700'
                   }
                   ${index === 0 ? 'rounded-t-lg' : ''}
                   ${index === options.length - 1 ? 'rounded-b-lg' : ''}

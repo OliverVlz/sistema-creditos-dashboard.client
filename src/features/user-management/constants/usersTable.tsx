@@ -10,7 +10,7 @@ export const userColumns: Column<User>[] = [
       sortable: true,
       width: '80px',
       render: (row) => (
-        <div className="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center text-slate-600 text-sm font-medium">
+        <div className="w-auto p-2 h-8 bg-slate-100 dark:bg-slate-700 rounded-lg flex items-center justify-center text-slate-600 dark:text-slate-300 text-sm font-medium">
           {row.id}
         </div>
       )
@@ -22,10 +22,10 @@ export const userColumns: Column<User>[] = [
       sortable: true,
       render: (row) => (
         <div>
-          <div className="text-sm font-semibold text-gray-900">
+          <div className="text-sm font-semibold text-gray-900 dark:text-gray-100">
             {row.firstName} {row.lastName}
           </div>
-          <div className="text-xs text-gray-500">{row.email}</div>
+          <div className="text-xs text-gray-500 dark:text-gray-400">{row.email}</div>
         </div>
       )
     },
@@ -35,7 +35,7 @@ export const userColumns: Column<User>[] = [
       headerIcon: 'pi pi-id-card',
       sortable: true,
       render: (row) => (
-        <div className="text-sm font-medium text-gray-900">
+        <div className="text-sm font-medium text-gray-900 dark:text-gray-100">
           {row.documentType} - {row.documentNumber}
         </div>
       )
@@ -45,15 +45,15 @@ export const userColumns: Column<User>[] = [
       header: 'Email',
       sortable: true,
       render: (row) => (
-        <div className="text-sm font-medium text-gray-900">{row.email}</div>
+        <div className="text-sm font-medium text-gray-900 dark:text-gray-100">{row.email}</div>
       )
     },
     {
-      field: 'phone',
+      field: 'phoneNumber',
       header: 'Teléfono',
       sortable: true,
       render: (row) => (
-        <div className="text-sm font-medium text-gray-900">{row.phone}</div>
+        <div className="text-sm font-medium text-gray-900 dark:text-gray-100">{row.phoneNumber}</div>
       )
     },
     {
@@ -61,7 +61,7 @@ export const userColumns: Column<User>[] = [
       header: 'Rol',
       sortable: true,
       render: (row) => (
-        <div className="text-sm font-medium text-gray-900">{row.role}</div>
+        <div className="text-sm font-medium text-gray-900 dark:text-gray-100">{row.role}</div>
       )
     },
     {

@@ -6,7 +6,7 @@ export interface User {
   documentType: string
   documentNumber: string
   email: string
-  phone: string
+  phoneNumber: string
   isActive: boolean
   createdAt: string
   updatedAt: string

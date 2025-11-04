@@ -92,13 +92,13 @@ export default function DataTable<T extends { id: number | string }>({
   // Componente de ícono de ordenamiento
   const SortIcon = ({ field }: { field: keyof T }) => {
     if (state.sortField !== field) {
-      return <i className="pi pi-sort text-gray-400 ml-1 text-xs"></i>
+      return <i className="pi pi-sort text-gray-400 dark:text-gray-500 ml-1 text-xs"></i>
     }
     return (
       <i className={`ml-1 text-xs ${
         state.sortOrder === 'asc'
-          ? 'pi pi-sort-up text-blue-500'
-          : 'pi pi-sort-down text-blue-500'
+          ? 'pi pi-sort-up text-blue-500 dark:text-blue-400'
+          : 'pi pi-sort-down text-blue-500 dark:text-blue-400'
       }`}></i>
     )
   }
@@ -106,38 +106,38 @@ export default function DataTable<T extends { id: number | string }>({
   // Colores para los botones de acción
   const getActionColorClasses = (color?: string) => {
     const colorMap = {
-      blue: 'text-gray-600 hover:text-blue-600 hover:bg-blue-50',
-      green: 'text-gray-600 hover:text-green-600 hover:bg-green-50',
-      red: 'text-gray-600 hover:text-red-600 hover:bg-red-50',
-      purple: 'text-gray-600 hover:text-purple-600 hover:bg-purple-50',
-      gray: 'text-gray-600 hover:text-gray-700 hover:bg-gray-100'
+      blue: 'text-gray-600 hover:text-blue-600 hover:bg-blue-50 dark:text-gray-400 dark:hover:text-blue-400 dark:hover:bg-blue-900/20',
+      green: 'text-gray-600 hover:text-green-600 hover:bg-green-50 dark:text-gray-400 dark:hover:text-green-400 dark:hover:bg-green-900/20',
+      red: 'text-gray-600 hover:text-red-600 hover:bg-red-50 dark:text-gray-400 dark:hover:text-red-400 dark:hover:bg-red-900/20',
+      purple: 'text-gray-600 hover:text-purple-600 hover:bg-purple-50 dark:text-gray-400 dark:hover:text-purple-400 dark:hover:bg-purple-900/20',
+      gray: 'text-gray-600 hover:text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-gray-300 dark:hover:bg-gray-700'
     }
     return colorMap[color as keyof typeof colorMap] || colorMap.gray
   }
 
   if (loading) {
     return (
-      <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-12">
+      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 p-12">
         <div className="flex flex-col items-center justify-center">
-          <i className="pi pi-spin pi-spinner text-4xl text-blue-500 mb-4"></i>
-          <p className="text-gray-600">Cargando datos...</p>
+          <i className="pi pi-spin pi-spinner text-4xl text-blue-500 dark:text-blue-400 mb-4"></i>
+          <p className="text-gray-600 dark:text-gray-300">Cargando datos...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className={`bg-white rounded-2xl shadow-xl border border-gray-100 ${className}`}>
+    <div className={`bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 ${className}`}>
       <div className="overflow-x-auto rounded-t-2xl">
         <table className="w-full">
           {/* HEADER */}
-          <thead className="bg-gray-50 border-b border-gray-200">
+          <thead className="bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
             <tr>
               {columns.map((column) => (
                 <th
                   key={String(column.field)}
-                  className={`px-6 py-4 text-xs font-semibold text-gray-700 uppercase tracking-wider ${
-                    column.sortable !== false ? 'cursor-pointer hover:bg-gray-100 transition-colors' : ''
+                  className={`px-6 py-4 text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider ${
+                    column.sortable !== false ? 'cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors' : ''
                   } text-${column.align || 'left'}`}
                   style={{ width: column.width }}
                   onClick={() => column.sortable !== false && handleSort(column.field)}
@@ -154,7 +154,7 @@ export default function DataTable<T extends { id: number | string }>({
               ))}
               
               {actions.length > 0 && (
-                <th className="px-6 py-4 text-center text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                <th className="px-6 py-4 text-center text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
                   Acciones
                 </th>
               )}
@@ -162,13 +162,13 @@ export default function DataTable<T extends { id: number | string }>({
           </thead>
 
           {/* BODY */}
-          <tbody className="bg-white divide-y divide-gray-100">
+          <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-100 dark:divide-gray-700">
             {currentData.length === 0 ? (
               <tr>
                 <td colSpan={columns.length + (actions.length > 0 ? 1 : 0)} className="px-6 py-12 text-center">
                   <div className="flex flex-col items-center">
-                    <i className={`${emptyIcon} text-gray-400 text-4xl mb-4`}></i>
-                    <h3 className="text-lg font-medium text-gray-900 mb-2">
+                    <i className={`${emptyIcon} text-gray-400 dark:text-gray-500 text-4xl mb-4`}></i>
+                    <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
                       {emptyMessage}
                     </h3>
                   </div>
@@ -178,12 +178,12 @@ export default function DataTable<T extends { id: number | string }>({
               currentData.map((row, index) => (
                 <tr
                   key={`${String(row.id)}-${startIndex + index}`}
-                  className="hover:bg-gray-50 transition-colors duration-150 group"
+                  className="hover:bg-gray-50 dark:hover:bg-gray-700/70 transition-colors duration-150 group"
                 >
                   {columns.map((column) => (
                     <td
                       key={String(column.field)}
-                      className={`px-6 py-4 whitespace-nowrap text-${column.align || 'left'}`}
+                      className={`px-6 py-4 whitespace-nowrap text-${column.align || 'left'} text-gray-700 dark:text-gray-200`}
                     >
                       {column.render ? column.render(row) : String(row[column.field] || '-')}
                     </td>
@@ -220,11 +220,11 @@ export default function DataTable<T extends { id: number | string }>({
 
       {/* FOOTER CON PAGINACIÓN */}
       {showPagination && sortedData.length > 0 && (
-        <div className="bg-gray-50 px-8 py-4 border-t border-gray-200 rounded-b-2xl overflow-visible">
+        <div className="bg-gray-50 dark:bg-gray-900 px-8 py-4 border-t border-gray-200 dark:border-gray-700 rounded-b-2xl overflow-visible">
           <div className="flex items-center justify-between">
             {/* Items por página */}
             <div className="flex items-center gap-2">
-              <span className="text-gray-600 text-sm">Mostrar:</span>
+              <span className="text-gray-600 dark:text-gray-300 text-sm">Mostrar:</span>
               <Dropdown
                 value={state.itemsPerPage}
                 options={itemsPerPageOptions}
@@ -234,7 +234,7 @@ export default function DataTable<T extends { id: number | string }>({
             </div>
 
             {/* Información */}
-            <div className="text-sm text-gray-700">
+            <div className="text-sm text-gray-700 dark:text-gray-300">
               Mostrando {startIndex + 1} a {Math.min(endIndex, sortedData.length)} de {sortedData.length}
             </div>
 

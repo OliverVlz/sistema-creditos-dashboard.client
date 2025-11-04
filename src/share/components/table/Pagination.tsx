@@ -43,7 +43,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
         text
         disabled={currentPage === 1}
         onClick={() => onPageChange(currentPage - 1)}
-        className="w-8 h-8 rounded-lg disabled:opacity-50 hover:bg-gray-200"
+        className="w-8 h-8 rounded-lg disabled:opacity-50 hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-gray-300"
       />
 
       {totalPages <= 7 ? (
@@ -56,8 +56,8 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
             onClick={() => onPageChange(page)}
             className={`w-8 h-8 rounded-lg ${
               currentPage === page
-                ? 'bg-blue-500 text-white'
-                : 'hover:bg-gray-200 text-gray-700'
+                ? 'bg-blue-500 dark:bg-blue-600 text-white'
+                : 'hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
             }`}
           />
         ))
@@ -65,7 +65,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
         getPageNumbers().map((page, index) => (
           <span key={index}>
             {page === '...' ? (
-              <span className="px-2 text-gray-500">...</span>
+              <span className="px-2 text-gray-500 dark:text-gray-400">...</span>
             ) : (
               <Button
                 label={page.toString()}
@@ -74,8 +74,8 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
                 onClick={() => onPageChange(Number(page))}
                 className={`w-8 h-8 rounded-lg ${
                   currentPage === page
-                    ? 'bg-blue-500 text-white'
-                    : 'hover:bg-gray-200 text-gray-700'
+                    ? 'bg-blue-500 dark:bg-blue-600 text-white'
+                    : 'hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
                 }`}
               />
             )}
@@ -89,7 +89,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
         text
         disabled={currentPage === totalPages}
         onClick={() => onPageChange(currentPage + 1)}
-        className="w-8 h-8 rounded-lg disabled:opacity-50 hover:bg-gray-200"
+        className="w-8 h-8 rounded-lg disabled:opacity-50 hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-gray-300"
       />
     </div>
   )

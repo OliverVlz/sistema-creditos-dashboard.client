@@ -1,17 +1,19 @@
 import { User } from '../models/usersTableConfig'
 
 export const StatusBadge = ({ status }: { status: User['isActive'] }) => {
-  const config = {
-    true: { color: 'green', label: 'Activo' },
-    false: { color: 'gray', label: 'Inactivo' },
+  if (status) {
+    return (
+      <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 border border-green-200 dark:border-green-700">
+        <div className="w-1.5 h-1.5 bg-green-500 dark:bg-green-400 rounded-full mr-1.5"></div>
+        Activo
+      </span>
+    )
   }
-
-  const { color, label } = config[status ? 'true' : 'false'] as { color: string; label: string }
-
+  
   return (
-    <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-${color}-100 text-${color}-800`}>
-      <div className={`w-1.5 h-1.5 bg-${color}-400 rounded-full mr-1.5`}></div>
-      {label}
+    <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300 border border-gray-200 dark:border-gray-600">
+      <div className="w-1.5 h-1.5 bg-gray-400 dark:bg-gray-500 rounded-full mr-1.5"></div>
+      Inactivo
     </span>
   )
 }
