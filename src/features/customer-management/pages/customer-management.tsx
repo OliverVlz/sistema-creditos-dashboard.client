@@ -1,4 +1,3 @@
-import React from 'react';
 import ClientTable from '../components/clientTable';
 const CustomerManagementComponent = () => {
   return (
