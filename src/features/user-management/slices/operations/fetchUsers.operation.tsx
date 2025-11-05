@@ -10,13 +10,11 @@ import { User } from '../../models/usersTableConfig'
 export const fetchUsers = createAsyncThunk(
     'users/fetchUsers',
     async ({ page = 1, limit = 100, searchTerm = '', role = '' }: { page?: number, limit?: number, searchTerm?: string, role?: string } = {}) => {
-        // Construir parámetros dinámicamente
         const params: Record<string, string | number> = {
             page,
             limit
         }
         
-        // Solo agregar searchTerm y role si tienen valores
         if (searchTerm) params.terms = searchTerm
         if (role) params.role = role
         
