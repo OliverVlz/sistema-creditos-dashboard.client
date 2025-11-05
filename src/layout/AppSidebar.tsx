@@ -35,6 +35,11 @@ const aplicacionItems: NavItem[] = [
     path: "/dashboard/gestion-de-usuarios",
   },
   {
+    icon: <TaskIcon />,
+    name: "Gestión de Clientes",
+    path: "/gestion-de-clientes",
+  },
+  {
     icon: <DollarLineIcon />, 
     name: "Gestión de Créditos",
     path: "/dashboard/gestion-de-creditos",
@@ -43,11 +48,6 @@ const aplicacionItems: NavItem[] = [
     icon: <GridIcon />,
     name: "Mi Dashboard",
     path: "/dashboard",
-  },
-  {
-    icon: <TaskIcon />,
-    name: "Gestión de Clientes",
-    path: "/dashboard/clients",
   },
   {
     icon: <DocsIcon />,

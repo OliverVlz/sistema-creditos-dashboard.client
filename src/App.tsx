@@ -36,6 +36,7 @@ import CreditManagementComponent from "./features/credit-management/pages/credit
 import FormCreateUser from "./features/user-management/pages/form-create-user";
 import { store } from "./store";
 import { Provider } from "react-redux";
+import CustomerManagementComponent from "./features/customer-management/pages/customer-management";
 
 export default function App() {
   return (
@@ -59,6 +60,7 @@ export default function App() {
           <Route path="/dashboard/gestion-de-usuarios" element={<UserManagementComponent />} />
           <Route path="/dashboard/crear-usuario" element={<FormCreateUser />} />
           <Route path="/dashboard/gestion-de-creditos" element={<CreditManagementComponent />} />
+          <Route path="gestion-de-clientes" element={<CustomerManagementComponent />} />
 
 
 

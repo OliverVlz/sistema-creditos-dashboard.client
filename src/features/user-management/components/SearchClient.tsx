@@ -19,16 +19,15 @@ export default function SearchClient({ onFiltersChange }: SearchClientProps) {
 
   const statusOptions: DropdownOption[] = [
     { label: 'Todos los estados', value: null },
-    { label: 'Activo', value: 'active' },
-    { label: 'Inactivo', value: 'inactive' },
-    { label: 'Suspendido', value: 'suspended' }
+    { label: 'Activo', value: 'true' },
+    { label: 'Inactivo', value: 'false' },
   ]
 
   const roleOptions: DropdownOption[] = [
     { label: 'Todos los roles', value: null },
     { label: 'Administrador', value: 'ADMIN' },
-    { label: 'Asesor', value: 'ADVISOR' },
-    { label: 'Cliente', value: 'CLIENT' },
+    { label: 'Asesor', value: 'ASESOR' },
+    { label: 'Cliente', value: 'CLIENTE' },
   ]
 
   useEffect(() => {

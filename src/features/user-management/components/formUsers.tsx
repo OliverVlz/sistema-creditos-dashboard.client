@@ -53,7 +53,8 @@ const FormUsers: React.FC<FormUsersProps> = ({
   // Opciones para los selects
   const roleOptions = [
     { value: 'ADMIN', label: 'Administrador' },
-    { value: 'ADVISOR', label: 'Asesor' },
+    { value: 'ASESOR', label: 'Asesor' },
+    { value: 'CLIENTE', label: 'Cliente' },
   ];
 
 

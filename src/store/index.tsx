@@ -2,10 +2,12 @@ import { configureStore } from '@reduxjs/toolkit'
 import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux'
 import type { ThunkAction, UnknownAction } from '@reduxjs/toolkit'
 import usersReducer from '../features/user-management/slices/users.slices'
+import clientsReducer from '../features/customer-management/slices/client.slices'
 
 export const store = configureStore({
     reducer: {
         users: usersReducer,
+        clients: clientsReducer,
     },
 })
 
