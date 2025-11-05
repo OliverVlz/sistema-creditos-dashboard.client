@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useMemo } from 'react';
+import { useAppDispatch, useAppSelector, RootState } from '../../../store/index';
 import Form from '../../../components/form/Form';
 import Label from '../../../components/form/Label';
 import Input from '../../../components/form/input/InputField';
@@ -6,6 +7,9 @@ import Select from '../../../components/form/Select';
 import Button from '../../../components/ui/button/Button';
 import { EyeIcon, EyeCloseIcon, CloseIcon} from '../../../icons';
 import { FormUsersProps, UserFormData, FormErrors } from '../models/formUserModel';
+import { createUser } from '../slices/operations/createUser.operations';
+import { fetchUsers } from '../slices/operations/fetchUsers.operation';
+import swal from 'sweetalert2';
 
 
 
@@ -13,59 +17,55 @@ const FormUsers: React.FC<FormUsersProps> = ({
   initialData, 
   onSuccess,
   onError,
-  onCancel
 }) => {
+  const dispatch = useAppDispatch();
+  const { loading: reduxLoading, error: reduxError } = useAppSelector((state: RootState) => state.users);
   const isEditMode = !!initialData;
-
   // Estados del formulario
   const [formData, setFormData] = useState<UserFormData>({
-    firstname: initialData?.firstname || '',
-    lastname: initialData?.lastname || '',
+    firstName: initialData?.firstName || '',
+    lastName: initialData?.lastName || '',
     email: initialData?.email || '',
     password: initialData?.password || '',
+/*     typedocument: initialData?.typedocument || '',*/    
+   documentNumber: initialData?.documentNumber || '',
+    phoneNumber: initialData?.phoneNumber || '',
     role: initialData?.role || '',
-    typedocument: initialData?.typedocument || '',
-    numberdocument: initialData?.numberdocument || '',
-    phone: initialData?.phone || '',
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  
+  // Usar el loading de Redux si está disponible, sino usar el estado local
+  const isLoadingState = reduxLoading || isLoading;
   const [touched, setTouched] = useState<Record<keyof UserFormData, boolean>>({
-    firstname: false,
-    lastname: false,
+    firstName: false,
+    lastName: false,
     email: false,
     password: false,
+/*     typedocument: false,*/    
+    documentNumber: false,
+    phoneNumber: false,
     role: false,
-    typedocument: false,
-    numberdocument: false,
-    phone: false,
   });
 
   // Opciones para los selects
   const roleOptions = [
-    { value: 'admin', label: 'Administrador' },
-    { value: 'user', label: 'Usuario' },
-    { value: 'manager', label: 'Gerente' },
-    { value: 'analyst', label: 'Analista' },
+    { value: 'ADMIN', label: 'Administrador' },
+    { value: 'ADVISOR', label: 'Asesor' },
   ];
 
-  const documentTypeOptions = [
-    { value: 'CC', label: 'Cédula de Ciudadanía' },
-    { value: 'CE', label: 'Cédula de Extranjería' },
-    { value: 'PA', label: 'Pasaporte' },
-  ];
 
   // Validaciones con useMemo para optimización
   const validations = useMemo(() => ({
-    firstname: (value: string) => {
+    firstName: (value: string) => {
       if (!value.trim()) return 'El nombre es requerido';
       if (value.length < 2) return 'El nombre debe tener al menos 2 caracteres';
       if (!/^[a-zA-ZÀ-ÿ\u00f1\u00d1\s]+$/.test(value)) return 'El nombre solo puede contener letras y espacios';
       return '';
     },
-    lastname: (value: string) => {
+    lastName: (value: string) => {
       if (!value.trim()) return 'El apellido es requerido';
       if (value.length < 2) return 'El apellido debe tener al menos 2 caracteres';
       if (!/^[a-zA-ZÀ-ÿ\u00f1\u00d1\s]+$/.test(value)) return 'El apellido solo puede contener letras y espacios';
@@ -90,17 +90,17 @@ const FormUsers: React.FC<FormUsersProps> = ({
       if (!value.trim()) return 'El rol es requerido';
       return '';
     },
-    typedocument: (value: string) => {
+    /* typedocument: (value: string) => {
       if (!value.trim()) return 'El tipo de documento es requerido';
       return '';
-    },
-    numberdocument: (value: string) => {
+    }, */
+    documentNumber: (value: string) => {
       if (!value.trim()) return 'El número de documento es requerido';
       if (!/^[0-9]+$/.test(value)) return 'El número de documento solo puede contener números';
       if (value.length < 5) return 'El número de documento debe tener al menos 5 dígitos';
       return '';
     },
-    phone: (value: string) => {
+    phoneNumber: (value: string) => {
       if (!value.trim()) return 'El teléfono es requerido';
       if (!/^[0-9+\-\s()]+$/.test(value)) return 'Ingresa un número de teléfono válido';
       const digitsOnly = value.replace(/\D/g, '');
@@ -153,24 +153,27 @@ const FormUsers: React.FC<FormUsersProps> = ({
     validateField(field, formData[field]);
   }, [formData, validateField]);
 
-  // Submit optimizado - Maneja toda la lógica internamente
-  const handleSubmit = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log('Submit');
-    
-    if (!validateForm()) {
+  const resetForm = useCallback(() => {
       // Marcar todos los campos como tocados para mostrar errores
       const allTouched: Record<keyof UserFormData, boolean> = {
-        firstname: true,
-        lastname: true,
+        firstName: true,
+        lastName: true,
         email: true,
         password: true,
         role: true,
-        typedocument: true,
-        numberdocument: true,
-        phone: true,
+/*         typedocument: true,*/    
+        documentNumber: true,
+        phoneNumber: true,
       };
       setTouched(allTouched);
+  }, []);
+
+  // Submit optimizado - Maneja toda la lógica internamente
+  const handleSubmit = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    
+    if (!validateForm()) {
+      resetForm();
       return;
     }
 
@@ -178,10 +181,7 @@ const FormUsers: React.FC<FormUsersProps> = ({
     setErrors({});
 
     try {
-      // Preparar datos para enviar
       const dataToSubmit: UserFormData = { ...formData };
-      
-      // Si es modo edición y la contraseña está vacía, crear objeto sin password
       const finalData = isEditMode && !dataToSubmit.password.trim()
         ? (() => {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -190,43 +190,86 @@ const FormUsers: React.FC<FormUsersProps> = ({
           })()
         : dataToSubmit;
 
-      // TODO: Implementar llamada a la API aquí
-      // Ejemplo:
-      // const response = isEditMode 
-      //   ? await updateUser(initialData?.id, finalData)
-      //   : await createUser(finalData);
-      
-      console.log(isEditMode ? 'Actualizando usuario:' : 'Creando usuario:', finalData);
-
-      // Simular llamada a API
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      // Si hay callback de éxito, ejecutarlo
-      if (onSuccess) {
-        await onSuccess(dataToSubmit);
+      if (isEditMode) {
+        // TODO: Implementar actualización de usuario cuando esté disponible
+        console.log('Actualizando usuario:', finalData);
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        if (onSuccess) {
+          await onSuccess(dataToSubmit);
+        }
+      } else {
+        // Crear usuario usando Redux
+        // finalData ya incluye password si no está en modo edición
+        // @ts-expect-error - Redux Toolkit types issue with React 19
+        const createUserResult = await dispatch(createUser(dataToSubmit));
+        
+        if (createUser.fulfilled.match(createUserResult)) {
+          console.log('Usuario creado exitosamente:', createUserResult.payload);
+          
+          // Refrescar la lista de usuarios después de crear uno nuevo
+          // @ts-expect-error - Redux Toolkit types issue with React 19
+          await dispatch(fetchUsers({}));
+          
+          // Mostrar mensaje de éxito
+          await swal.fire({
+            title: '¡Éxito!',
+            text: 'Usuario creado exitosamente',
+            icon: 'success',
+            confirmButtonColor: '#FB6514',
+          });
+          
+          if (onSuccess) {
+            await onSuccess(dataToSubmit);
+          }
+        } else {
+          const errorMsg = createUserResult.error ? String(createUserResult.error) : 'Error al crear el usuario';
+          throw new Error(errorMsg);
+        }
       }
+
     } catch (error) {
       console.error('Error al guardar usuario:', error);
       
-      // Si hay callback de error, ejecutarlo
+      const errorMessage = error instanceof Error 
+        ? error.message 
+        : reduxError || 'Error al guardar el usuario. Por favor, intenta nuevamente.';
+      
+      // Mostrar error al usuario
+      await swal.fire({
+        title: 'Error',
+        text: errorMessage,
+        icon: 'error',
+        confirmButtonColor: '#FB6514',
+      });
+      
       if (onError) {
-        onError(error as Error);
+        onError(error instanceof Error ? error : new Error(errorMessage));
       } else {
-        // Mostrar error general si no hay callback
         setErrors({
-          general: 'Error al guardar el usuario. Por favor, intenta nuevamente.'
+          general: errorMessage
         });
       }
     } finally {
       setIsLoading(false);
     }
-  }, [formData, validateForm, isEditMode, onSuccess, onError]);
+  }, [formData, validateForm, isEditMode, onSuccess, onError, resetForm, dispatch, reduxError]);
 
   const handleCancel = () => {
     console.log('Cancelar');
-    if (onCancel) {
-      onCancel();
-    }
+    swal.fire({
+      title: '¿Estás seguro de querer cancelar?',
+      text: 'Todos los cambios realizados se perderán.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#FB6514',
+      confirmButtonText: 'Cancelar',
+      cancelButtonText: 'Continuar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        console.log('Cancelar');
+      }
+    });
   };
 
   return (
@@ -246,32 +289,32 @@ const FormUsers: React.FC<FormUsersProps> = ({
           {/* Primera fila: Nombre y Apellido */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <Label htmlFor="firstname">Nombre *</Label>
+              <Label htmlFor="firstName">Nombre *</Label>
               <Input
                 type="text"
-                id="firstname"
-                name="firstname"
+                id="firstName"
+                name="firstName"
                 placeholder="Ingresa el nombre"
-                value={formData.firstname}
-                onChange={(e) => handleInputChange('firstname', e.target.value)}
-                onBlur={() => handleBlur('firstname')}
-                error={!!errors.firstname && touched.firstname}
-                hint={touched.firstname ? errors.firstname : ''}
+                value={formData.firstName}
+                onChange={(e) => handleInputChange('firstName', e.target.value)}
+                onBlur={() => handleBlur('firstName')}
+                error={!!errors.firstName && touched.firstName}
+                hint={touched.firstName ? errors.firstName : ''}
               />
             </div>
 
             <div>
-              <Label htmlFor="lastname">Apellido *</Label>
+              <Label htmlFor="lastName">Apellido *</Label>
               <Input
                 type="text"
-                id="lastname"
-                name="lastname"
+                id="lastName"
+                name="lastName"
                 placeholder="Ingresa el apellido"
-                value={formData.lastname}
-                onChange={(e) => handleInputChange('lastname', e.target.value)}
-                onBlur={() => handleBlur('lastname')}
-                error={!!errors.lastname && touched.lastname}
-                hint={touched.lastname ? errors.lastname : ''}
+                value={formData.lastName}
+                onChange={(e) => handleInputChange('lastName', e.target.value)}
+                onBlur={() => handleBlur('lastName')}
+                error={!!errors.lastName && touched.lastName}
+                hint={touched.lastName ? errors.lastName : ''}
               />
             </div>
           </div>
@@ -294,49 +337,37 @@ const FormUsers: React.FC<FormUsersProps> = ({
             </div>
 
             <div>
-              <Label htmlFor="phone">Teléfono *</Label>
+              <Label htmlFor="phoneNumber">Teléfono *</Label>
               <Input
                 type="tel"
-                id="phone"
-                name="phone"
+                id="phoneNumber"
+                name="phoneNumber"
                 placeholder="300 123 4567"
-                value={formData.phone}
-                onChange={(e) => handleInputChange('phone', e.target.value)}
-                onBlur={() => handleBlur('phone')}
-                error={!!errors.phone && touched.phone}
-                hint={touched.phone ? errors.phone : ''}
+                value={formData.phoneNumber}
+                onChange={(e) => handleInputChange('phoneNumber', e.target.value)}
+                onBlur={() => handleBlur('phoneNumber')}
+                error={!!errors.phoneNumber && touched.phoneNumber}
+                hint={touched.phoneNumber ? errors.phoneNumber : ''}
               />
             </div>
           </div>
 
           {/* Tercera fila: Tipo de Documento y Número de Documento */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <Label htmlFor="typedocument">Tipo de Documento *</Label>
-              <Select
-                options={documentTypeOptions}
-                placeholder="Selecciona el tipo de documento"
-                value={formData.typedocument}
-                onChange={(value) => handleInputChange('typedocument', value)}
-                className="dark:bg-gray-900"
-              />
-              {touched.typedocument && errors.typedocument && (
-                <p className="mt-1.5 text-xs text-error-500">{errors.typedocument}</p>
-              )}
-            </div>
+
 
             <div>
-              <Label htmlFor="numberdocument">Número de Documento *</Label>
+              <Label htmlFor="documentNumber">Número de Documento *</Label>
               <Input
                 type="text"
-                id="numberdocument"
-                name="numberdocument"
+                id="documentNumber"
+                name="documentNumber"
                 placeholder="1234567890"
-                value={formData.numberdocument}
-                onChange={(e) => handleInputChange('numberdocument', e.target.value)}
-                onBlur={() => handleBlur('numberdocument')}
-                error={!!errors.numberdocument && touched.numberdocument}
-                hint={touched.numberdocument ? errors.numberdocument : ''}
+                value={formData.documentNumber}
+                onChange={(e) => handleInputChange('documentNumber', e.target.value)}
+                onBlur={() => handleBlur('documentNumber')}
+                error={!!errors.documentNumber && touched.documentNumber}
+                hint={touched.documentNumber ? errors.documentNumber : ''}
               />
             </div>
           </div>
@@ -407,16 +438,16 @@ const FormUsers: React.FC<FormUsersProps> = ({
             </Button>
             <button
               type="submit"
-              disabled={isLoading}
+              disabled={isLoadingState}
               className={`inline-flex items-center justify-center gap-2 rounded-lg transition px-5 py-3.5 text-sm ${
-                isLoading 
+                isLoadingState 
                   ? 'cursor-not-allowed opacity-50 bg-brand-300 text-white' 
                   : 'bg-brand-500 text-white shadow-theme-xs hover:bg-brand-600 disabled:bg-brand-300'
               }`}
             >
               <span className="flex items-center">
               </span>
-              {isLoading ? 'Guardando...' : isEditMode ? 'Actualizar Usuario' : 'Crear Usuario'}
+              {isLoadingState ? 'Guardando...' : isEditMode ? 'Actualizar Usuario' : 'Crear Usuario'}
             </button>
           </div>
         </Form>

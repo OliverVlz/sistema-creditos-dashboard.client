@@ -34,7 +34,7 @@ export default function SearchClient({ onFiltersChange }: SearchClientProps) {
   useEffect(() => {
     // @ts-expect-error - Redux Toolkit types issue with React 19
     dispatch(fetchUsers( { page: 1, limit: 100, searchTerm: filters.searchTerm, role: filters.role }))
-  }, [filters.searchTerm, filters.role])
+  }, [filters.searchTerm, filters.role, dispatch])
 
   const handleStatusChange = (value: string | number | null) => {
     updateFilters({ status: value as string | null })

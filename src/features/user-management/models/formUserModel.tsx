@@ -3,10 +3,10 @@ export interface UserFormData {
     lastname: string;
     email: string;
     password: string;
+/*     typedocument: string; 
+ */    documentNumber: string;
+    phoneNumber: string;
     role: string;
-    typedocument: string;
-    numberdocument: string;
-    phone: string;
   }
   
   export interface FormErrors {
@@ -14,10 +14,10 @@ export interface UserFormData {
     lastname?: string;
     email?: string;
     password?: string;
+    /* typedocument?: string; */
+    documentNumber?: string;
+    phoneNumber?: string;
     role?: string;
-    typedocument?: string;
-    numberdocument?: string;
-    phone?: string;
     general?: string;
   }
   

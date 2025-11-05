@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { User } from "../models/usersTableConfig"
 import { createAsyncFetchUsersReducer } from "./operations/fetchUsers.operation"
+import { createAsyncFetchUsersReducer as createAsyncCreateUserReducer } from "./operations/createUser.operations"
 
 
 export interface UsersState {
@@ -25,6 +26,7 @@ export const usersSlice = createSlice({
     },
     extraReducers: (builder) => {
         createAsyncFetchUsersReducer({ builder })
+        createAsyncCreateUserReducer({ builder })
     }
 })
 

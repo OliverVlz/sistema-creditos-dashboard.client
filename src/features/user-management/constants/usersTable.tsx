@@ -3,7 +3,7 @@ import { User } from '../models/usersTableConfig'
 import { StatusBadge } from './usersTableBadges'
 
 export const userColumns: Column<User>[] = [
-    {
+/*     {
       field: 'id',
       header: 'ID',
       headerIcon: 'pi pi-id-card',
@@ -14,10 +14,21 @@ export const userColumns: Column<User>[] = [
           {row.id}
         </div>
       )
+    }, */
+    {
+      field: 'documentNumber',
+      header: 'Documento',
+      headerIcon: 'pi pi-id-card',
+      sortable: true,
+      render: (row) => (
+        <div className="text-sm font-medium text-gray-900 dark:text-gray-100">
+          {row.documentNumber}
+        </div>
+      )
     },
     {
       field: 'firstName',
-      header: 'Cliente',
+      header: 'Usuario',
       headerIcon: 'pi pi-user',
       sortable: true,
       render: (row) => (
@@ -25,21 +36,11 @@ export const userColumns: Column<User>[] = [
           <div className="text-sm font-semibold text-gray-900 dark:text-gray-100">
             {row.firstName} {row.lastName}
           </div>
-          <div className="text-xs text-gray-500 dark:text-gray-400">{row.email}</div>
+          {/* <div className="text-xs text-gray-500 dark:text-gray-400">{row.email}</div> */}
         </div>
       )
     },
-    {
-      field: 'documentType',
-      header: 'Documento',
-      headerIcon: 'pi pi-id-card',
-      sortable: true,
-      render: (row) => (
-        <div className="text-sm font-medium text-gray-900 dark:text-gray-100">
-          {row.documentType} - {row.documentNumber}
-        </div>
-      )
-    },
+
     {
       field: 'email',
       header: 'Email',
