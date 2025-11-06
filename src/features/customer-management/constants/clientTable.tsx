@@ -46,7 +46,7 @@ export const clientColumns: Column<Client>[] = [
       sortable: true,
       headerIcon: 'pi pi-building',
       render: (row) => (
-        <div className="text-sm font-medium text-gray-900 dark:text-gray-100">{row.organization.name}</div>
+        <div className="text-sm font-medium text-gray-900 dark:text-gray-100">{row.organization?.name}</div>
       )
     },
     {

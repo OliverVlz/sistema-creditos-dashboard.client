@@ -17,17 +17,19 @@ export default function UserTable() {
   
 
   return (
-  <DataTable 
-  data={users} 
-  columns={userColumns}
-  actions={userActions}
-  itemsPerPage={10}
-  defaultSortField="id"
-  defaultSortOrder="asc"
-  emptyMessage="No se encontraron usuarios"
-  emptyIcon="pi pi-users"
-  loading={loading}
-  onSelectionChange={() => {}}
-  selectable={false}
-  />
+    <div>
+        <DataTable 
+        data={users} 
+        columns={userColumns}
+        actions={userActions}
+        itemsPerPage={10}
+        defaultSortField="id"
+        defaultSortOrder="asc"
+        emptyMessage="No se encontraron usuarios"
+        emptyIcon="pi pi-users"
+        loading={loading}
+        onSelectionChange={() => {}}
+        selectable={false}
+        />
+    </div>
 )}

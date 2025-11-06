@@ -1,6 +1,6 @@
 import UserTable from '../components/userTable'
 import PageBreadcrumb from '../../../components/common/PageBreadCrumb'
-import SearchClient from '../components/SearchClient'
+import SearchUsers from '../components/SearchUsers'
 
 const UserManagementComponent = () => {
   return (
@@ -20,7 +20,7 @@ const UserManagementComponent = () => {
       </div>
 
       {/* Filtros de búsqueda */}
-      <SearchClient />
+      <SearchUsers />  
 
       {/* Tabla de usuarios */}
       <div className="mt-6">

@@ -1,64 +1,86 @@
-import React, { useState, useCallback, useMemo } from 'react';
-import { useAppDispatch, useAppSelector, RootState } from '../../../store/index';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
+/* import { useAppDispatch, useAppSelector, RootState } from '../../../store/index';
+ */
+import { useAppSelector, RootState } from '../../../store/index';
 import Form from '../../../components/form/Form';
 import Label from '../../../components/form/Label';
 import Input from '../../../components/form/input/InputField';
 import Select from '../../../components/form/Select';
 import Button from '../../../components/ui/button/Button';
 import { EyeIcon, EyeCloseIcon, CloseIcon} from '../../../icons';
-import { FormUsersProps, UserFormData, FormErrors } from '../models/formUserModel';
-import { createUser } from '../slices/operations/createUser.operations';
-import { fetchUsers } from '../slices/operations/fetchUsers.operation';
+import { FormClientProps, ClientFormData, FormErrors } from '../models/formClientModel';
+/* import { createClient } from '../slices/operations/createClient.operations';
+import { fetchClients } from '../slices/operations/fetchClients.operation'; */
 import swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
+import DatePicker from '@/components/form/date-picker';
 
+import { useDispatch } from 'react-redux';
+import { fetchOrganizations } from '../slices/operations/fetchOrganizations.operation';
+import { createClient } from '../slices/operations/createClient.operations';
 
-
-const FormUsers: React.FC<FormUsersProps> = ({ 
+const FormClient: React.FC<FormClientProps> = ({ 
   initialData, 
   onSuccess,
   onError,
 }) => {
-  const dispatch = useAppDispatch();
-  const { loading: reduxLoading, error: reduxError } = useAppSelector((state: RootState) => state.users);
+  /* const dispatch = useAppDispatch(); */
+  const { loading: reduxLoading, error: reduxError } = useAppSelector((state: RootState) => state.clients);
+  const { organizations} = useAppSelector((state: RootState) => state.organizations);
   const navigate = useNavigate();
   const isEditMode = !!initialData;
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchOrganizations({ page: 1, limit: 100 }));
+}, [dispatch]);
+
+
   // Estados del formulario
-  const [formData, setFormData] = useState<UserFormData>({
-    firstName: initialData?.firstName || '',
-    lastName: initialData?.lastName || '',
+  const [formData, setFormData] = useState<ClientFormData>({
     email: initialData?.email || '',
     password: initialData?.password || '',
-/*     typedocument: initialData?.typedocument || '',*/    
-   documentNumber: initialData?.documentNumber || '',
+    firstName: initialData?.firstName || '',
+    lastName: initialData?.lastName || '',
+    address: initialData?.address || '',
+    birthDate: initialData?.birthDate || '',
+    documentNumber: initialData?.documentNumber || '',
     phoneNumber: initialData?.phoneNumber || '',
-    role: initialData?.role || '',
+    employmentStatus: initialData?.employmentStatus || '',
+    employmentStatusOther: initialData?.employmentStatusOther || '',
+    organizationId: initialData?.organizationId || '',
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   
-  // Usar el loading de Redux si está disponible, sino usar el estado local
   const isLoadingState = reduxLoading || isLoading;
-  const [touched, setTouched] = useState<Record<keyof UserFormData, boolean>>({
-    firstName: false,
-    lastName: false,
+  
+  const [touched, setTouched] = useState<Record<keyof ClientFormData, boolean>>({
     email: false,
     password: false,
-/*     typedocument: false,*/    
+    firstName: false,
+    lastName: false,
+    address: false,
+    birthDate: false,
     documentNumber: false,
     phoneNumber: false,
-    role: false,
+    employmentStatus: false,
+    employmentStatusOther: false,
+    organizationId: false,
   });
 
   // Opciones para los selects
-  const roleOptions = [
-    { value: 'ADMIN', label: 'Administrador' },
-    { value: 'ASESOR', label: 'Asesor' },
-    { value: 'CLIENTE', label: 'Cliente' },
+  const employmentStatusOptions = [
+    { value: 'ACTIVE', label: 'Activo' },
+    { value: 'JUBILADO', label: 'Jubilado' }
   ];
 
+  const organizationOptions = organizations.map((organization) => ({
+    value: organization.id,
+    label: organization.name,
+  }));
 
   // Validaciones con useMemo para optimización
   const validations = useMemo(() => ({
@@ -80,7 +102,6 @@ const FormUsers: React.FC<FormUsersProps> = ({
       return '';
     },
     password: (value: string) => {
-      // En modo edición, la contraseña es opcional
       if (isEditMode && !value.trim()) return '';
       if (!value.trim()) return 'La contraseña es requerida';
       if (value.length < 8) return 'La contraseña debe tener al menos 8 caracteres';
@@ -89,14 +110,15 @@ const FormUsers: React.FC<FormUsersProps> = ({
       }
       return '';
     },
-    role: (value: string) => {
-      if (!value.trim()) return 'El rol es requerido';
+    employmentStatus: (value: string) => {
+      if (!value.trim()) return 'El estado laboral es requerido';
       return '';
     },
-    /* typedocument: (value: string) => {
-      if (!value.trim()) return 'El tipo de documento es requerido';
+    employmentStatusOther: (value: string) => {
+      // Solo validar si employmentStatus es "OTRO"
+      if (!value.trim()) return '';
       return '';
-    }, */
+    },
     documentNumber: (value: string) => {
       if (!value.trim()) return 'El número de documento es requerido';
       if (!/^[0-9]+$/.test(value)) return 'El número de documento solo puede contener números';
@@ -110,13 +132,55 @@ const FormUsers: React.FC<FormUsersProps> = ({
       if (digitsOnly.length < 10) return 'El número debe tener al menos 10 dígitos';
       return '';
     },
-  }), [isEditMode]);
+    address: (value: string) => {
+      if (!value.trim()) return 'La dirección es requerida';
+      if (value.length < 5) return 'La dirección debe tener al menos 5 caracteres';
+      return '';
+    },
+    birthDate: (value: string) => {
+      if (!value.trim()) return 'La fecha de nacimiento es requerida';
+      const birthDate = new Date(value);
+      const today = new Date();
+      const age = today.getFullYear() - birthDate.getFullYear();
+      if (age < 18) return 'Debes ser mayor de 18 años';
+      if (age > 100) return 'Por favor verifica la fecha de nacimiento';
+      return '';
+    },
+    organizationId: (value: string) => {
+      if (!value.trim()) return 'La organización es requerida';
+      return '';
+    },
+  }), [isEditMode, formData.employmentStatus]);
+
+  const maxBirthDate = useMemo(() => {
+    const today = new Date();
+    const eighteenYearsAgo = new Date(
+      today.getFullYear() - 18,
+      today.getMonth(),
+      today.getDate()
+    );
+    return eighteenYearsAgo.toISOString().split('T')[0]; // Formato: YYYY-MM-DD
+  }, []);
+
+  // Fecha mínima (100 años atrás)
+  const minBirthDate = useMemo(() => {
+    const today = new Date();
+    const hundredYearsAgo = new Date(
+      today.getFullYear() - 100,
+      today.getMonth(),
+      today.getDate()
+    );
+    return hundredYearsAgo.toISOString().split('T')[0];
+  }, []);
 
   // Validar campo individual
-  const validateField = useCallback((field: keyof UserFormData, value: string) => {
-    const error = validations[field](value);
-    setErrors(prev => ({ ...prev, [field]: error }));
-    return !error;
+  const validateField = useCallback((field: keyof ClientFormData, value: string) => {
+    if (validations[field]) {
+      const error = validations[field](value);
+      setErrors(prev => ({ ...prev, [field]: error }));
+      return !error;
+    }
+    return true;
   }, [validations]);
 
   // Validar todo el formulario
@@ -125,11 +189,13 @@ const FormUsers: React.FC<FormUsersProps> = ({
     let isValid = true;
 
     Object.keys(validations).forEach(key => {
-      const field = key as keyof UserFormData;
-      const error = validations[field](formData[field]);
-      if (error) {
-        newErrors[field] = error;
-        isValid = false;
+      const field = key as keyof ClientFormData;
+      if (validations[field]) {
+        const error = validations[field](formData[field]);
+        if (error) {
+          newErrors[field] = error;
+          isValid = false;
+        }
       }
     });
 
@@ -138,41 +204,43 @@ const FormUsers: React.FC<FormUsersProps> = ({
   }, [formData, validations]);
 
   // Manejador optimizado con useCallback
-  const handleInputChange = useCallback((field: keyof UserFormData, value: string) => {
+  const handleInputChange = useCallback((field: keyof ClientFormData, value: string) => {
     setFormData(prev => ({
       ...prev,
       [field]: value
     }));
 
-    // Limpiar error cuando el usuario empiece a escribir
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: '' }));
     }
   }, [errors]);
 
   // Manejador de blur para validación en tiempo real
-  const handleBlur = useCallback((field: keyof UserFormData) => {
+  const handleBlur = useCallback((field: keyof ClientFormData) => {
     setTouched(prev => ({ ...prev, [field]: true }));
     validateField(field, formData[field]);
   }, [formData, validateField]);
 
   const resetForm = useCallback(() => {
-      // Marcar todos los campos como tocados para mostrar errores
-      const allTouched: Record<keyof UserFormData, boolean> = {
-        firstName: true,
-        lastName: true,
-        email: true,
-        password: true,
-        role: true,
-/*         typedocument: true,*/    
-        documentNumber: true,
-        phoneNumber: true,
-      };
-      setTouched(allTouched);
+    const allTouched: Record<keyof ClientFormData, boolean> = {
+      email: true,
+      password: true,
+      firstName: true,
+      lastName: true,
+      address: true,
+      birthDate: true,
+      documentNumber: true,
+      phoneNumber: true,
+      employmentStatus: true,
+      employmentStatusOther: true,
+      organizationId: true,
+    };
+    setTouched(allTouched);
   }, []);
 
-  // Submit optimizado - Maneja toda la lógica internamente
+
   const handleSubmit = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
+    
     e.preventDefault();
     
     if (!validateForm()) {
@@ -184,7 +252,8 @@ const FormUsers: React.FC<FormUsersProps> = ({
     setErrors({});
 
     try {
-      const dataToSubmit: UserFormData = { ...formData };
+      console.log('try');
+      const dataToSubmit: ClientFormData = { ...formData };
       const finalData = isEditMode && !dataToSubmit.password.trim()
         ? (() => {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -194,51 +263,40 @@ const FormUsers: React.FC<FormUsersProps> = ({
         : dataToSubmit;
 
       if (isEditMode) {
-        // TODO: Implementar actualización de usuario cuando esté disponible
-        console.log('Actualizando usuario:', finalData);
+        console.log('Actualizando cliente:', finalData);
         await new Promise(resolve => setTimeout(resolve, 1000));
         
         if (onSuccess) {
           await onSuccess(dataToSubmit);
         }
       } else {
-        // Crear usuario usando Redux
-        // finalData ya incluye password si no está en modo edición
-        // @ts-expect-error - Redux Toolkit types issue with React 19
-        const createUserResult = await dispatch(createUser(dataToSubmit));
-        
-        if (createUser.fulfilled.match(createUserResult)) {
-          console.log('Usuario creado exitosamente:', createUserResult.payload);
-          
-          // Refrescar la lista de usuarios después de crear uno nuevo
-          // @ts-expect-error - Redux Toolkit types issue with React 19
-          await dispatch(fetchUsers({}));
-          
-          // Mostrar mensaje de éxito
-          await swal.fire({
-            title: '¡Éxito!',
-            text: 'Usuario creado exitosamente',
-            icon: 'success',
-            confirmButtonColor: '#FB6514',
-          });
-          
-          if (onSuccess) {
-            await onSuccess(dataToSubmit);
+        // Crear cliente usando Redux
+        const createClientResult = await dispatch(createClient(dataToSubmit));
+        if (createClient.fulfilled.match(createClientResult)) {
+            // Mostrar mensaje de éxito
+            await swal.fire({
+              title: '¡Éxito!',
+              text: 'Cliente creado exitosamente',
+              icon: 'success',
+              confirmButtonColor: '#FB6514',
+            });
+            
+            if (onSuccess) {
+              await onSuccess(dataToSubmit);
+            }
+          } else if (createClient.rejected.match(createClientResult)) {
+            const errorMsg = createClientResult.error?.message || 'Error al crear el cliente';
+            throw new Error(errorMsg);
           }
-        } else {
-          const errorMsg = createUserResult.error ? String(createUserResult.error) : 'Error al crear el usuario';
-          throw new Error(errorMsg);
-        }
       }
 
     } catch (error) {
-      console.error('Error al guardar usuario:', error);
+      console.error('Error al guardar cliente:', error);
       
       const errorMessage = error instanceof Error 
         ? error.message 
-        : reduxError || 'Error al guardar el usuario. Por favor, intenta nuevamente.';
+        : reduxError || 'Error al guardar el cliente. Por favor, intenta nuevamente.';
       
-      // Mostrar error al usuario
       await swal.fire({
         title: 'Error',
         text: errorMessage,
@@ -256,7 +314,7 @@ const FormUsers: React.FC<FormUsersProps> = ({
     } finally {
       setIsLoading(false);
     }
-  }, [formData, validateForm, isEditMode, onSuccess, onError, resetForm, dispatch, reduxError]);
+  }, [formData, validateForm, isEditMode, onSuccess, onError, resetForm, reduxError]);
 
   const handleCancel = useCallback(() => {  
     swal.fire({
@@ -265,11 +323,11 @@ const FormUsers: React.FC<FormUsersProps> = ({
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#FB6514',
-      confirmButtonText: 'Cancelar',
-      cancelButtonText: 'Continuar',
+      confirmButtonText: 'Sí, cancelar',
+      cancelButtonText: 'No, continuar editando',
     }).then((result) => {
       if (result.isConfirmed) {
-        navigate('/dashboard/gestion-de-usuarios');
+        navigate('/dashboard/gestion-de-clientes');
       }
     });
   }, [navigate]);
@@ -278,7 +336,7 @@ const FormUsers: React.FC<FormUsersProps> = ({
     <div className="max-w-4xl mx-auto p-6">
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 md:p-8">
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-          {isEditMode ? 'Editar Usuario' : 'Crear Nuevo Usuario'}
+          {isEditMode ? 'Editar Cliente' : 'Crear Nuevo Cliente'}
         </h2>
 
         {errors.general && (
@@ -354,10 +412,8 @@ const FormUsers: React.FC<FormUsersProps> = ({
             </div>
           </div>
 
-          {/* Tercera fila: Tipo de Documento y Número de Documento */}
+          {/* Tercera fila: Número de Documento y Fecha de Nacimiento */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-
             <div>
               <Label htmlFor="documentNumber">Número de Documento *</Label>
               <Input
@@ -372,24 +428,87 @@ const FormUsers: React.FC<FormUsersProps> = ({
                 hint={touched.documentNumber ? errors.documentNumber : ''}
               />
             </div>
+
+            <div>
+               <DatePicker
+                    id="birthDate"
+                    label="Fecha de Nacimiento *"
+                    placeholder="Selecciona la fecha de nacimiento"
+                    onChange={(_dates, currentDateString) => {
+                    handleInputChange('birthDate', currentDateString);
+                    handleBlur('birthDate');
+                    }}
+                    maxDate={maxBirthDate}
+                    minDate={minBirthDate}
+                />
+            </div>
           </div>
 
-          {/* Cuarta fila: Rol y Contraseña */}
+          {/* Cuarta fila: Dirección */}
+          <div>
+            <Label htmlFor="address">Dirección *</Label>
+            <Input
+              type="text"
+              id="address"
+              name="address"
+              placeholder="Calle 123 #45-67, Ciudad"
+              value={formData.address}
+              onChange={(e) => handleInputChange('address', e.target.value)}
+              onBlur={() => handleBlur('address')}
+              error={!!errors.address && touched.address}
+              hint={touched.address ? errors.address : ''}
+            />
+          </div>
+
+          {/* Quinta fila: Estado Laboral y Campo Condicional */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <Label htmlFor="role">Rol *</Label>
+              <Label htmlFor="employmentStatus">Estado Laboral *</Label>
               <Select
-                options={roleOptions}
-                placeholder="Selecciona el rol"
-                value={formData.role}
-                onChange={(value) => handleInputChange('role', value)}
+                options={employmentStatusOptions}
+                placeholder="Selecciona el estado laboral"
+                value={formData.employmentStatus}
+                onChange={(value) => handleInputChange('employmentStatus', value)}
                 className="dark:bg-gray-900"
               />
-              {touched.role && errors.role && (
-                <p className="mt-1.5 text-xs text-error-500">{errors.role}</p>
+              {touched.employmentStatus && errors.employmentStatus && (
+                <p className="mt-1.5 text-xs text-error-500">{errors.employmentStatus}</p>
               )}
             </div>
 
+            {formData.employmentStatus === 'OTRO' && (
+              <div>
+                <Label htmlFor="employmentStatusOther">Especifica el Estado Laboral *</Label>
+                <Input
+                  type="text"
+                  id="employmentStatusOther"
+                  name="employmentStatusOther"
+                  placeholder="Describe tu situación laboral"
+                  value={formData.employmentStatusOther}
+                  onChange={(e) => handleInputChange('employmentStatusOther', e.target.value)}
+                  onBlur={() => handleBlur('employmentStatusOther')}
+                  error={!!errors.employmentStatusOther && touched.employmentStatusOther}
+                  hint={touched.employmentStatusOther ? errors.employmentStatusOther : ''}
+                />
+              </div>
+            )}
+
+            {formData.employmentStatus !== 'OTRO' && (
+              <div>
+                <Label htmlFor="organizationId">Organización *</Label>
+                <Select
+                  options={organizationOptions}
+                  placeholder="Selecciona la organización"
+                  value={formData.organizationId}
+                  onChange={(value) => handleInputChange('organizationId', value)}
+                  className="dark:bg-gray-900"
+                />
+              </div>
+            )}
+          </div>
+
+          {/* Sexta fila: Contraseña */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <Label htmlFor="password">
                 Contraseña {isEditMode ? '(Dejar vacío para no cambiar)' : '*'}
@@ -399,7 +518,7 @@ const FormUsers: React.FC<FormUsersProps> = ({
                   type={showPassword ? 'text' : 'password'}
                   id="password"
                   name="password"
-                  placeholder={isEditMode ? 'Dejar vacío para no cambiar' : 'Ingresa la contraseña'}
+                  placeholder={isEditMode ? 'Dejar vacío para no cambiar' : 'Mínimo 8 caracteres'}
                   value={formData.password}
                   onChange={(e) => handleInputChange('password', e.target.value)}
                   onBlur={() => handleBlur('password')}
@@ -441,15 +560,13 @@ const FormUsers: React.FC<FormUsersProps> = ({
             <button
               type="submit"
               disabled={isLoadingState}
-              className={`inline-flex items-center justify-center gap-2 rounded-lg transition px-5 py-3.5 text-sm ${
+              className={`inline-flex items-center justify-center gap-2 rounded-lg transition px-5 py-3.5 text-sm font-medium ${
                 isLoadingState 
                   ? 'cursor-not-allowed opacity-50 bg-brand-300 text-white' 
                   : 'bg-brand-500 text-white shadow-theme-xs hover:bg-brand-600 disabled:bg-brand-300'
               }`}
             >
-              <span className="flex items-center">
-              </span>
-              {isLoadingState ? 'Guardando...' : isEditMode ? 'Actualizar Usuario' : 'Crear Usuario'}
+              {isLoadingState ? 'Guardando...' : isEditMode ? 'Actualizar Cliente' : 'Crear Cliente'}
             </button>
           </div>
         </Form>
@@ -458,4 +575,4 @@ const FormUsers: React.FC<FormUsersProps> = ({
   );
 };
 
-export default FormUsers;
+export default FormClient;

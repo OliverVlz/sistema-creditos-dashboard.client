@@ -1,9 +1,8 @@
 export interface SearchFilters {
   searchTerm: string
-  status: string | null | undefined
-  role: string | null | undefined
+  employmentStatus: string | null | undefined
 }
 
-export interface SearchUsersProps {
+export interface SearchClientProps {
   onFiltersChange?: (filters: SearchFilters) => void
 }

@@ -1,6 +1,6 @@
 export interface UserFormData {
-    firstname: string;
-    lastname: string;
+    firstName: string;
+    lastName: string;
     email: string;
     password: string;
 /*     typedocument: string; 
@@ -10,8 +10,8 @@ export interface UserFormData {
   }
   
   export interface FormErrors {
-    firstname?: string;
-    lastname?: string;
+    firstName?: string;
+    lastName?: string;
     email?: string;
     password?: string;
     /* typedocument?: string; */

@@ -8,8 +8,8 @@ export interface DropdownOption {
 interface DropdownProps {
   placeholder?: string;
   options?: DropdownOption[];
-  value?: string | number | null;
-  onChange?: (value: string | number | null) => void;
+  value?: string | number | null | undefined;
+  onChange?: (value: string | number | null | undefined) => void;
   disabled?: boolean;
   className?: string;
   showClear?: boolean;
@@ -55,11 +55,16 @@ const Dropdown: React.FC<DropdownProps> = ({
     e.stopPropagation();
     setIsOpen(false);
     if (onChange) {
-      onChange(null);
+      onChange(undefined);
     }
   };
 
-  const selectedOption = options.find(opt => opt.value === value);
+  // Si value es undefined, no buscar opción (mostrar placeholder)
+  // Si value es null u otro valor, buscar la opción correspondiente
+  const selectedOption = value !== undefined ? options.find(opt => opt.value === value) : undefined;
+  
+  // Mostrar placeholder solo si value es undefined o si no se encontró ninguna opción
+  const displayText = value === undefined || !selectedOption ? placeholder : selectedOption.label;
 
   return (
     <div className={`relative ${className}`} ref={dropdownRef}>
@@ -75,11 +80,11 @@ const Dropdown: React.FC<DropdownProps> = ({
         `}
         onClick={() => !disabled && setIsOpen(!isOpen)}
       >
-        <span className={value ? 'text-gray-800 dark:text-gray-200' : 'text-gray-400 dark:text-gray-500'}>
-          {selectedOption ? selectedOption.label : placeholder}
+        <span className={selectedOption ? 'text-gray-800 dark:text-gray-200' : 'text-gray-400 dark:text-gray-500'}>
+          {displayText}
         </span>
         <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1">
-          {showClear && value && (
+          {showClear && value !== undefined && (
             <span
               className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 cursor-pointer"
               onClick={handleClear}
