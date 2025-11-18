@@ -3,16 +3,16 @@ import React from 'react';
  */import FormUsers from '../components/formUsers';
 import { FormCreateUserProps } from '../models/formUserModel';
 import PageBreadcrumb from '@/components/common/PageBreadCrumb';
+import { useNavigate } from 'react-router-dom';
  
 
 
 const FormCreateUser: React.FC<FormCreateUserProps> = ({ initialData }) => {
-/*   const navigate = useNavigate();
- */
+  const navigate = useNavigate();
+ 
   const handleSuccess = () => {
-    console.log('Usuario guardado exitosamente');
-/*     navigate('/dashboard/gestion-de-usuarios');
- */  };
+     navigate('/dashboard/gestion-de-usuarios');
+ };
 
   const handleError = (error: Error) => {
     console.error('Error al guardar usuario:', error);

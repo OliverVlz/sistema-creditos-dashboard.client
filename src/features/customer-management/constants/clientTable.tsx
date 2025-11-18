@@ -1,6 +1,7 @@
 import { Column, Action } from '@share/components/table/DataTable.types'
 import { Client } from '../models/clientsTableModel'
 import { StatusBadge } from '@/features/user-management/constants/usersTableBadges'
+import { NavigateFunction } from 'react-router-dom'
 
 export const clientColumns: Column<Client>[] = [
 /*     {
@@ -81,7 +82,7 @@ export const clientColumns: Column<Client>[] = [
     }
   ]
   
-  export const clientActions: Action<Client>[] = [
+  export const getClientActions = (navigate: NavigateFunction): Action<Client>[] => [
     {
       icon: 'pi pi-eye',
       label: 'Ver Detalles',
@@ -92,20 +93,7 @@ export const clientColumns: Column<Client>[] = [
       icon: 'pi pi-pencil',
       label: 'Editar',
       color: 'green',
-      onClick: (client) => console.log('Editar cliente:', client.documentNumber),
+      onClick: (client) => navigate(`/gestion-de-clientes/editar-cliente/${client.id}`),
       /* show: (client) => client.status !== 'Rechazado' */
     },
-    {
-      icon: 'pi pi-list',
-      label: 'Ver Solicitudes',
-      color: 'purple',
-      onClick: (client) => console.log('Ver solicitudes:', client.documentNumber)
-    },
-    {
-      icon: 'pi pi-ban',
-      label: 'Suspender',
-      color: 'red',
-      onClick: (client) => console.log('Suspender:', client.documentNumber),
-      /* show: (user) => user.status === 'active' */
-    }
   ]

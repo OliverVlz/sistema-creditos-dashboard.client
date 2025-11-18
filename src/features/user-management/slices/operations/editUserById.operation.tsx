@@ -8,35 +8,35 @@ import { UsersState } from '../users.slices'
 import { User } from '../../models/usersTableConfig'
 import { UserFormData } from '../../models/formUserModel'
 
-export const createUser = createAsyncThunk(
-    'users/createUser',
-    async (user: UserFormData) => {
-        const response = await mainCustomAxios.post('/users/staff', user)
+export const editUserById = createAsyncThunk(
+    'users/editUserById',
+    async ({userId, user}: {userId: string, user: UserFormData}) => {
+        const response = await mainCustomAxios.patch(`/users/${userId}`, user)
         return response.data
     }
 )
 
-interface createAsyncFetchUsersReducerArgs {
+interface createAsyncEditUserByIdReducerArgs {
     builder: ActionReducerMapBuilder<UsersState>
 }
 
-export const createAsyncFetchUsersReducer = ({
+export const createAsyncEditUserByIdReducer = ({
     builder,
-}: createAsyncFetchUsersReducerArgs) => {
+    }: createAsyncEditUserByIdReducerArgs) => {
     builder
-        .addCase(createUser.pending, (state: UsersState) => {
+        .addCase(editUserById.pending, (state: UsersState) => {
             state.loading = true
             state.error = null
         })
         .addCase(
-                createUser.fulfilled,
-            (state: UsersState, action: PayloadAction<User[]>) => {
+                editUserById.fulfilled,
+            (state: UsersState, action: PayloadAction<User>) => {
                 state.loading = false
-                state.users = action.payload
+                state.selectedUser = action.payload
             }
         )
         .addCase(
-            createUser.rejected,
+            editUserById.rejected,
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             (state: UsersState, action: any) => {
                 state.loading = false

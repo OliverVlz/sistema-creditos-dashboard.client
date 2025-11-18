@@ -6,37 +6,36 @@ import {
 import { mainCustomAxios } from "../../../../config/axios.config"
 import { UsersState } from '../users.slices'
 import { User } from '../../models/usersTableConfig'
-import { UserFormData } from '../../models/formUserModel'
 
-export const createUser = createAsyncThunk(
-    'users/createUser',
-    async (user: UserFormData) => {
-        const response = await mainCustomAxios.post('/users/staff', user)
+export const fetchUserById = createAsyncThunk(
+    'users/fetchUserById',
+    async (userId: string) => {
+        const response = await mainCustomAxios.get(`/users/${userId}`)
         return response.data
     }
 )
 
-interface createAsyncFetchUsersReducerArgs {
+interface createAsyncFetchUserByIdReducerArgs {
     builder: ActionReducerMapBuilder<UsersState>
 }
 
-export const createAsyncFetchUsersReducer = ({
+export const createAsyncFetchUserByIdReducer = ({
     builder,
-}: createAsyncFetchUsersReducerArgs) => {
+}: createAsyncFetchUserByIdReducerArgs) => {
     builder
-        .addCase(createUser.pending, (state: UsersState) => {
+        .addCase(fetchUserById.pending, (state: UsersState) => {
             state.loading = true
             state.error = null
         })
         .addCase(
-                createUser.fulfilled,
-            (state: UsersState, action: PayloadAction<User[]>) => {
+                fetchUserById.fulfilled,
+            (state: UsersState, action: PayloadAction<User>) => {
                 state.loading = false
-                state.users = action.payload
+                state.selectedUser = action.payload
             }
         )
         .addCase(
-            createUser.rejected,
+            fetchUserById.rejected,
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             (state: UsersState, action: any) => {
                 state.loading = false

@@ -5,16 +5,35 @@ import {
 } from '@reduxjs/toolkit'
 import { mainCustomAxios } from "../../../../config/axios.config"
 import { ClientsState } from '../client.slices'
-import { Client } from '../../models/clientsTableModel' 
+import { Client } from '../../models/clientsTableModel'
+import { ClientApiResponse } from '../../models/clientsTableModel'
+
+
 
 export const fetchClients = createAsyncThunk(
     'clients/fetchClients',
-    async () => {       
-        const response = await mainCustomAxios.get('/clients/all')
+    async ({page = 1, limit = 100, searchTerm = '', status = '', organizationId = ''}: {page?: number, limit?: number, searchTerm?: string, status?: string, organizationId?: string} = {}) => {  
+        const params: Record<string, string | number> = {
+            page,
+            limit
+        }
+
+        if (searchTerm) params.terms = searchTerm
+        if (status) params.status = status
+        if (organizationId) params.organizationId = organizationId
+        
+        const response = await mainCustomAxios.get('/clients/all', { params })
         console.log('response.data', response.data.data)
-        const clients = response.data.data.map((client: Client) => ({
-            ...client,
-            id: client.id || client.documentNumber
+        const clients = response.data.data.map((client: ClientApiResponse): Client => ({
+            id: client.id || client.documentNumber,
+            isActive: client.isActive,
+            fullName: client.fullName || `${client.firstName || ''} ${client.lastName || ''}`.trim(),
+            documentNumber: client.documentNumber,
+            email: client.email,
+            phoneNumber: client.phoneNumber,
+            organization: client.organization,
+            employmentStatus: client.employmentStatus,
+            createdAt: client.createdAt
         }))
         return clients
     }

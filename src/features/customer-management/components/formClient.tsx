@@ -1,42 +1,35 @@
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
-/* import { useAppDispatch, useAppSelector, RootState } from '../../../store/index';
- */
 import { useAppSelector, RootState } from '../../../store/index';
 import Form from '../../../components/form/Form';
 import Label from '../../../components/form/Label';
 import Input from '../../../components/form/input/InputField';
 import Select from '../../../components/form/Select';
-import Button from '../../../components/ui/button/Button';
 import { EyeIcon, EyeCloseIcon, CloseIcon} from '../../../icons';
 import { FormClientProps, ClientFormData, FormErrors } from '../models/formClientModel';
-/* import { createClient } from '../slices/operations/createClient.operations';
-import { fetchClients } from '../slices/operations/fetchClients.operation'; */
 import swal from 'sweetalert2';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import DatePicker from '@/components/form/date-picker';
-
 import { useDispatch } from 'react-redux';
 import { fetchOrganizations } from '../slices/operations/fetchOrganizations.operation';
 import { createClient } from '../slices/operations/createClient.operations';
+import { editClientById } from '../slices/operations/editClientById.operations';
 
 const FormClient: React.FC<FormClientProps> = ({ 
   initialData, 
   onSuccess,
   onError,
 }) => {
-  /* const dispatch = useAppDispatch(); */
   const { loading: reduxLoading, error: reduxError } = useAppSelector((state: RootState) => state.clients);
   const { organizations} = useAppSelector((state: RootState) => state.organizations);
   const navigate = useNavigate();
+  const { id } = useParams();
   const isEditMode = !!initialData;
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchOrganizations({ page: 1, limit: 100 }));
-}, [dispatch]);
+  }, [dispatch]);
 
-
-  // Estados del formulario
   const [formData, setFormData] = useState<ClientFormData>({
     email: initialData?.email || '',
     password: initialData?.password || '',
@@ -50,6 +43,26 @@ const FormClient: React.FC<FormClientProps> = ({
     employmentStatusOther: initialData?.employmentStatusOther || '',
     organizationId: initialData?.organizationId || '',
   });
+
+  // ⬅️ ACTUALIZAR formData cuando cambie initialData
+  useEffect(() => {
+    console.log('initialData para ver la fecha', initialData);
+    if (initialData) {
+      setFormData({
+        email: initialData.email || '',
+        password: '', // No mostrar contraseña en edición
+        firstName: initialData.firstName || '',
+        lastName: initialData.lastName || '',
+        address: initialData.address || '',
+        birthDate: initialData.birthDate || '',
+        documentNumber: initialData.documentNumber || '',
+        phoneNumber: initialData.phoneNumber || '',
+        employmentStatus: initialData.employmentStatus || '',
+        employmentStatusOther: initialData.employmentStatusOther || '',
+        organizationId: initialData.organizationId || '',
+      });
+    }
+  }, [initialData]);
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [isLoading, setIsLoading] = useState(false);
@@ -73,7 +86,7 @@ const FormClient: React.FC<FormClientProps> = ({
 
   // Opciones para los selects
   const employmentStatusOptions = [
-    { value: 'ACTIVE', label: 'Activo' },
+    { value: 'ACTIVO', label: 'Activo' },
     { value: 'JUBILADO', label: 'Jubilado' }
   ];
 
@@ -115,7 +128,6 @@ const FormClient: React.FC<FormClientProps> = ({
       return '';
     },
     employmentStatusOther: (value: string) => {
-      // Solo validar si employmentStatus es "OTRO"
       if (!value.trim()) return '';
       return '';
     },
@@ -150,20 +162,19 @@ const FormClient: React.FC<FormClientProps> = ({
       if (!value.trim()) return 'La organización es requerida';
       return '';
     },
-  }), [isEditMode, formData.employmentStatus]);
+  }), [isEditMode]);
 
-  const maxBirthDate = useMemo(() => {
+  /* const maxBirthDate = useMemo(() => {
     const today = new Date();
     const eighteenYearsAgo = new Date(
       today.getFullYear() - 18,
       today.getMonth(),
       today.getDate()
     );
-    return eighteenYearsAgo.toISOString().split('T')[0]; // Formato: YYYY-MM-DD
-  }, []);
+    return eighteenYearsAgo.toISOString().split('T')[0];
+  }, []); */
 
-  // Fecha mínima (100 años atrás)
-  const minBirthDate = useMemo(() => {
+/*   const minBirthDate = useMemo(() => {
     const today = new Date();
     const hundredYearsAgo = new Date(
       today.getFullYear() - 100,
@@ -171,9 +182,8 @@ const FormClient: React.FC<FormClientProps> = ({
       today.getDate()
     );
     return hundredYearsAgo.toISOString().split('T')[0];
-  }, []);
+  }, []); */
 
-  // Validar campo individual
   const validateField = useCallback((field: keyof ClientFormData, value: string) => {
     if (validations[field]) {
       const error = validations[field](value);
@@ -183,7 +193,6 @@ const FormClient: React.FC<FormClientProps> = ({
     return true;
   }, [validations]);
 
-  // Validar todo el formulario
   const validateForm = useCallback(() => {
     const newErrors: FormErrors = {};
     let isValid = true;
@@ -203,7 +212,6 @@ const FormClient: React.FC<FormClientProps> = ({
     return isValid;
   }, [formData, validations]);
 
-  // Manejador optimizado con useCallback
   const handleInputChange = useCallback((field: keyof ClientFormData, value: string) => {
     setFormData(prev => ({
       ...prev,
@@ -215,7 +223,6 @@ const FormClient: React.FC<FormClientProps> = ({
     }
   }, [errors]);
 
-  // Manejador de blur para validación en tiempo real
   const handleBlur = useCallback((field: keyof ClientFormData) => {
     setTouched(prev => ({ ...prev, [field]: true }));
     validateField(field, formData[field]);
@@ -238,9 +245,7 @@ const FormClient: React.FC<FormClientProps> = ({
     setTouched(allTouched);
   }, []);
 
-
   const handleSubmit = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
-    
     e.preventDefault();
     
     if (!validateForm()) {
@@ -252,7 +257,6 @@ const FormClient: React.FC<FormClientProps> = ({
     setErrors({});
 
     try {
-      console.log('try');
       const dataToSubmit: ClientFormData = { ...formData };
       const finalData = isEditMode && !dataToSubmit.password.trim()
         ? (() => {
@@ -263,31 +267,50 @@ const FormClient: React.FC<FormClientProps> = ({
         : dataToSubmit;
 
       if (isEditMode) {
-        console.log('Actualizando cliente:', finalData);
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        // ⬅️ EDITAR CLIENTE
+        const editClientResult = await dispatch(editClientById({
+          clientId: id || '', 
+          client: finalData as ClientFormData
+        }));
         
-        if (onSuccess) {
-          await onSuccess(dataToSubmit);
+        if (editClientById.fulfilled.match(editClientResult)) {
+          await swal.fire({
+            title: '¡Éxito!',
+            text: 'Cliente actualizado exitosamente',
+            icon: 'success',
+            confirmButtonColor: '#FB6514',
+          }).then(() => {
+            navigate('/gestion-de-clientes');
+          });
+
+          if (onSuccess) {
+            await onSuccess(dataToSubmit);
+          }
+        } else if (editClientById.rejected.match(editClientResult)) {
+          const errorMsg = editClientResult.error?.message || 'Error al actualizar el cliente';
+          throw new Error(errorMsg);
         }
       } else {
-        // Crear cliente usando Redux
+        // CREAR CLIENTE
         const createClientResult = await dispatch(createClient(dataToSubmit));
+        
         if (createClient.fulfilled.match(createClientResult)) {
-            // Mostrar mensaje de éxito
-            await swal.fire({
-              title: '¡Éxito!',
-              text: 'Cliente creado exitosamente',
-              icon: 'success',
-              confirmButtonColor: '#FB6514',
-            });
-            
-            if (onSuccess) {
-              await onSuccess(dataToSubmit);
-            }
-          } else if (createClient.rejected.match(createClientResult)) {
-            const errorMsg = createClientResult.error?.message || 'Error al crear el cliente';
-            throw new Error(errorMsg);
+          await swal.fire({
+            title: '¡Éxito!',
+            text: 'Cliente creado exitosamente',
+            icon: 'success',
+            confirmButtonColor: '#FB6514',
+          }).then(() => {
+            navigate('/gestion-de-clientes');
+          });
+          
+          if (onSuccess) {
+            await onSuccess(dataToSubmit);
           }
+        } else if (createClient.rejected.match(createClientResult)) {
+          const errorMsg = createClientResult.error?.message || 'Error al crear el cliente';
+          throw new Error(errorMsg);
+        }
       }
 
     } catch (error) {
@@ -314,7 +337,7 @@ const FormClient: React.FC<FormClientProps> = ({
     } finally {
       setIsLoading(false);
     }
-  }, [formData, validateForm, isEditMode, onSuccess, onError, resetForm, reduxError]);
+  }, [formData, validateForm, isEditMode, onSuccess, onError, resetForm, reduxError, dispatch, initialData, navigate, id]);
 
   const handleCancel = useCallback(() => {  
     swal.fire({
@@ -327,7 +350,7 @@ const FormClient: React.FC<FormClientProps> = ({
       cancelButtonText: 'No, continuar editando',
     }).then((result) => {
       if (result.isConfirmed) {
-        navigate('/dashboard/gestion-de-clientes');
+        navigate('/gestion-de-clientes'); 
       }
     });
   }, [navigate]);
@@ -430,17 +453,19 @@ const FormClient: React.FC<FormClientProps> = ({
             </div>
 
             <div>
-               <DatePicker
-                    id="birthDate"
-                    label="Fecha de Nacimiento *"
-                    placeholder="Selecciona la fecha de nacimiento"
-                    onChange={(_dates, currentDateString) => {
-                    handleInputChange('birthDate', currentDateString);
-                    handleBlur('birthDate');
-                    }}
-                    maxDate={maxBirthDate}
-                    minDate={minBirthDate}
-                />
+              <DatePicker
+                key={formData.birthDate || 'empty-date'}  // ⬅️ CAMBIAR: usar formData en lugar de initialData
+                id="birthDate"
+                label="Fecha de Nacimiento *"
+                placeholder="Selecciona la fecha de nacimiento"
+                defaultDate={formData.birthDate ? new Date(formData.birthDate) : undefined}
+                onChange={(_dates, currentDateString) => {
+                  handleInputChange('birthDate', currentDateString);
+                  handleBlur('birthDate');
+                }}
+                /* maxDate={maxBirthDate}
+                minDate={minBirthDate} */
+              />
             </div>
           </div>
 
@@ -507,67 +532,86 @@ const FormClient: React.FC<FormClientProps> = ({
             )}
           </div>
 
-          {/* Sexta fila: Contraseña */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <Label htmlFor="password">
-                Contraseña {isEditMode ? '(Dejar vacío para no cambiar)' : '*'}
-              </Label>
-              <div className="relative">
-                <Input
-                  type={showPassword ? 'text' : 'password'}
-                  id="password"
-                  name="password"
-                  placeholder={isEditMode ? 'Dejar vacío para no cambiar' : 'Mínimo 8 caracteres'}
-                  value={formData.password}
-                  onChange={(e) => handleInputChange('password', e.target.value)}
-                  onBlur={() => handleBlur('password')}
-                  error={!!errors.password && touched.password}
-                  hint={touched.password ? errors.password : ''}
-                  className="pr-12"
-                />
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    setShowPassword(!showPassword);
-                  }}
-                  className="absolute z-30 top-1/2 -translate-y-1/2 right-3 cursor-pointer outline-none focus:outline-none hover:opacity-70 transition-opacity flex items-center justify-center w-6 h-6"
-                  tabIndex={-1}
-                  aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
-                >
-                  {showPassword ? (
-                    <EyeIcon className="fill-gray-500 dark:fill-gray-400 size-5 pointer-events-none" />
-                  ) : (
-                    <EyeCloseIcon className="fill-gray-500 dark:fill-gray-400 size-5 pointer-events-none" />
-                  )}
-                </button>
+          {/* Sexta fila: Contraseña - SOLO EN MODO CREAR */}
+          {!isEditMode && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <Label htmlFor="password">Contraseña *</Label>
+                <div className="relative">
+                  <Input
+                    type={showPassword ? 'text' : 'password'}
+                    id="password"
+                    name="password"
+                    placeholder="Mínimo 8 caracteres"
+                    value={formData.password}
+                    onChange={(e) => handleInputChange('password', e.target.value)}
+                    onBlur={() => handleBlur('password')}
+                    error={!!errors.password && touched.password}
+                    hint={touched.password ? errors.password : ''}
+                    className="pr-12"
+                  />
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setShowPassword(!showPassword);
+                    }}
+                    className="absolute z-30 top-1/2 -translate-y-1/2 right-3 cursor-pointer outline-none focus:outline-none hover:opacity-70 transition-opacity flex items-center justify-center w-6 h-6"
+                    tabIndex={-1}
+                    aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                  >
+                    {showPassword ? (
+                      <EyeIcon className="fill-gray-500 dark:fill-gray-400 size-5 pointer-events-none" />
+                    ) : (
+                      <EyeCloseIcon className="fill-gray-500 dark:fill-gray-400 size-5 pointer-events-none" />
+                    )}
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
           {/* Botones de acción */}
           <div className="flex justify-end gap-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-            <Button 
-              variant="outline"
-              size="md"
-              startIcon={<CloseIcon className="size-5" />}
+          <button
+              type="button"
               onClick={handleCancel}
+              className="inline-flex items-center justify-center gap-2 rounded-lg transition px-5 py-3.5 text-sm font-medium bg-white text-gray-700 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-white/[0.03] dark:hover:text-gray-300"
             >
+              <CloseIcon className="size-5" />
               Cancelar
-            </Button>
-            <button
-              type="submit"
-              disabled={isLoadingState}
-              className={`inline-flex items-center justify-center gap-2 rounded-lg transition px-5 py-3.5 text-sm font-medium ${
-                isLoadingState 
-                  ? 'cursor-not-allowed opacity-50 bg-brand-300 text-white' 
-                  : 'bg-brand-500 text-white shadow-theme-xs hover:bg-brand-600 disabled:bg-brand-300'
-              }`}
-            >
-              {isLoadingState ? 'Guardando...' : isEditMode ? 'Actualizar Cliente' : 'Crear Cliente'}
             </button>
+
+            {/* Botón de ACTUALIZAR - SOLO en modo edición */}
+            {isEditMode && (
+              <button
+                type="submit"
+                disabled={isLoadingState}
+                className={`inline-flex items-center justify-center gap-2 rounded-lg transition px-5 py-3.5 text-sm font-medium ${
+                  isLoadingState 
+                    ? 'cursor-not-allowed opacity-50 bg-brand-300 text-white' 
+                    : 'bg-brand-500 text-white shadow-theme-xs hover:bg-brand-600 disabled:bg-brand-300'
+                }`}
+              >
+                {isLoadingState ? 'Actualizando...' : 'Actualizar Cliente'}
+              </button>
+            )}
+
+            {/* Botón de CREAR - SOLO cuando NO está editando */}
+            {!isEditMode && (
+              <button
+                type="submit"
+                disabled={isLoadingState}
+                className={`inline-flex items-center justify-center gap-2 rounded-lg transition px-5 py-3.5 text-sm font-medium ${
+                  isLoadingState 
+                    ? 'cursor-not-allowed opacity-50 bg-brand-300 text-white' 
+                    : 'bg-brand-500 text-white shadow-theme-xs hover:bg-brand-600 disabled:bg-brand-300'
+                }`}
+              >
+                {isLoadingState ? 'Guardando...' : 'Crear Cliente'}
+              </button>
+            )}
           </div>
         </Form>
       </div>

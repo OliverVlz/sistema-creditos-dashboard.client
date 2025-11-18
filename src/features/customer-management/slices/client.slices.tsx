@@ -1,18 +1,23 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { createAsyncFetchClientsReducer } from "./operations/fetchClients.operation"
 import { createAsyncCreateClientReducer } from "./operations/createClient.operations"
+import { createAsyncFetchClientByIdReducer } from "./operations/fetchClientById.operations"
+import { createAsyncEditClientByIdReducer } from "./operations/editClientById.operations"
 import { Client } from "../models/clientsTableModel"
+import { ClientFormData } from "../models/formClientModel"
 
 export interface ClientsState {
     clients: Client[]
     loading: boolean
     error: string | null
+    selectedClient: Partial<ClientFormData> | null
 }
 
 const initialState: ClientsState = {
     clients: [],
     loading: false,
     error: null,
+    selectedClient: null,
 }
 
 export const clientsSlice = createSlice({
@@ -30,6 +35,8 @@ export const clientsSlice = createSlice({
     extraReducers: (builder) => {
         createAsyncFetchClientsReducer({ builder })
         createAsyncCreateClientReducer({ builder })
+        createAsyncFetchClientByIdReducer({ builder })
+        createAsyncEditClientByIdReducer({ builder })
     }
 })
 

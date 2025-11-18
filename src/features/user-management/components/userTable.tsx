@@ -1,13 +1,15 @@
 // pages/Clients/ClientsPage.tsx
 
 import DataTable from '@share/components/table/DataTable'   
-import { userColumns, userActions } from '../constants/usersTable'
+import { userColumns, getUserActions } from '../constants/usersTable'
 import { useAppDispatch, useAppSelector } from '../../../store/index'
 import { fetchUsers } from '../slices/operations/fetchUsers.operation'
 import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 export default function UserTable() {
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
   const { users, loading } = useAppSelector((state) => state.users)  
   
   useEffect(() => {
@@ -21,7 +23,7 @@ export default function UserTable() {
         <DataTable 
         data={users} 
         columns={userColumns}
-        actions={userActions}
+        actions={getUserActions(navigate)}
         itemsPerPage={10}
         defaultSortField="id"
         defaultSortOrder="asc"

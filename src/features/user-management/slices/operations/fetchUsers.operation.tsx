@@ -18,7 +18,7 @@ export const fetchUsers = createAsyncThunk(
         if (searchTerm) params.terms = searchTerm
         if (role) params.role = role
         
-        const response = await mainCustomAxios.get('users', { params })
+        const response = await mainCustomAxios.get('users/all', { params })
         console.log('response.data', response.data.data)
         return response.data.data
     }

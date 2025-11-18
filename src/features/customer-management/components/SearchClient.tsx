@@ -1,36 +1,50 @@
 import { InputText } from "primereact/inputtext"
 import { Button } from "primereact/button"
-/* import { useEffect, useState } from "react"
- */
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { SearchFilters, SearchClientProps } from "../models/SearchFiltersClientModel"
 import Dropdown, { DropdownOption } from "../../../components/ui/Dropdown"
 import { useNavigate } from "react-router-dom"
-/* import { fetchUsers } from "../slices/operations/fetchUsers.operation"
- *//* import { useAppDispatch } from "../../../store/index" */
+import { fetchClients } from "../slices/operations/fetchClients.operation"
+import { useAppDispatch, useAppSelector, RootState } from "../../../store/index"
+import { fetchOrganizations } from "../slices/operations/fetchOrganizations.operation"
 
 export default function SearchClient({ onFiltersChange }: SearchClientProps) {
   const navigate = useNavigate()
-/*   const dispatch = useAppDispatch()
- */  
-    const [filters, setFilters] = useState<SearchFilters>({
+  const dispatch = useAppDispatch()
+  const { organizations } = useAppSelector((state: RootState) => state.organizations);
+  const [filters, setFilters] = useState<SearchFilters>({
     searchTerm: '',
-    employmentStatus: undefined
+    employmentStatus: undefined,
+    organizationId: undefined
   })
 
-  const employmentStatusOptions: DropdownOption[] = [
-    { label: 'Todos', value: null },
-    { label: 'Activo', value: 'ACTIVE' },
-    { label: 'Jubilado', value: 'JUBILADO' }, 
-  ]
-
-/*   useEffect(() => {
+  useEffect(() => {
     // @ts-expect-error - Redux Toolkit types issue with React 19
-    dispatch(fetchUsers({ page: 1, limit: 100, searchTerm: filters.searchTerm, role: filters.role }))
-  }, [filters.searchTerm, filters.role, dispatch]) */
+    dispatch(fetchClients({ page: 1, limit: 100, searchTerm: filters.searchTerm, status: filters.employmentStatus, organizationId: filters.organizationId }))
+  }, [filters.searchTerm, filters.employmentStatus, filters.organizationId, dispatch])
+
+
+  useEffect(() => {
+    // @ts-expect-error - Redux Toolkit types issue with React 19
+    dispatch(fetchOrganizations({ page: 1, limit: 100 }));
+}, [dispatch]);
+
+  const employmentStatusOptions: DropdownOption[] = [
+    { value: 'ACTIVE', label: 'Activo' },
+    { value: 'JUBILADO', label: 'Jubilado' }
+  ];
+
+  const organizationOptions: DropdownOption[] = organizations.map((organization) => ({
+    value: organization.id,
+    label: organization.name,
+  }));
 
   const handleStatusChange = (value: string | number | null | undefined) => {
     updateFilters({ employmentStatus: value as string | null | undefined })
+  }
+
+  const handleOrganizationChange = (value: string | number | null | undefined) => {
+    updateFilters({ organizationId: value as string | null | undefined })
   }
 
 
@@ -44,13 +58,15 @@ export default function SearchClient({ onFiltersChange }: SearchClientProps) {
     const clearedFilters: SearchFilters = {
       searchTerm: '',
       employmentStatus: undefined,
+      organizationId: undefined
     }
     setFilters(clearedFilters)
     onFiltersChange?.(clearedFilters)
   }
 
   const hasActiveFilters = filters.searchTerm || 
-                          filters.employmentStatus
+                          filters.employmentStatus ||
+                          filters.organizationId
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-4 mb-4">
@@ -74,6 +90,18 @@ export default function SearchClient({ onFiltersChange }: SearchClientProps) {
             value={filters.employmentStatus}
             onChange={handleStatusChange}
             placeholder="Estado Laboral"
+            showClear
+            className="w-full text-sm"
+          />
+        </div>
+
+        {/* Organización */}
+        <div className="w-[200px]">
+          <Dropdown
+            options={organizationOptions}
+            value={filters.organizationId}
+            onChange={handleOrganizationChange}
+            placeholder="Organización"
             showClear
             className="w-full text-sm"
           />
@@ -114,6 +142,11 @@ export default function SearchClient({ onFiltersChange }: SearchClientProps) {
           {filters.employmentStatus && (
             <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300">
               {employmentStatusOptions.find(s => s.value === filters.employmentStatus)?.label}
+            </span>
+          )}
+          {filters.organizationId && (
+            <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300">
+              {organizationOptions.find(o => o.value === filters.organizationId)?.label}
             </span>
           )}
         </div>

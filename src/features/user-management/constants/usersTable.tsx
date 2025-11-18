@@ -1,8 +1,10 @@
 import { Column, Action } from '@share/components/table/DataTable.types'
 import { User } from '../models/usersTableConfig'
 import { StatusBadge } from './usersTableBadges'
+import { NavigateFunction } from 'react-router-dom';
 
 export const userColumns: Column<User>[] = [
+  
 /*     {
       field: 'id',
       header: 'ID',
@@ -73,31 +75,16 @@ export const userColumns: Column<User>[] = [
     }
   ]
   
-  export const userActions: Action<User>[] = [
-    {
-      icon: 'pi pi-eye',
-      label: 'Ver Detalles',
-      color: 'blue',
-      onClick: (user) => console.log('Ver usuario:', user.id)
-    },
+  export const getUserActions = (navigate: NavigateFunction): Action<User>[] => [
     {
       icon: 'pi pi-pencil',
       label: 'Editar',
       color: 'green',
-      onClick: (user) => console.log('Editar usuario:', user.id),
+      onClick: (user) => {
+        console.log('Navegando a editar usuario:', user.id);
+        navigate(`/gestion-de-usuarios/editar-usuario/${user.id}`);
+      },
       /* show: (client) => client.status !== 'Rechazado' */
     },
-    {
-      icon: 'pi pi-list',
-      label: 'Ver Solicitudes',
-      color: 'purple',
-      onClick: (user) => console.log('Ver solicitudes:', user.id)
-    },
-    {
-      icon: 'pi pi-ban',
-      label: 'Suspender',
-      color: 'red',
-      onClick: (user) => console.log('Suspender:', user.id),
-      /* show: (user) => user.status === 'active' */
-    }
+
   ]

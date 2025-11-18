@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { useAppDispatch, useAppSelector, RootState } from '../../../store/index';
 import Form from '../../../components/form/Form';
 import Label from '../../../components/form/Label';
@@ -11,6 +11,7 @@ import { createUser } from '../slices/operations/createUser.operations';
 import { fetchUsers } from '../slices/operations/fetchUsers.operation';
 import swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
+import { editUserById } from '../slices/operations/editUserById.operation';
 
 
 
@@ -34,6 +35,8 @@ const FormUsers: React.FC<FormUsersProps> = ({
     phoneNumber: initialData?.phoneNumber || '',
     role: initialData?.role || '',
   });
+
+
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [isLoading, setIsLoading] = useState(false);
@@ -171,6 +174,28 @@ const FormUsers: React.FC<FormUsersProps> = ({
       setTouched(allTouched);
   }, []);
 
+  // Actualizar el estado del formulario cuando cambia initialData
+  useEffect(() => {
+    if (initialData) {
+      setFormData({
+        firstName: initialData.firstName || '',
+        lastName: initialData.lastName || '',
+        email: initialData.email || '',
+        password: '', // No mostrar contraseña en edición
+        documentNumber: initialData.documentNumber || '',
+        phoneNumber: initialData.phoneNumber || '',
+        role: initialData.role || '',
+      });
+    }
+  }, [initialData]);
+
+  // Ocultar campo de contraseña en modo edición
+  useEffect(() => {
+    if (isEditMode) {
+      setShowPassword(false);
+    }
+  }, [isEditMode]);
+
   // Submit optimizado - Maneja toda la lógica internamente
   const handleSubmit = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -194,12 +219,26 @@ const FormUsers: React.FC<FormUsersProps> = ({
         : dataToSubmit;
 
       if (isEditMode) {
-        // TODO: Implementar actualización de usuario cuando esté disponible
-        console.log('Actualizando usuario:', finalData);
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        // @ts-expect-error - Redux Toolkit types issue with React 19
+        const editUserByIdResult = await dispatch(editUserById({userId: initialData?.id || '', user: finalData}));
         
-        if (onSuccess) {
-          await onSuccess(dataToSubmit);
+        if (editUserById.fulfilled.match(editUserByIdResult)) {
+          await swal.fire({
+            title: '¡Éxito!',
+            text: 'Usuario actualizado exitosamente',
+            icon: 'success',
+            confirmButtonColor: '#FB6514',
+          }).then(() => {
+            navigate('/dashboard/gestion-de-usuarios');
+          });
+        } else if (editUserById.rejected.match(editUserByIdResult)) {
+          const errorMsg = editUserByIdResult.error ? String(editUserByIdResult.error) : 'Error al actualizar el usuario';
+          await swal.fire({
+            title: 'Error',
+            text: errorMsg,
+            icon: 'error',
+            confirmButtonColor: '#FB6514',
+          });
         }
       } else {
         // Crear usuario usando Redux
@@ -273,6 +312,7 @@ const FormUsers: React.FC<FormUsersProps> = ({
       }
     });
   }, [navigate]);
+
 
   return (
     <div className="max-w-4xl mx-auto p-6">
@@ -372,10 +412,7 @@ const FormUsers: React.FC<FormUsersProps> = ({
                 hint={touched.documentNumber ? errors.documentNumber : ''}
               />
             </div>
-          </div>
 
-          {/* Cuarta fila: Rol y Contraseña */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <Label htmlFor="role">Rol *</Label>
               <Select
@@ -389,43 +426,49 @@ const FormUsers: React.FC<FormUsersProps> = ({
                 <p className="mt-1.5 text-xs text-error-500">{errors.role}</p>
               )}
             </div>
+          </div>
 
-            <div>
-              <Label htmlFor="password">
-                Contraseña {isEditMode ? '(Dejar vacío para no cambiar)' : '*'}
-              </Label>
-              <div className="relative">
-                <Input
-                  type={showPassword ? 'text' : 'password'}
-                  id="password"
-                  name="password"
-                  placeholder={isEditMode ? 'Dejar vacío para no cambiar' : 'Ingresa la contraseña'}
-                  value={formData.password}
-                  onChange={(e) => handleInputChange('password', e.target.value)}
-                  onBlur={() => handleBlur('password')}
-                  error={!!errors.password && touched.password}
-                  hint={touched.password ? errors.password : ''}
-                  className="pr-12"
-                />
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    setShowPassword(!showPassword);
-                  }}
-                  className="absolute z-30 top-1/2 -translate-y-1/2 right-3 cursor-pointer outline-none focus:outline-none hover:opacity-70 transition-opacity flex items-center justify-center w-6 h-6"
-                  tabIndex={-1}
-                  aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
-                >
-                  {showPassword ? (
-                    <EyeIcon className="fill-gray-500 dark:fill-gray-400 size-5 pointer-events-none" />
-                  ) : (
-                    <EyeCloseIcon className="fill-gray-500 dark:fill-gray-400 size-5 pointer-events-none" />
-                  )}
-                </button>
+          {/* Cuarta fila: Rol y Contraseña */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            {!isEditMode && (
+              <div>
+                <Label htmlFor="password">
+                  Contraseña *
+                </Label>
+                <div className="relative">
+                  <Input
+                    type={showPassword ? 'text' : 'password'}
+                    id="password"
+                    name="password"
+                    placeholder="Ingresa la contraseña"
+                    value={formData.password}
+                    onChange={(e) => handleInputChange('password', e.target.value)}
+                    onBlur={() => handleBlur('password')}
+                    error={!!errors.password && touched.password}
+                    hint={touched.password ? errors.password : ''}
+                    className="pr-12"
+                  />
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setShowPassword(!showPassword);
+                    }}
+                    className="absolute z-30 top-1/2 -translate-y-1/2 right-3 cursor-pointer outline-none focus:outline-none hover:opacity-70 transition-opacity flex items-center justify-center w-6 h-6"
+                    tabIndex={-1}
+                    aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                  >
+                    {showPassword ? (
+                      <EyeIcon className="fill-gray-500 dark:fill-gray-400 size-5 pointer-events-none" />
+                    ) : (
+                      <EyeCloseIcon className="fill-gray-500 dark:fill-gray-400 size-5 pointer-events-none" />
+                    )}
+                  </button>
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
           {/* Botones de acción */}
@@ -438,19 +481,38 @@ const FormUsers: React.FC<FormUsersProps> = ({
             >
               Cancelar
             </Button>
-            <button
-              type="submit"
-              disabled={isLoadingState}
-              className={`inline-flex items-center justify-center gap-2 rounded-lg transition px-5 py-3.5 text-sm ${
-                isLoadingState 
-                  ? 'cursor-not-allowed opacity-50 bg-brand-300 text-white' 
-                  : 'bg-brand-500 text-white shadow-theme-xs hover:bg-brand-600 disabled:bg-brand-300'
-              }`}
-            >
-              <span className="flex items-center">
-              </span>
-              {isLoadingState ? 'Guardando...' : isEditMode ? 'Actualizar Usuario' : 'Crear Usuario'}
-            </button>
+
+            {isEditMode && (
+              <button 
+                type="submit"
+                className={`inline-flex items-center justify-center gap-2 rounded-lg transition px-5 py-3.5 text-sm ${
+                  isLoadingState 
+                    ? 'cursor-not-allowed opacity-50 bg-brand-300 text-white' 
+                    : 'bg-brand-500 text-white shadow-theme-xs hover:bg-brand-600 disabled:bg-brand-300'
+                }`}                
+                disabled={isLoadingState}
+              >
+                <span className="flex items-center">
+                  {isLoadingState ? 'Actualizando usuario...' : 'Actualizar Usuario'}
+                </span>
+              </button>
+            )}  
+
+            {!isEditMode && (
+              <button
+                type="submit"
+                disabled={isLoadingState}
+                className={`inline-flex items-center justify-center gap-2 rounded-lg transition px-5 py-3.5 text-sm ${
+                  isLoadingState 
+                    ? 'cursor-not-allowed opacity-50 bg-brand-300 text-white' 
+                    : 'bg-brand-500 text-white shadow-theme-xs hover:bg-brand-600 disabled:bg-brand-300'
+                }`}
+              >
+                <span className="flex items-center">
+                </span>
+                {isLoadingState ? 'Guardando...' : 'Crear Usuario'}
+              </button>
+            )}
           </div>
         </Form>
       </div>
