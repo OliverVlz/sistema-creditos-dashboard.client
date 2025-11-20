@@ -1,16 +1,13 @@
-import { type ReactNode } from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
-
-interface PrivateRouteProps {
-  children: ReactNode;
-}
+import { Navigate, useLocation } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
+import AppLayout from "./AppLayout";
 
 /**
- * Componente Guard para proteger rutas privadas
- * Redirige al login si el usuario no está autenticado
+ * Layout protegido que requiere autenticación
+ * Todas las rutas que usen este layout requerirán autenticación
+ * Equivalente a un Guard en Angular
  */
-export const PrivateRoute = ({ children }: PrivateRouteProps) => {
+const ProtectedAppLayout = () => {
   const { isAuthenticated, loading } = useAuth();
   const location = useLocation();
 
@@ -29,5 +26,8 @@ export const PrivateRoute = ({ children }: PrivateRouteProps) => {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  return <>{children}</>;
+  // Si está autenticado, renderizar el layout con las rutas hijas
+  return <AppLayout />;
 };
+
+export default ProtectedAppLayout;

@@ -1,9 +1,8 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 
-import AppLayout from "./layout/AppLayout";
+import ProtectedAppLayout from "./layout/ProtectedAppLayout";
 import { ScrollToTop } from "./components/common/ScrollToTop";
 
-import Home from "./pages/Dashboard/Home";
 import UserProfiles from "./pages/UserProfiles";
 import Calendar from "./pages/Calendar";
 import Blank from "./pages/Blank";
@@ -41,6 +40,7 @@ import FormCreateClient from "./features/customer-management/pages/form-create-c
 import Login from "./features/auth/pages/login";
 import FormEditUser from "./features/user-management/pages/form-edit-user";
 import FormEditClient from "./features/customer-management/pages/form-edit-client";
+import Home from "./features/home/pages/home";
 
 export default function App() {
   return (
@@ -61,7 +61,9 @@ export default function App() {
           <Route path="/login2" element={<Login />} />
         </Route>
 
-        <Route element={<AppLayout />}>
+        <Route element={<ProtectedAppLayout />}>
+          <Route path="/home" element={<Home />} />
+
           <Route path="/dashboard/gestion-de-usuarios" element={<UserManagementComponent />} />
           <Route path="/dashboard/crear-usuario" element={<FormCreateUser />} />
           <Route path="/gestion-de-usuarios/editar-usuario/:id" element={<FormEditUser />} />

@@ -1,8 +1,7 @@
-import LoginForm from "../../../modules/landing/pages/LoginPage/sections/LoginForm";
+import LoginForm from '../components/login';  
+
 export default function Login() {
   return (
-    <>
-      <LoginForm />
-    </>
+    <LoginForm />
   );
 }

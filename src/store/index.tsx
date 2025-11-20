@@ -4,12 +4,14 @@ import type { ThunkAction, UnknownAction } from '@reduxjs/toolkit'
 import usersReducer from '../features/user-management/slices/users.slices'
 import clientsReducer from '../features/customer-management/slices/client.slices'
 import organizationsReducer from '../features/customer-management/slices/organizationsSlice'
+import loginReducer from '../features/auth/slices/loginSlice'
 
 export const store = configureStore({
     reducer: {
         users: usersReducer,
         clients: clientsReducer,
         organizations: organizationsReducer,
+        login: loginReducer,
     },
 })
 

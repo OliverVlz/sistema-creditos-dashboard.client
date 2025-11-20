@@ -15,7 +15,7 @@ import {
   DocsIcon,
   TaskIcon,
   BoltIcon,
-  DollarLineIcon,
+  DollarLineIcon,  
 } from "../icons";
 import { useSidebar } from "../context/SidebarContext";
 import { LogoComponent } from "../share/components/logoComponent/logoComponent";
@@ -29,6 +29,11 @@ type NavItem = {
 
 // --- SECCIÓN APLICACIÓN ---
 const aplicacionItems: NavItem[] = [
+  {
+    icon: < GridIcon/>,
+    name: "Inicio",
+    path: "/home",
+  },
   {
     icon: <UserCircleIcon />,
     name: "Gestión de Usuarios",
@@ -311,7 +316,7 @@ const AppSidebar: React.FC = () => {
           !isExpanded && !isHovered ? "lg:justify-center" : "justify-center"
         }`}
       >
-        <Link to="/">
+        <Link to="/home">
           {isExpanded || isHovered || isMobileOpen ? (
             <>
               <LogoComponent
