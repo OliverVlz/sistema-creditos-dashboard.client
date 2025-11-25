@@ -8,6 +8,12 @@ import {
   UserCircleIcon,
   TaskIcon,
   DollarLineIcon,  
+  CalenderIcon,
+  ListIcon,
+  TableIcon,
+  PieChartIcon,
+  BoxCubeIcon,
+  PlugInIcon,
 } from "../icons";
 import { useSidebar } from "../context/SidebarContext";
 import { LogoComponent } from "../share/components/logoComponent/logoComponent";
@@ -70,7 +76,7 @@ const aplicacionItems: NavItem[] = [
 
 // --- SECCIÓN TEMPLATE ---
 const templateItems: NavItem[] = [
-  /* {
+  {
     icon: <GridIcon />,
     name: "Ecommerce",
     path: "/ecommerce",
@@ -122,7 +128,7 @@ const templateItems: NavItem[] = [
       { name: "Sign In", path: "/signin" },
       { name: "Sign Up", path: "/signup" },
     ],
-  }, */
+  }
 ];
 
 const AppSidebar: React.FC = () => {

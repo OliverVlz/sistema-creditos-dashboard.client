@@ -1,9 +1,74 @@
-import CreditTable from '../components/creditTable'
+import { useAppSelector, RootState } from '@/store';
+import { Stepper } from '@/share/components/stepper';
+import { LoanCalculator } from '../components/LoanCalculator';
+import { ClientInformationComponent } from '../components/clientInformation';
+import { UploadDocumentsComponent } from '../components/uploadDocuments';
+import { CreditSummaryComponent } from '../components/creditSummary';
+import { CreditStep } from '../models/creditStepsModel';
 
 export default function CreditManagementComponent() {
+  const { currentStep } = useAppSelector((state: RootState) => state.creditManagement);
+
+  // Configuración de los pasos
+  const steps = [
+    {
+      id: 1,
+      title: 'Calcular Crédito',
+      description: 'Define el monto y plazo',
+    },
+    {
+      id: 2,
+      title: 'Información',
+      description: 'Verifica tus datos',
+    },
+    {
+      id: 3,
+      title: 'Documentos',
+      description: 'Adjunta los archivos',
+    },
+    {
+      id: 4,
+      title: 'Resumen',
+      description: 'Revisa y envía',
+    },
+  ];
+
+  // Renderizar el componente del paso actual
+  const renderCurrentStep = () => {
+    switch (currentStep) {
+      case CreditStep.CALCULATE:
+        return <LoanCalculator />;
+      case CreditStep.CLIENT_INFO:
+        return <ClientInformationComponent />;
+      case CreditStep.UPLOAD_DOCS:
+        return <UploadDocumentsComponent />;
+      case CreditStep.SUMMARY:
+        return <CreditSummaryComponent />;
+      default:
+        return <LoanCalculator />;
+    }
+  };
+
   return (
-    <div>
-      <CreditTable />
+    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
+        {/* Stepper */}
+        <div className="mb-8 bg-white rounded-2xl p-6 shadow-sm border border-gray-200">
+          <Stepper 
+            steps={steps.map((step, index) => ({
+              ...step,
+              completed: index < currentStep,
+              active: index === currentStep,
+            }))}
+            currentStep={currentStep}
+          />
+        </div>
+
+        {/* Contenido del paso actual */}
+        <div className="animate-fade-in">
+          {renderCurrentStep()}
+        </div>
+      </div>
     </div>
-  )
+  );
 }
