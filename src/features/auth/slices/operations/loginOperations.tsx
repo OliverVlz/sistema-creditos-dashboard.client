@@ -1,7 +1,7 @@
-import { LoginFormData } from '../models/loginModel';
+import { LoginFormData } from '../../models/loginModel';
 import { ActionReducerMapBuilder, createAsyncThunk } from '@reduxjs/toolkit';
-import { mainCustomAxios } from '../../../config/axios.config';
-import { LoginSliceState } from '../models/loginModel';
+import { mainCustomAxios } from '../../../../config/axios.config';
+import { LoginSliceState } from '../../models/loginModel';
 
 
 export const login = createAsyncThunk(

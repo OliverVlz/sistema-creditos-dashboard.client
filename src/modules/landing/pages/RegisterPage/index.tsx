@@ -1,9 +1,9 @@
-import RegisterForm from './sections/RegisterForm';
+import RegisterFormPage from './sections/RegisterForm';
 
 export default function RegisterPage() {
   return (
     <>
-      <RegisterForm />
+      <RegisterFormPage />
     </>
   );
 }

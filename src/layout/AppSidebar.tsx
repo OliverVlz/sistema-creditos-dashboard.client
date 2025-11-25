@@ -2,19 +2,11 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 import {
-  BoxCubeIcon,
-  CalenderIcon,
   ChevronDownIcon,
   GridIcon,
   HorizontaLDots,
-  ListIcon,
-  PieChartIcon,
-  PlugInIcon,
-  TableIcon,
   UserCircleIcon,
-  DocsIcon,
   TaskIcon,
-  BoltIcon,
   DollarLineIcon,  
 } from "../icons";
 import { useSidebar } from "../context/SidebarContext";
@@ -49,12 +41,12 @@ const aplicacionItems: NavItem[] = [
     name: "Gestión de Créditos",
     path: "/dashboard/gestion-de-creditos",
   },
-  {
+ /*  {
     icon: <GridIcon />,
     name: "Mi Dashboard",
     path: "/dashboard",
-  },
-  {
+  }, */
+  /* {
     icon: <DocsIcon />,
     name: "Solicitudes",
     subItems: [
@@ -62,8 +54,8 @@ const aplicacionItems: NavItem[] = [
       { name: "Simulación", path: "/dashboard/simulation" },
       { name: "Mis Solicitudes", path: "/dashboard/my-loans" },
     ],
-  },
-  {
+  }, */
+  /* {
     icon: <BoltIcon />,
     name: "Administración",
     subItems: [
@@ -73,12 +65,12 @@ const aplicacionItems: NavItem[] = [
       { name: "Configuración", path: "/dashboard/settings" },
       { name: "Reportes", path: "/dashboard/reports" },
     ],
-  },
+  }, */
 ];
 
 // --- SECCIÓN TEMPLATE ---
 const templateItems: NavItem[] = [
-  {
+  /* {
     icon: <GridIcon />,
     name: "Ecommerce",
     path: "/ecommerce",
@@ -130,7 +122,7 @@ const templateItems: NavItem[] = [
       { name: "Sign In", path: "/signin" },
       { name: "Sign Up", path: "/signup" },
     ],
-  },
+  }, */
 ];
 
 const AppSidebar: React.FC = () => {

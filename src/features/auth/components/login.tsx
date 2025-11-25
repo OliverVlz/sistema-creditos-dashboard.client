@@ -3,8 +3,9 @@ import { useNavigate, Link, useLocation } from 'react-router-dom';
 import Button from '../../../components/ui/Button';
 import EditText from '../../../components/ui/EditText';
 import logoColor from '../../../assets_landing/images/ui/logo-color.png';   
+import { EyeIcon, EyeCloseIcon } from '../../../icons';
 import { LoginFormData, FormErrors } from '../models/loginModel';
-import { login } from '../slices/loginOperations';
+import { login } from '../slices/operations/loginOperations';
 import { useAppDispatch } from '../../../store';
 import { saveAuthData } from '../../../core/services/auth.service';
 import { useAuth } from '../../../hooks/useAuth';
@@ -23,6 +24,7 @@ export default function LoginForm() {
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [touched, setTouched] = useState<Record<keyof LoginFormData, boolean>>({
     email: false,
     password: false
@@ -189,14 +191,33 @@ export default function LoginForm() {
                   <label className="block text-sm font-semibold text-gray-700 mb-1">
                 Contraseña
               </label>
-              <EditText
-                value={formData.password}
-                onChange={(value) => handleInputChange('password', value)}
-                    onBlur={() => handleBlur('password')}
-                type="password"
-                    className={`w-full ${errors.password && touched.password ? 'border-red-300 focus:border-red-500' : ''}`}
-                    disabled={isLoading}
-                  />
+              <div className="relative">
+                <EditText
+                  value={formData.password}
+                  onChange={(value) => handleInputChange('password', value)}
+                  onBlur={() => handleBlur('password')}
+                  type={showPassword ? 'text' : 'password'}
+                  className={`w-full pr-12 ${errors.password && touched.password ? 'border-red-300 focus:border-red-500' : ''}`}
+                  disabled={isLoading}
+                />
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setShowPassword(!showPassword);
+                  }}
+                  className="absolute z-30 top-1/2 -translate-y-1/2 right-3 cursor-pointer outline-none focus:outline-none hover:opacity-70 transition-opacity flex items-center justify-center w-6 h-6"
+                  tabIndex={-1}
+                  aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                >
+                  {showPassword ? (
+                    <EyeIcon className="fill-gray-500 dark:fill-gray-400 size-5 pointer-events-none" />
+                  ) : (
+                    <EyeCloseIcon className="fill-gray-500 dark:fill-gray-400 size-5 pointer-events-none" />
+                  )}
+                </button>
+              </div>
                   {errors.password && touched.password && (
                     <p className="mt-1 text-sm text-red-600 flex items-center">
                       <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
