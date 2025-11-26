@@ -6,6 +6,7 @@ import clientsReducer from '../features/customer-management/slices/client.slices
 import organizationsReducer from '../features/customer-management/slices/organizationsSlice'
 import authReducer from '../features/auth/slices/authSlice'
 import creditManagementReducer from '../features/credit-management/slices/creditManagement'
+import profileReducer from '../features/profile/slices/profile.slices'
 
 export const store = configureStore({
     reducer: {
@@ -14,6 +15,7 @@ export const store = configureStore({
         organizations: organizationsReducer,
         auth: authReducer,
         creditManagement: creditManagementReducer,
+        profile: profileReducer,
     },
 })
 

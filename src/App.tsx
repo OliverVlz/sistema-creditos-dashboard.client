@@ -41,6 +41,7 @@ import Login from "./features/auth/pages/login";
 import FormEditUser from "./features/user-management/pages/form-edit-user";
 import FormEditClient from "./features/customer-management/pages/form-edit-client";
 import Home from "./features/home/pages/home";
+import { ProfilePage } from "./features/profile/pages/profilePage";
 
 export default function App() {
   return (
@@ -72,6 +73,7 @@ export default function App() {
           <Route path="/gestion-de-clientes" element={<CustomerManagementComponent />} />
           <Route path="/gestion-de-clientes/crear-cliente" element={<FormCreateClient />} />
           <Route path="/gestion-de-clientes/editar-cliente/:id" element={<FormEditClient />} />
+          <Route path="/dashboard/mi-perfil" element={<ProfilePage />} />
 
 
           <Route path="/dashboard" element={<RebuiltDashboard />} />

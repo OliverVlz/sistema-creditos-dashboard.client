@@ -47,6 +47,11 @@ const aplicacionItems: NavItem[] = [
     name: "Gestión de Créditos",
     path: "/dashboard/gestion-de-creditos",
   },
+  {
+    icon: <UserCircleIcon />,
+    name: "Mi Perfil",
+    path: "/dashboard/mi-perfil",
+  },
  /*  {
     icon: <GridIcon />,
     name: "Mi Dashboard",
