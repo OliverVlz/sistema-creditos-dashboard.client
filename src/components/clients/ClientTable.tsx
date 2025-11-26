@@ -433,7 +433,7 @@ export default function ClientTable() {
                 
                 <div className="flex items-center gap-2">
                     <span className="text-gray-600 text-sm">Mostrar:</span>
-                    <Dropdown
+                    <Dropdown 
                         value={itemsPerPage}
                         options={itemsPerPageOptions}
                         onChange={(e) => handleItemsPerPageChange(e.value)}

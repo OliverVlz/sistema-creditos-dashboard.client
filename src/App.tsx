@@ -1,9 +1,8 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 
-import AppLayout from "./layout/AppLayout";
+import ProtectedAppLayout from "./layout/ProtectedAppLayout";
 import { ScrollToTop } from "./components/common/ScrollToTop";
 
-import Home from "./pages/Dashboard/Home";
 import UserProfiles from "./pages/UserProfiles";
 import Calendar from "./pages/Calendar";
 import Blank from "./pages/Blank";
@@ -21,7 +20,6 @@ import NotFound from "./pages/OtherPage/NotFound";
 
 import RebuiltDashboard from "./pages/Dashboard/RebuiltDashboard";
 import ClientsPage from "./pages/ClientsPage";
-
 import LandingLayout from "./components/layout/LandingLayout";
 import HomePage from "./modules/landing/pages/HomePage";
 import ServicesPage from "./modules/landing/pages/ServicesPage";
@@ -32,10 +30,22 @@ import EjercitoNacionalPage from "./modules/landing/pages/EjercitoNacionalPage";
 import ArmadaNacionalPage from "./modules/landing/pages/ArmadaNacionalPage";
 import FuerzaAeroespacialPage from "./modules/landing/pages/FuerzaAeroespacialPage";
 import PoliciaNacionalPage from "./modules/landing/pages/PoliciaNacionalPage";
+import UserManagementComponent from "./features/user-management/pages/user-management.component";
+import CreditManagementComponent from "./features/credit-management/pages/credit-managment";   
+import FormCreateUser from "./features/user-management/pages/form-create-user";
+import { store } from "./store";
+import { Provider } from "react-redux";
+import CustomerManagementComponent from "./features/customer-management/pages/customer-management";
+import FormCreateClient from "./features/customer-management/pages/form-create-client";
+import Login from "./features/auth/pages/login";
+import FormEditUser from "./features/user-management/pages/form-edit-user";
+import FormEditClient from "./features/customer-management/pages/form-edit-client";
+import Home from "./features/home/pages/home";
+import { ProfilePage } from "./features/profile/pages/profilePage";
 
 export default function App() {
   return (
-    <>
+    <Provider store={store}>
       <ScrollToTop />
       <Routes>
         <Route element={<LandingLayout />}>
@@ -49,9 +59,23 @@ export default function App() {
           <Route path="/policia-nacional" element={<PoliciaNacionalPage />} />
           <Route path="/registro" element={<RegisterPage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/login2" element={<Login />} />
         </Route>
 
-        <Route element={<AppLayout />}>
+        <Route element={<ProtectedAppLayout />}>
+          <Route path="/home" element={<Home />} />
+
+          <Route path="/dashboard/gestion-de-usuarios" element={<UserManagementComponent />} />
+          <Route path="/dashboard/crear-usuario" element={<FormCreateUser />} />
+          <Route path="/gestion-de-usuarios/editar-usuario/:id" element={<FormEditUser />} />
+
+          <Route path="/dashboard/gestion-de-creditos" element={<CreditManagementComponent />} />
+          <Route path="/gestion-de-clientes" element={<CustomerManagementComponent />} />
+          <Route path="/gestion-de-clientes/crear-cliente" element={<FormCreateClient />} />
+          <Route path="/gestion-de-clientes/editar-cliente/:id" element={<FormEditClient />} />
+          <Route path="/dashboard/mi-perfil" element={<ProfilePage />} />
+
+
           <Route path="/dashboard" element={<RebuiltDashboard />} />
           <Route path="/dashboard/clients" element={<ClientsPage />} />
           <Route path="/dashboard/loan-application" element={<Blank />} />
@@ -81,6 +105,6 @@ export default function App() {
 
         <Route path="*" element={<NotFound />} />
       </Routes>
-    </>
+    </Provider>
   );
 }

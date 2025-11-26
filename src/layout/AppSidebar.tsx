@@ -2,21 +2,21 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 import {
-  BoxCubeIcon,
-  CalenderIcon,
   ChevronDownIcon,
   GridIcon,
   HorizontaLDots,
-  ListIcon,
-  PieChartIcon,
-  PlugInIcon,
-  TableIcon,
   UserCircleIcon,
-  DocsIcon,
   TaskIcon,
-  BoltIcon,
+  DollarLineIcon,  
+  CalenderIcon,
+  ListIcon,
+  TableIcon,
+  PieChartIcon,
+  BoxCubeIcon,
+  PlugInIcon,
 } from "../icons";
 import { useSidebar } from "../context/SidebarContext";
+import { LogoComponent } from "../share/components/logoComponent/logoComponent";
 
 type NavItem = {
   name: string;
@@ -28,16 +28,36 @@ type NavItem = {
 // --- SECCIÓN APLICACIÓN ---
 const aplicacionItems: NavItem[] = [
   {
-    icon: <GridIcon />,
-    name: "Mi Dashboard",
-    path: "/dashboard",
+    icon: < GridIcon/>,
+    name: "Inicio",
+    path: "/home",
+  },
+  {
+    icon: <UserCircleIcon />,
+    name: "Gestión de Usuarios",
+    path: "/dashboard/gestion-de-usuarios",
   },
   {
     icon: <TaskIcon />,
     name: "Gestión de Clientes",
-    path: "/dashboard/clients",
+    path: "/gestion-de-clientes",
   },
   {
+    icon: <DollarLineIcon />, 
+    name: "Gestión de Créditos",
+    path: "/dashboard/gestion-de-creditos",
+  },
+  {
+    icon: <UserCircleIcon />,
+    name: "Mi Perfil",
+    path: "/dashboard/mi-perfil",
+  },
+ /*  {
+    icon: <GridIcon />,
+    name: "Mi Dashboard",
+    path: "/dashboard",
+  }, */
+  /* {
     icon: <DocsIcon />,
     name: "Solicitudes",
     subItems: [
@@ -45,8 +65,8 @@ const aplicacionItems: NavItem[] = [
       { name: "Simulación", path: "/dashboard/simulation" },
       { name: "Mis Solicitudes", path: "/dashboard/my-loans" },
     ],
-  },
-  {
+  }, */
+  /* {
     icon: <BoltIcon />,
     name: "Administración",
     subItems: [
@@ -56,7 +76,7 @@ const aplicacionItems: NavItem[] = [
       { name: "Configuración", path: "/dashboard/settings" },
       { name: "Reportes", path: "/dashboard/reports" },
     ],
-  },
+  }, */
 ];
 
 // --- SECCIÓN TEMPLATE ---
@@ -113,7 +133,7 @@ const templateItems: NavItem[] = [
       { name: "Sign In", path: "/signin" },
       { name: "Sign Up", path: "/signup" },
     ],
-  },
+  }
 ];
 
 const AppSidebar: React.FC = () => {
@@ -296,33 +316,19 @@ const AppSidebar: React.FC = () => {
     >
       <div
         className={`py-8 flex ${
-          !isExpanded && !isHovered ? "lg:justify-center" : "justify-start"
+          !isExpanded && !isHovered ? "lg:justify-center" : "justify-center"
         }`}
       >
-        <Link to="/">
+        <Link to="/home">
           {isExpanded || isHovered || isMobileOpen ? (
             <>
-              <img
-                className="dark:hidden"
-                src="/images/logo/logo.svg"
-                alt="Logo"
-                width={150}
-                height={40}
-              />
-              <img
-                className="hidden dark:block"
-                src="/images/logo/logo-dark.svg"
-                alt="Logo"
-                width={150}
-                height={40}
+              <LogoComponent
+                className="w-20 h-20 center"
               />
             </>
           ) : (
-            <img
-              src="/images/logo/logo-icon.svg"
-              alt="Logo"
-              width={32}
-              height={32}
+            <LogoComponent
+              className="w-10 h-10 justify-center"
             />
           )}
         </Link>
