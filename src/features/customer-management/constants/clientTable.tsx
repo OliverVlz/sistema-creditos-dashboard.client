@@ -19,7 +19,6 @@ export const clientColumns: Column<Client>[] = [
     {
       field: 'documentNumber',
       header: 'Documento',
-      headerIcon: 'pi pi-id-card',
       sortable: true,
       render: (row) => (
         <div className="text-sm font-medium text-gray-900 dark:text-gray-100">
@@ -30,7 +29,6 @@ export const clientColumns: Column<Client>[] = [
     {
       field: 'fullName',
       header: 'Usuario',
-      headerIcon: 'pi pi-user',
       sortable: true,
       render: (row) => (
         <div>
@@ -45,7 +43,6 @@ export const clientColumns: Column<Client>[] = [
       field: 'organization',
       header: 'Organización',
       sortable: true,
-      headerIcon: 'pi pi-building',
       render: (row) => (
         <div className="text-sm font-medium text-gray-900 dark:text-gray-100">{row.organization?.name}</div>
       )
@@ -83,14 +80,15 @@ export const clientColumns: Column<Client>[] = [
   ]
   
   export const getClientActions = (navigate: NavigateFunction): Action<Client>[] => [
-    {
+    /* {
       icon: 'pi pi-eye',
       label: 'Ver Detalles',
       color: 'blue',
       onClick: (client) => console.log('Ver cliente:', client.documentNumber)
-    },
+    }, */
     {
-      icon: 'pi pi-pencil',
+      /* icon: 'pi pi-pencil', */
+      icon: 'pi pi-eye',
       label: 'Editar',
       color: 'green',
       onClick: (client) => navigate(`/gestion-de-clientes/editar-cliente/${client.id}`),

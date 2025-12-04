@@ -72,7 +72,7 @@ export const loanRequestColumns: Column<LoanRequestTableItem>[] = [
     sortable: true,
     width: '140px',
     render: (row) => (
-      <div className="text-sm font-semibold text-blue-600 dark:text-blue-400">
+      <div className="text-sm font-semibold">
         {row.loanNumber}
       </div>
     )

@@ -20,7 +20,6 @@ export const userColumns: Column<User>[] = [
     {
       field: 'documentNumber',
       header: 'Documento',
-      headerIcon: 'pi pi-id-card',
       sortable: true,
       render: (row) => (
         <div className="text-sm font-medium text-gray-900 dark:text-gray-100">
@@ -31,7 +30,6 @@ export const userColumns: Column<User>[] = [
     {
       field: 'firstName',
       header: 'Usuario',
-      headerIcon: 'pi pi-user',
       sortable: true,
       render: (row) => (
         <div>
@@ -77,7 +75,8 @@ export const userColumns: Column<User>[] = [
   
   export const getUserActions = (navigate: NavigateFunction): Action<User>[] => [
     {
-      icon: 'pi pi-pencil',
+      /* icon: 'pi pi-pencil', */
+      icon: 'pi pi-eye',
       label: 'Editar',
       color: 'green',
       onClick: (user) => {
