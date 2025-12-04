@@ -370,7 +370,7 @@ export const LoanCalculator: React.FC = () => {
               size="large"
               fullWidth
               className="shadow-md"
-              onClick={() => navigate('/registro')}
+              onClick={() => navigate("/registro")}
             >
               Continuar con la solicitud
             </Button>

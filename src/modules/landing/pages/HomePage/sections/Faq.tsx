@@ -29,10 +29,6 @@ export default function Faq() {
     {
       question: '¿En cuánto tiempo se realiza el desembolso?',
       answer: 'Una vez aprobado tu crédito, el desembolso se realiza en un plazo máximo de 48 horas hábiles directamente a tu cuenta bancaria.'
-    },
-    {
-      question: '¿Cuál es el monto mínimo y máximo de aprobación?',
-      answer: 'El monto mínimo es de $1.000.000 COP y el máximo es de $150.000.000 COP, sujeto a tu capacidad de pago y perfil crediticio.'
     }
   ];
 
