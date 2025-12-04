@@ -48,6 +48,9 @@ export default function RegisterForm() {
     organizationId: false,
     confirmPassword: false
   });
+  const [acceptTerms, setAcceptTerms] = useState(false);
+  const [acceptPrivacy, setAcceptPrivacy] = useState(false);
+  const [termsError, setTermsError] = useState('');
 
   // Cargar organizaciones al montar el componente
   useEffect(() => {
@@ -200,6 +203,13 @@ export default function RegisterForm() {
   const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Validar aceptación de términos y políticas
+    if (!acceptTerms || !acceptPrivacy) {
+      setTermsError('Debes aceptar los Términos y Condiciones para crear tu cuenta.');
+      return;
+    }
+    setTermsError('');
+
     // Marcar todos los campos como touched
     const allFields: (keyof RegisterFormData)[] = [
       'email', 'password', 'firstName', 'lastName', 'address',
@@ -227,7 +237,7 @@ export default function RegisterForm() {
         general: errorMessage
       });
     }
-  }, [formData, validateForm, dispatch]);
+  }, [formData, validateForm, dispatch, acceptTerms, acceptPrivacy]);
 
   const isLoading = loading;
 
@@ -542,6 +552,73 @@ export default function RegisterForm() {
                   {errors.confirmPassword && touched.confirmPassword && (
                     <p className="mt-1 text-xs text-red-500 ml-1">{errors.confirmPassword}</p>
                   )}
+
+                </div>
+
+                {/* Aceptación de términos y políticas */}
+                <div className="md:col-span-2 mt-1">
+                  <div className="flex items-start gap-2">
+                    <input
+                      id="acceptTerms"
+                      type="checkbox"
+                      checked={acceptTerms}
+                      onChange={(e) => {
+                        setAcceptTerms(e.target.checked);
+                        if (e.target.checked && acceptPrivacy) {
+                          setTermsError('');
+                        }
+                      }}
+                      className="mt-1 h-4 w-4 rounded border-gray-300 text-[#FF8546] focus:ring-[#FF8546]"
+                    />
+                    <label
+                      htmlFor="acceptTerms"
+                      className="text-xs md:text-sm text-gray-500 leading-snug"
+                    >
+                      Acepto los{' '}
+                      <Link
+                        to="/terminos-y-condiciones"
+                        className="text-[#FF8546] font-semibold hover:text-[#E64A2E] transition-colors"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        Términos y Condiciones
+                      </Link>
+                      
+                      .
+                    </label>
+                  </div>
+
+                  <div className="flex items-start gap-2 mt-2">
+                    <input
+                      id="acceptPrivacy"
+                      type="checkbox"
+                      checked={acceptPrivacy}
+                      onChange={(e) => {
+                        setAcceptPrivacy(e.target.checked);
+                        if (e.target.checked && acceptTerms) {
+                          setTermsError('');
+                        }
+                      }}
+                      className="mt-1 h-4 w-4 rounded border-gray-300 text-[#FF8546] focus:ring-[#FF8546]"
+                    />
+                    <label
+                      htmlFor="acceptPrivacy"
+                      className="text-xs md:text-sm text-gray-500 leading-snug"
+                    >
+                      Autorizo el tratamiento de mis datos personales conforme a la{' '}
+                      <Link
+                        to="/politica-de-privacidad"
+                        className="text-[#FF8546] font-semibold hover:text-[#E64A2E] transition-colors"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        Política de Privacidad
+                      </Link>
+                      .
+                    </label>
+                  </div>
+
+                  {termsError && (
+                    <p className="mt-1 text-xs text-red-500 ml-1">{termsError}</p>
+                  )}
                 </div>
 
                 {/* Botón Submit - CAMBIO 4: Full width en grid */}
@@ -551,7 +628,7 @@ export default function RegisterForm() {
                     variant="primary"
                     size="large"
                     fullWidth
-                    disabled={isLoading}
+                    disabled={isLoading || !acceptTerms || !acceptPrivacy}
                     className="bg-gradient-to-r from-[#FF8546] to-[#FF6B35] hover:from-[#E64A2E] hover:to-[#FF5722] shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed py-3 text-lg font-semibold rounded-xl"
                   >
                     {isLoading ? (

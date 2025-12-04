@@ -20,7 +20,7 @@ import LineChart from "./pages/Charts/LineChart";
 import BarChart from "./pages/Charts/BarChart";
 import NotFound from "./pages/OtherPage/NotFound";
 
-import RebuiltDashboard from "./pages/Dashboard/RebuiltDashboard";
+/* import RebuiltDashboard from "./pages/Dashboard/RebuiltDashboard"; */
 import ClientsPage from "./pages/ClientsPage";
 import LandingLayout from "./components/layout/LandingLayout";
 import HomePage from "./modules/landing/pages/HomePage";
@@ -175,7 +175,7 @@ export default function App() {
           />
 
           {/* Rutas legacy/template (mantener acceso general) */}
-          <Route path="/dashboard" element={<RebuiltDashboard />} />
+          {/* <Route path="/dashboard" element={<RebuiltDashboard />} /> */}
           <Route path="/dashboard/clients" element={<ClientsPage />} />
           <Route path="/dashboard/loan-application" element={<Blank />} />
           <Route path="/dashboard/simulation" element={<Blank />} />

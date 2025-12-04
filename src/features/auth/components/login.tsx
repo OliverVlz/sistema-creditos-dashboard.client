@@ -111,14 +111,10 @@ export default function LoginForm() {
       saveAuthData(result);
       updateUser(result.user);
       
-      // Mostrar el resultado en consola
-      console.log('Login exitoso - Resultado:', result);
-      console.log('Token guardado:', result.token);
-      console.log('Usuario guardado:', result.user);
-      console.log('Datos del formulario:', formData);
+
       
       // Redirigir a la ruta desde la que se intentó acceder o al dashboard por defecto
-      const from = (location.state as { from?: { pathname: string } })?.from?.pathname || '/dashboard';
+      const from = (location.state as { from?: { pathname: string } })?.from?.pathname || '/home';
       navigate(from, { replace: true });
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : 'Error al iniciar sesión. Verifica tus credenciales.';

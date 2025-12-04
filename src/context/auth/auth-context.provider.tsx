@@ -47,7 +47,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       localStorage.setItem(LOCAL_STORAGE_USER, JSON.stringify(mockUser));
       localStorage.setItem(LOCAL_STORAGE_TOKEN, 'mock-token');
       
-      navigate('/dashboard', { replace: true });
+      navigate('/home', { replace: true });
     } catch (error) {
       console.error('Error en login:', error);
       setUser(null);
