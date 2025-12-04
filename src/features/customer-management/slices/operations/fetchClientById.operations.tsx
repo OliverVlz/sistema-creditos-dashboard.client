@@ -9,8 +9,10 @@ import { ClientFormData } from '../../models/formClientModel'
 
 export const fetchClientById = createAsyncThunk(
     'clients/fetchClientById',
-    async (clientId: string) => {
-        const response = await mainCustomAxios.get(`/clients/${clientId}/profile`)
+    async (userId: string) => {
+        // IMPORTANTE: userId debe ser el userId del usuario (UUID), NO el clientId ni documentNumber
+        // La API espera el userId para obtener el perfil completo del cliente
+        const response = await mainCustomAxios.get(`/clients/${userId}/profile`)
         const clientData = response.data
         const mappedClient: ClientFormData & { id: string } = {
             id: clientData.id,

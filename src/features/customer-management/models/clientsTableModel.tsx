@@ -14,7 +14,8 @@ export interface Client {
 }
   
 export interface ClientApiResponse {
-    id: string
+    clientId: string  // ID del cliente (clientInfo.id)
+    userId: string    // ID del usuario (user.id) - Este es el que se usa para editar
     firstName?: string
     lastName?: string
     fullName?: string
