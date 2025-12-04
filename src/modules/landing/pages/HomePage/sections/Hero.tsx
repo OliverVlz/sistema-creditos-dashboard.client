@@ -1,6 +1,6 @@
-import Button from '../../../../../components/ui/Button';
-import Section from '../../../../../components/layout/Section';
-import heroNavalOfficer from '../../../../../assets_landing/images/landing/hero-naval-officer1.png';
+import Button from "../../../../../components/ui/Button";
+import Section from "../../../../../components/layout/Section";
+import heroNavalOfficer from "../../../../../assets_landing/images/landing/hero-naval-officer1.png";
 
 export default function Hero() {
   return (
@@ -10,38 +10,54 @@ export default function Hero() {
           {/* Left Content */}
           <div className="flex-1 max-w-2xl">
             <h1 className="sm:text-5xl md:text-[47px] font-extrabold leading-tight uppercase text-global-10">
-              Préstamos por libranza, 100% digitales y sin complicaciones.
+              Préstamos por libranza, ágiles, seguros y sin complicaciones.
             </h1>
-            
+
             <p className="mt-6 text-base leading-relaxed text-global-6">
-              Especialistas en créditos por libranza para pensionados y activos de las Fuerzas Militares y la Policía Nacional: desde hace más de 10 años hacemos que tu solicitud sea transparente y segura, sin costos ocultos y con acompañamiento paso a paso hasta el desembolso.
+              Especialistas en créditos por libranza para pensionados y activos
+              de las Fuerzas Militares y la Policía Nacional: desde hace más de
+              10 años hacemos que tu solicitud sea transparente y segura, sin
+              costos ocultos y con acompañamiento paso a paso hasta el
+              desembolso.
             </p>
-            
+
             <div className="mt-8 flex flex-col sm:flex-row gap-4">
-              <Button 
-                variant="primary" 
+              <Button
+                variant="primary"
                 size="large"
                 className="w-full sm:w-auto font-semibold"
+                onClick={() => {
+                  const element = document.getElementById("simulacion");
+                  if (element) {
+                    element.scrollIntoView({ behavior: "smooth" });
+                  }
+                }}
               >
                 Simula tu préstamo
               </Button>
-              
+
               <Button
                 variant="outline"
                 size="large"
                 className="w-full sm:w-auto"
+                onClick={() => {
+                  const element = document.getElementById("contacto");
+                  if (element) {
+                    element.scrollIntoView({ behavior: "smooth" });
+                  }
+                }}
               >
                 Contáctanos
               </Button>
             </div>
           </div>
-          
+
           {/* Right Image */}
           <div className="flex-1 max-w-sm">
-            <img 
-              src={heroNavalOfficer} 
-              alt="Naval Officer" 
-              className="w-full h-auto rounded-2xl shadow-xl" 
+            <img
+              src={heroNavalOfficer}
+              alt="Naval Officer"
+              className="w-full h-auto rounded-2xl shadow-xl"
             />
           </div>
         </div>
@@ -49,4 +65,3 @@ export default function Hero() {
     </section>
   );
 }
-

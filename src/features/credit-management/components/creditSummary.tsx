@@ -1,30 +1,28 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAppDispatch, useAppSelector, RootState } from '@/store'; 
-import { ViewDocumentPreviewComponent } from './creditSummary/viewDocumentPreview';
-import { previousStep } from '../slices/creditManagement';
-import { submitLoanRequest } from '../slices/operations/submitLoanRequest.operation';
-import Swal from 'sweetalert2';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector, RootState } from "@/store";
+import { ViewDocumentPreviewComponent } from "./creditSummary/viewDocumentPreview";
+import { previousStep } from "../slices/creditManagement";
+import { submitLoanRequest } from "../slices/operations/submitLoanRequest.operation";
+import Swal from "sweetalert2";
 
 // Loan Type Name (debe coincidir con el usado en LoanCalculator)
-const LOAN_TYPE_NAME = 'Libranza';
+const LOAN_TYPE_NAME = "Libranza";
 
 // Mapeo de tipos de documentos a códigos del backend
 // Según el backend: CEDULA, NOMINA, CONSTANCIA_TIEMPO, MESADA
 const DOCUMENT_TYPE_MAP: Record<string, string> = {
-  'cedula': 'CEDULA',
-  'nomina': 'NOMINA',
-  'mesada': 'MESADA',
-  'constancia': 'CONSTANCIA_TIEMPO',
+  cedula: "CEDULA",
+  nomina: "NOMINA",
+  mesada: "MESADA",
+  constancia: "CONSTANCIA_TIEMPO",
 };
-
-
 
 // --- HELPER PARA DINERO ---
 const formatMoney = (value: number) => {
-  return new Intl.NumberFormat('es-CO', {
-    style: 'currency',
-    currency: 'COP',
+  return new Intl.NumberFormat("es-CO", {
+    style: "currency",
+    currency: "COP",
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   }).format(value);
@@ -34,81 +32,90 @@ export const CreditSummaryComponent: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+
   // Obtener datos de Redux
-  const { clientInformation, creditRequest, uploadedDocuments, loanCalculation, loading } = useAppSelector(
-    (state: RootState) => state.creditManagement
-  );
+  const {
+    clientInformation,
+    creditRequest,
+    uploadedDocuments,
+    loanCalculation,
+    loading,
+  } = useAppSelector((state: RootState) => state.creditManagement);
 
   // Preparar datos del cliente (toda la información disponible)
-  const clientData = clientInformation ? {
-    name: `${clientInformation.firstName} ${clientInformation.lastName}`,
-    firstName: clientInformation.firstName,
-    lastName: clientInformation.lastName,
-    document: clientInformation.documentNumber,
-    email: clientInformation.email,
-    phone: clientInformation.phoneNumber,
-    organization: clientInformation.clientInfo?.organization?.name || '---',
-    employmentStatus: clientInformation.clientInfo?.employmentStatus || '---',
-    address: clientInformation.clientInfo?.address || '---',
-    birthDate: clientInformation.clientInfo?.birthDate || '---',
-  } : null;
+  const clientData = clientInformation
+    ? {
+        name: `${clientInformation.firstName} ${clientInformation.lastName}`,
+        firstName: clientInformation.firstName,
+        lastName: clientInformation.lastName,
+        document: clientInformation.documentNumber,
+        email: clientInformation.email,
+        phone: clientInformation.phoneNumber,
+        organization: clientInformation.clientInfo?.organization?.name || "---",
+        employmentStatus:
+          clientInformation.clientInfo?.employmentStatus || "---",
+        address: clientInformation.clientInfo?.address || "---",
+        birthDate: clientInformation.clientInfo?.birthDate || "---",
+      }
+    : null;
 
   // Preparar datos del crédito
-  const creditData = creditRequest ? {
-    amount: creditRequest.amount,
-    months: creditRequest.months,
-  } : null;
+  const creditData = creditRequest
+    ? {
+        amount: creditRequest.amount,
+        months: creditRequest.months,
+      }
+    : null;
 
   // Preparar lista de documentos
   const handleSendRequest = async () => {
     // Validar que tenemos todos los datos necesarios
     if (!clientInformation?.clientInfo?.id) {
       Swal.fire({
-        title: 'Error',
-        text: 'No se encontró la información del cliente',
-        icon: 'error',
-        confirmButtonColor: '#FF8546',
+        title: "Error",
+        text: "No se encontró la información del cliente",
+        icon: "error",
+        confirmButtonColor: "#FF8546",
       });
       return;
     }
 
     if (!clientInformation?.clientInfo?.organization?.id) {
       Swal.fire({
-        title: 'Error',
-        text: 'No se encontró la información de la organización',
-        icon: 'error',
-        confirmButtonColor: '#FF8546',
+        title: "Error",
+        text: "No se encontró la información de la organización",
+        icon: "error",
+        confirmButtonColor: "#FF8546",
       });
       return;
     }
 
     if (!loanCalculation) {
       Swal.fire({
-        title: 'Error',
-        text: 'No se encontró el cálculo del préstamo',
-        icon: 'error',
-        confirmButtonColor: '#FF8546',
+        title: "Error",
+        text: "No se encontró el cálculo del préstamo",
+        icon: "error",
+        confirmButtonColor: "#FF8546",
       });
       return;
     }
 
     if (!creditRequest) {
       Swal.fire({
-        title: 'Error',
-        text: 'No se encontró la información del crédito',
-        icon: 'error',
-        confirmButtonColor: '#FF8546',
+        title: "Error",
+        text: "No se encontró la información del crédito",
+        icon: "error",
+        confirmButtonColor: "#FF8546",
       });
       return;
     }
 
     if (uploadedDocuments.length === 0) {
       Swal.fire({
-        title: 'Error',
-        text: 'Debes subir al menos un documento',
-        icon: 'error',
-        confirmButtonColor: '#FF8546',
+        title: "Error",
+        text: "Debes subir al menos un documento",
+        icon: "error",
+        confirmButtonColor: "#FF8546",
       });
       return;
     }
@@ -122,63 +129,69 @@ export const CreditSummaryComponent: React.FC = () => {
 
       uploadedDocuments.forEach((doc) => {
         files.push(doc.file);
-        documentTypeCodes.push(DOCUMENT_TYPE_MAP[doc.type] || doc.type.toUpperCase());
+        documentTypeCodes.push(
+          DOCUMENT_TYPE_MAP[doc.type] || doc.type.toUpperCase()
+        );
       });
 
       // Enviar solicitud al backend y obtener respuesta (loanId, loanNumber)
       // @ts-expect-error - Redux Toolkit types issue with React 19
-      const response = await dispatch(submitLoanRequest({
-        clientId: clientInformation.clientInfo.id,
-        loanTypeName: LOAN_TYPE_NAME,
-        organizationName: clientInformation.clientInfo.organization.name,
-        amountRequested: creditRequest.amount,
-        termMonths: creditRequest.months,
-        monthlyPayment: loanCalculation.monthlyPayment,
-        totalInterest: loanCalculation.totalInterest,
-        totalPayable: loanCalculation.totalPayable,
-        documentTypeCodes,
-        files,
-      })).unwrap() as { loanId?: string; loanNumber?: string };
+      const response = (await dispatch(
+        submitLoanRequest({
+          clientId: clientInformation.clientInfo.id,
+          loanTypeName: LOAN_TYPE_NAME,
+          organizationName: clientInformation.clientInfo.organization.name,
+          amountRequested: creditRequest.amount,
+          termMonths: creditRequest.months,
+          monthlyPayment: loanCalculation.monthlyPayment,
+          totalInterest: loanCalculation.totalInterest,
+          totalPayable: loanCalculation.totalPayable,
+          documentTypeCodes,
+          files,
+        })
+      ).unwrap()) as { loanId?: string; loanNumber?: string };
 
-      const loanNumber = response?.loanNumber ?? '---';
+      const loanNumber = response?.loanNumber ?? "---";
 
       // Mostrar mensaje de éxito con el número de solicitud
       await Swal.fire({
-        title: '¡Éxito!',
+        title: "¡Éxito!",
         html: `
           <p style="margin-bottom: 8px;">Tu solicitud de crédito ha sido enviada correctamente.</p>
           <p style="font-size: 14px; color: #475467;">
             <strong>Número de solicitud:</strong> ${loanNumber}
           </p>
         `,
-        icon: 'success',
-        confirmButtonColor: '#FF8546',
-        confirmButtonText: 'Ir a mis solicitudes',
+        icon: "success",
+        confirmButtonColor: "#FF8546",
+        confirmButtonText: "Ir a mis solicitudes",
       });
 
       // Redirigir a la gestión de solicitudes
-      navigate('/gestion-solicitudes');
-
+      navigate("/gestion-solicitudes");
     } catch (error: unknown) {
-      console.error('Error al enviar la solicitud:', error);
-      
+      console.error("Error al enviar la solicitud:", error);
+
       // Intentar extraer el mensaje del error de la respuesta del backend
-      let errorMessage = 'Error al enviar la solicitud. Por favor, intenta nuevamente.';
-      
-      if (error && typeof error === 'object' && 'response' in error) {
-        const axiosError = error as { response?: { data?: { message?: string } } };
+      let errorMessage =
+        "Error al enviar la solicitud. Por favor, intenta nuevamente.";
+
+      if (error && typeof error === "object" && "response" in error) {
+        const axiosError = error as {
+          response?: { data?: { message?: string } };
+        };
         if (axiosError.response?.data?.message) {
           errorMessage = axiosError.response.data.message;
         }
       } else if (error instanceof Error) {
         errorMessage = error.message;
       }
-      
+
       Swal.fire({
-        title: 'Error',
+        title: "Error",
         text: errorMessage,
-        icon: 'error',
-        confirmButtonColor: '#FF8546',
+        icon: "error",
+        confirmButtonColor: "#FF8546",
       });
     } finally {
       setIsSubmitting(false);
@@ -189,20 +202,20 @@ export const CreditSummaryComponent: React.FC = () => {
   const SimpleRow = ({ label, value }: { label: string; value: string }) => (
     <div className="flex justify-between py-2 border-b border-gray-100 last:border-0">
       <span className="text-sm font-medium text-gray-500">{label}</span>
-      <span className="text-sm font-semibold text-gray-800 text-right">{value}</span>
+      <span className="text-sm font-semibold text-gray-800 text-right">
+        {value}
+      </span>
     </div>
   );
 
   return (
     <div className="bg-white rounded-[32px] p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 w-full mx-auto mt-6">
-      
       <h2 className="text-2xl font-bold text-gray-800 tracking-tight font-plus-jakarta mb-8 text-center">
         Información de crédito
       </h2>
 
       {/* --- SECCIÓN SUPERIOR: DATOS (2 COLUMNAS) --- */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-        
         {/* COLUMNA 1: DATOS DEL CLIENTE */}
         <div className="border border-gray-200 rounded-2xl p-6 flex flex-col h-full">
           <h3 className="text-lg font-bold text-gray-800 mb-4 border-b border-gray-100 pb-2">
@@ -214,10 +227,23 @@ export const CreditSummaryComponent: React.FC = () => {
               <SimpleRow label="Cédula" value={clientData.document} />
               <SimpleRow label="Correo electrónico" value={clientData.email} />
               <SimpleRow label="Teléfono" value={clientData.phone} />
-              <SimpleRow label="Entidad / Organización" value={clientData.organization} />
-              <SimpleRow label="Estado Laboral" value={clientData.employmentStatus} />
+              <SimpleRow
+                label="Entidad / Organización"
+                value={clientData.organization}
+              />
+              <SimpleRow
+                label="Estado Laboral"
+                value={clientData.employmentStatus}
+              />
               {/* <SimpleRow label="Dirección" value={clientData.address} /> */}
-              <SimpleRow label="Fecha de nacimiento" value={clientData.birthDate ? new Date(clientData.birthDate).toLocaleDateString('es-CO') : '---'} />
+              <SimpleRow
+                label="Fecha de nacimiento"
+                value={
+                  clientData.birthDate
+                    ? new Date(clientData.birthDate).toLocaleDateString("es-CO")
+                    : "---"
+                }
+              />
             </div>
           ) : (
             <p className="text-sm text-gray-400 text-center py-4">
@@ -237,8 +263,9 @@ export const CreditSummaryComponent: React.FC = () => {
               <div className="bg-blue-50/50 rounded-xl p-4 border border-blue-100">
                 <div className="flex justify-between items-center">
                   <div>
-                    <p className="text-sm text-blue-800 font-medium">Cuota mensual estimada</p>
-                    <p className="text-xs text-blue-600">Capital + Intereses</p>
+                    <p className="text-sm text-blue-800 font-medium">
+                      Cuota mensual estimada
+                    </p>
                   </div>
                   <div className="text-2xl font-bold text-blue-900">
                     {formatMoney(loanCalculation.monthlyPayment)}
@@ -248,16 +275,31 @@ export const CreditSummaryComponent: React.FC = () => {
 
               {/* Detalles del crédito */}
               <div className="space-y-2">
-                <SimpleRow label="Valor del crédito" value={formatMoney(loanCalculation.amountRequested)} />
+                <SimpleRow
+                  label="Valor del crédito"
+                  value={formatMoney(loanCalculation.amountRequested)}
+                />
                 <SimpleRow label="Plazo" value={`${creditData.months} Meses`} />
-                <SimpleRow label="Tasa de interés anual" value={`${loanCalculation.annualInterestRate}%`} />
-                <SimpleRow label="Tasa de interés mensual (N.M.V)" value={`${(loanCalculation.monthlyRate * 100).toFixed(4)}%`} />
+                <SimpleRow
+                  label="Tasa de interés anual"
+                  value={`${loanCalculation.annualInterestRate}%`}
+                />
+                <SimpleRow
+                  label="Tasa de interés mensual"
+                  value={`${(loanCalculation.monthlyRate * 100).toFixed(4)}%`}
+                />
                 <div className="flex justify-between items-center py-2 border-b border-gray-100 bg-blue-50/30 px-2 -mx-2 rounded">
-                  <span className="text-sm text-blue-800 font-medium">Total de intereses</span>
-                  <span className="text-sm text-blue-800 font-bold">{formatMoney(loanCalculation.totalInterest)}</span>
+                  <span className="text-sm text-blue-800 font-medium">
+                    Total de intereses
+                  </span>
+                  <span className="text-sm text-blue-800 font-bold">
+                    {formatMoney(loanCalculation.totalInterest)}
+                  </span>
                 </div>
                 <div className="flex justify-between items-center pt-2 mt-2">
-                  <span className="text-base font-bold text-gray-800">Total a pagar aproximado</span>
+                  <span className="text-base font-bold text-gray-800">
+                    Total a pagar aproximado
+                  </span>
                   <span className="text-lg font-bold text-[#FF8546]">
                     {formatMoney(loanCalculation.totalPayable)}
                   </span>
@@ -295,7 +337,7 @@ export const CreditSummaryComponent: React.FC = () => {
             disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none
           "
         >
-          {isSubmitting || loading ? 'Enviando...' : 'Enviar Solicitud'}
+          {isSubmitting || loading ? "Enviando..." : "Enviar Solicitud"}
         </button>
       </div>
     </div>
