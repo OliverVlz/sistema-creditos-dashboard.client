@@ -6,11 +6,11 @@ import bannerImage from '../utils/Home.jpg';
  */
 export default function HomeBanner() {
   return (
-    <div className="relative h-full min-h-[420px] lg:min-h-[560px] rounded-2xl overflow-hidden shadow-xl">
+    <div className="relative w-full h-auto max-h-[calc(100vh-180px)] rounded-2xl overflow-hidden shadow-xl">
       <img
         src={bannerImage}
         alt="Banner Presta Ya"
-        className="w-full h-full object-cover"
+        className="w-full h-auto max-h-[calc(100vh-180px)] object-contain rounded-2xl"
       />
     </div>
   );

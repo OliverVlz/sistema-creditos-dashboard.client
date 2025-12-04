@@ -271,6 +271,29 @@ const AppSidebar: React.FC = () => {
 
         {/* Sección inferior: usuario actual */}
         <div className="pb-6 pt-4 border-t border-gray-100 dark:border-gray-800 relative">
+          {/* Menú desplegable hacia arriba */}
+          {isUserMenuOpen && (isExpanded || isHovered || isMobileOpen) && (
+            <div className="absolute bottom-full left-0 right-0 mb-2 mx-1 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-lg text-sm overflow-hidden z-10">
+              <button
+                type="button"
+                onClick={() => {
+                  navigate(CHANGE_PASSWORD_ROUTE);
+                  setIsUserMenuOpen(false);
+                }}
+                className="w-full text-left px-4 py-2.5 hover:bg-gray-50 dark:hover:bg-white/5 text-gray-700 dark:text-gray-200"
+              >
+                Cambiar mi contraseña
+              </button>
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="w-full text-left px-4 py-2.5 hover:bg-gray-50 dark:hover:bg-white/5 text-gray-700 dark:text-gray-200"
+              >
+                Cerrar sesión
+              </button>
+            </div>
+          )}
+
           <button
             type="button"
             onClick={handleUserMenuToggle}
@@ -296,33 +319,11 @@ const AppSidebar: React.FC = () => {
             {(isExpanded || isHovered || isMobileOpen) && (
               <ChevronDownIcon
                 className={`ml-auto w-4 h-4 text-gray-400 transition-transform ${
-                  isUserMenuOpen ? "rotate-180" : ""
+                  isUserMenuOpen ? "" : "rotate-180"
                 }`}
               />
             )}
           </button>
-
-          {isUserMenuOpen && (isExpanded || isHovered || isMobileOpen) && (
-            <div className="mt-2 mx-1 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-lg text-sm overflow-hidden">
-              <button
-                type="button"
-                onClick={() => {
-                  navigate(CHANGE_PASSWORD_ROUTE);
-                  setIsUserMenuOpen(false);
-                }}
-                className="w-full text-left px-4 py-2.5 hover:bg-gray-50 dark:hover:bg-white/5 text-gray-700 dark:text-gray-200"
-              >
-                Cambiar mi contraseña
-              </button>
-              <button
-                type="button"
-                onClick={handleLogout}
-                className="w-full text-left px-4 py-2.5 hover:bg-gray-50 dark:hover:bg-white/5 text-gray-700 dark:text-gray-200"
-              >
-                Cerrar sesión
-              </button>
-            </div>
-          )}
         </div>
       </div>
     </aside>

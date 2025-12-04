@@ -338,9 +338,9 @@ export const LoanCalculator: React.FC = () => {
             </Button>
           </div>
 
-          <p className="mt-4 text-xs text-center text-global-6 leading-relaxed">
+          {/* <p className="mt-4 text-xs text-center text-global-6 leading-relaxed">
             * Los valores presentados son una simulación y pueden variar según el análisis de crédito definitivo.
-          </p>
+          </p> */}
         </div>
       )}
     </div>
