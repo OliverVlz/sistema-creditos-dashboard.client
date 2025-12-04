@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector, RootState } from '@/store'; 
 import { ViewDocumentPreviewComponent } from './creditSummary/viewDocumentPreview';
-import { previousStep } from '../slices/creditManagement';
+import { previousStep, resetCreditManagement } from '../slices/creditManagement';
 import { submitLoanRequest } from '../slices/operations/submitLoanRequest.operation';
 import Swal from 'sweetalert2';
 
@@ -141,6 +141,9 @@ export const CreditSummaryComponent: React.FC = () => {
       })).unwrap() as { loanId?: string; loanNumber?: string };
 
       const loanNumber = response?.loanNumber ?? '---';
+
+      // Limpiar el estado de la solicitud anterior para que no aparezca en la próxima solicitud
+      dispatch(resetCreditManagement());
 
       // Mostrar mensaje de éxito con el número de solicitud
       await Swal.fire({

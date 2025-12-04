@@ -7,16 +7,16 @@ import HomeRequestsPanel from '../components/HomeRequestsPanel';
  */
 export default function Home() {
   return (
-    <div className="min-h-[calc(100vh-120px)] flex items-center py-6 lg:py-10">
+    <div className="min-h-[calc(100vh-120px)] flex items-start py-6 lg:py-10">
       {/* Layout principal: en desktop siempre 2 columnas mitad y mitad */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full items-stretch w-full">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start w-full">
         {/* Columna Izquierda: Banner */}
-        <div className="order-2 lg:order-1 h-full flex justify-center lg:justify-start pt-10">
+        <div className="order-2 lg:order-1 flex justify-center lg:justify-start">
           <HomeBanner />
         </div>
 
         {/* Columna Derecha: Panel de Solicitudes */}
-        <div className="order-1 lg:order-2 h-full flex flex-col pt-15">
+        <div className="order-1 lg:order-2 flex flex-col">
           <HomeRequestsPanel />
         </div>
       </div>

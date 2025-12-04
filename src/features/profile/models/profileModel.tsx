@@ -43,6 +43,7 @@ export interface ProfileUpdateData {
   address?: string;
   birthDate?: string;
   employmentStatus?: string;
+  organizationId?: string;
 }
 
 export interface ProfileState {
