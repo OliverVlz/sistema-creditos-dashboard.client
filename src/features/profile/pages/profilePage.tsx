@@ -1,10 +1,7 @@
 import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import { fetchMyProfile } from '../slices/operations/fetchMyProfile.operation';
-import ProfileMetaCard from '../components/ProfileMetaCard';
-import ProfileInfoCard from '../components/ProfileInfoCard';
-import ProfileAddressCard from '../components/ProfileAddressCard';
-import ProfileOrganizationCard from '../components/ProfileOrganizationCard';
+import ProfileUnifiedCard from '../components/ProfileUnifiedCard';
 import PageBreadcrumb from '@/components/common/PageBreadCrumb';
 
 export const ProfilePage = () => {
@@ -118,17 +115,8 @@ export const ProfilePage = () => {
         </p>
       </div>
 
-      {/* Profile Meta Card */}
-      <ProfileMetaCard profile={profile} />
-
-      {/* Profile Info Cards Grid */}
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <ProfileInfoCard profile={profile} />
-        <ProfileAddressCard profile={profile} />
-      </div>
-
-      {/* Organization Card */}
-      <ProfileOrganizationCard profile={profile} />
+      {/* Profile Unified Card */}
+      <ProfileUnifiedCard profile={profile} />
     </div>
   );
 };
