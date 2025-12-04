@@ -1,8 +1,21 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
-import { useAppSelector, RootState } from '@/store'; 
+import React, { useState } from 'react';
+import { useAppDispatch, useAppSelector, RootState } from '@/store'; 
 import { ViewDocumentPreviewComponent } from './creditSummary/viewDocumentPreview';
 import { previousStep } from '../slices/creditManagement';
+import { submitLoanRequest } from '../slices/operations/submitLoanRequest.operation';
+import Swal from 'sweetalert2';
+
+// Loan Type ID (debe coincidir con el usado en LoanCalculator)
+const LOAN_TYPE_ID = 'a0835c2b-cd2d-4347-954c-384aecb5e24a';
+
+// Mapeo de tipos de documentos a códigos del backend
+// Según el backend: CEDULA, NOMINA, CONSTANCIA_TIEMPO, MESADA
+const DOCUMENT_TYPE_MAP: Record<string, string> = {
+  'cedula': 'CEDULA',
+  'nomina': 'NOMINA',
+  'mesada': 'MESADA',
+  'constancia': 'CONSTANCIA_TIEMPO',
+};
 
 
 
@@ -17,10 +30,11 @@ const formatMoney = (value: number) => {
 };
 
 export const CreditSummaryComponent: React.FC = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   
   // Obtener datos de Redux
-  const { clientInformation, creditRequest, uploadedDocuments } = useAppSelector(
+  const { clientInformation, creditRequest, uploadedDocuments, loanCalculation, loading } = useAppSelector(
     (state: RootState) => state.creditManagement
   );
 
@@ -45,13 +59,119 @@ export const CreditSummaryComponent: React.FC = () => {
   } : null;
 
   // Preparar lista de documentos
-  const handleSendRequest = () => {
-    console.log("Enviando solicitud...", {
-      client: clientData,
-      credit: creditData,
-      documents: uploadedDocuments,
-    });
-    // Aquí iría la lógica para enviar la solicitud al backend
+  const handleSendRequest = async () => {
+    // Validar que tenemos todos los datos necesarios
+    if (!clientInformation?.clientInfo?.id) {
+      Swal.fire({
+        title: 'Error',
+        text: 'No se encontró la información del cliente',
+        icon: 'error',
+        confirmButtonColor: '#FF8546',
+      });
+      return;
+    }
+
+    if (!clientInformation?.clientInfo?.organization?.id) {
+      Swal.fire({
+        title: 'Error',
+        text: 'No se encontró la información de la organización',
+        icon: 'error',
+        confirmButtonColor: '#FF8546',
+      });
+      return;
+    }
+
+    if (!loanCalculation) {
+      Swal.fire({
+        title: 'Error',
+        text: 'No se encontró el cálculo del préstamo',
+        icon: 'error',
+        confirmButtonColor: '#FF8546',
+      });
+      return;
+    }
+
+    if (!creditRequest) {
+      Swal.fire({
+        title: 'Error',
+        text: 'No se encontró la información del crédito',
+        icon: 'error',
+        confirmButtonColor: '#FF8546',
+      });
+      return;
+    }
+
+    if (uploadedDocuments.length === 0) {
+      Swal.fire({
+        title: 'Error',
+        text: 'Debes subir al menos un documento',
+        icon: 'error',
+        confirmButtonColor: '#FF8546',
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      // Preparar archivos y códigos en el mismo orden
+      const files: File[] = [];
+      const documentTypeCodes: string[] = [];
+
+      uploadedDocuments.forEach((doc) => {
+        files.push(doc.file);
+        documentTypeCodes.push(DOCUMENT_TYPE_MAP[doc.type] || doc.type.toUpperCase());
+      });
+
+      // @ts-expect-error - Redux Toolkit types issue with React 19
+      await dispatch(submitLoanRequest({
+        clientId: clientInformation.clientInfo.id,
+        loanTypeId: LOAN_TYPE_ID,
+        organizationId: clientInformation.clientInfo.organization.id,
+        amountRequested: creditRequest.amount,
+        termMonths: creditRequest.months,
+        monthlyPayment: loanCalculation.monthlyPayment,
+        totalInterest: loanCalculation.totalInterest,
+        totalPayable: loanCalculation.totalPayable,
+        documentTypeCodes,
+        files,
+      })).unwrap();
+
+      // Mostrar mensaje de éxito
+      await Swal.fire({
+        title: '¡Éxito!',
+        text: 'Tu solicitud de crédito ha sido enviada correctamente',
+        icon: 'success',
+        confirmButtonColor: '#FF8546',
+      });
+
+      // Opcional: redirigir o limpiar el estado
+      // dispatch(resetCreditManagement());
+
+    } catch (error: unknown) {
+      console.error('Error al enviar la solicitud:', error);
+      
+      // Intentar extraer el mensaje del error de la respuesta del backend
+      let errorMessage = 'Error al enviar la solicitud. Por favor, intenta nuevamente.';
+      
+      if (error && typeof error === 'object' && 'response' in error) {
+        const axiosError = error as { response?: { data?: { message?: string } } };
+        if (axiosError.response?.data?.message) {
+          errorMessage = axiosError.response.data.message;
+        }
+      } else if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+      
+      Swal.fire({
+        title: 'Error',
+        text: errorMessage,
+        icon: 'error',
+        confirmButtonColor: '#FF8546',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   // Componente de Fila Simple
@@ -140,12 +260,14 @@ export const CreditSummaryComponent: React.FC = () => {
         </button>
         <button
           onClick={handleSendRequest}
+          disabled={isSubmitting || loading}
           className="
             flex-1 py-3 rounded-xl font-bold text-white text-lg shadow-lg transition-transform hover:-translate-y-0.5
             bg-gradient-to-r from-[#FF8546] to-[#FF6B35]
+            disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none
           "
         >
-          Enviar Solicitud
+          {isSubmitting || loading ? 'Enviando...' : 'Enviar Solicitud'}
         </button>
       </div>
     </div>

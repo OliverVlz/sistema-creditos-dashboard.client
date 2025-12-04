@@ -1,4 +1,4 @@
-import React, { useState, type InputHTMLAttributes } from 'react';
+import React, { useState, useEffect, type InputHTMLAttributes } from 'react';
 
 interface EditTextProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
   placeholder?: string;
@@ -19,6 +19,11 @@ const EditText: React.FC<EditTextProps> = ({
   ...props 
 }) => {
   const [inputValue, setInputValue] = useState(value);
+
+  // Sincronizar el estado interno con el prop value cuando cambia
+  useEffect(() => {
+    setInputValue(value);
+  }, [value]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;

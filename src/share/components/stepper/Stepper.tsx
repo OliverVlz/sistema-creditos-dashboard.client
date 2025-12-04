@@ -12,9 +12,10 @@ export interface StepperProps {
   steps: Step[];
   currentStep: number;
   className?: string;
+  onStepClick?: (stepIndex: number) => void;
 }
 
-export const Stepper: React.FC<StepperProps> = ({ steps, currentStep, className = '' }) => {
+export const Stepper: React.FC<StepperProps> = ({ steps, currentStep, className = '', onStepClick }) => {
   return (
     <div className={`w-full ${className}`}>
       <div className="flex items-center justify-between">
@@ -22,21 +23,26 @@ export const Stepper: React.FC<StepperProps> = ({ steps, currentStep, className 
           const isCompleted = step.completed || index < currentStep;
           const isActive = step.active || index === currentStep;
           const isLast = index === steps.length - 1;
+          const isClickable = onStepClick && (isCompleted || isActive);
 
           return (
             <React.Fragment key={step.id}>
               {/* Paso individual */}
-              <div className="flex flex-col items-center flex-1">
+              <div 
+                className={`flex flex-col items-center flex-1 ${isClickable ? 'cursor-pointer' : ''}`}
+                onClick={() => isClickable && onStepClick?.(index)}
+              >
                 {/* Círculo del paso */}
                 <div
                   className={`
                     w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300
                     ${isCompleted
-                      ? 'bg-green-500 text-white shadow-lg'
+                      ? 'bg-[#FF8546] text-white shadow-lg'
                       : isActive
-                      ? 'bg-blue-600 text-white shadow-md ring-4 ring-blue-100'
+                      ? 'bg-[#5966a0] text-white shadow-md ring-4 ring-[#5966a0]/20'
                       : 'bg-gray-200 text-gray-500'
                     }
+                    ${isClickable ? 'hover:scale-110' : ''}
                   `}
                 >
                   {isCompleted ? (
@@ -63,7 +69,7 @@ export const Stepper: React.FC<StepperProps> = ({ steps, currentStep, className 
                   <p
                     className={`
                       text-xs font-semibold transition-colors
-                      ${isActive ? 'text-blue-600' : isCompleted ? 'text-green-600' : 'text-gray-400'}
+                      ${isActive ? 'text-[#5966a0]' : isCompleted ? 'text-[#FF8546]' : 'text-gray-400'}
                     `}
                   >
                     {step.title}
@@ -81,7 +87,7 @@ export const Stepper: React.FC<StepperProps> = ({ steps, currentStep, className 
                 <div
                   className={`
                     flex-1 h-0.5 mx-2 transition-colors duration-300
-                    ${isCompleted ? 'bg-green-500' : 'bg-gray-200'}
+                    ${isCompleted ? 'bg-[#FF8546]' : 'bg-gray-200'}
                   `}
                 />
               )}

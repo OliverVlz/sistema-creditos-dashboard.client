@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { fetchClientInformation } from '../slices/operations/fetchClientInformation.operation';
-import { nextStep } from '../slices/creditManagement';
+import { nextStep, previousStep } from '../slices/creditManagement';
 import { RootState, useAppSelector } from '@/store'; 
 
 // --- ICONOS ---
@@ -16,6 +16,13 @@ const ArrowRightIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
     <line x1="5" y1="12" x2="19" y2="12"></line>
     <polyline points="12 5 19 12 12 19"></polyline>
+  </svg>
+);
+
+const ArrowLeftIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="19" y1="12" x2="5" y2="12"></line>
+    <polyline points="12 19 5 12 12 5"></polyline>
   </svg>
 );
 
@@ -35,6 +42,10 @@ export const ClientInformationComponent: React.FC = () => {
 
   const handleNextStep = () => {
     dispatch(nextStep());
+  };
+
+  const handlePreviousStep = () => {
+    dispatch(previousStep());
   };
 
   // Componente auxiliar para las filas
@@ -145,8 +156,17 @@ export const ClientInformationComponent: React.FC = () => {
         </dl>
       )}
 
-      {/* FOOTER: Botón Siguiente */}
-      <div className="flex justify-end pt-4 border-t border-gray-100">
+      {/* FOOTER: Botones Navegación */}
+      <div className="flex justify-between pt-4 border-t border-gray-100">
+        <button
+          onClick={handlePreviousStep}
+          className="h-12 px-6 flex items-center justify-center rounded-xl border-2 border-gray-200 bg-white text-gray-600 hover:bg-gray-50 hover:border-gray-300 transition-all duration-300 group font-semibold text-sm"
+        >
+          <div className="mr-2 transform group-hover:-translate-x-1 transition-transform">
+             <ArrowLeftIcon />
+          </div>
+          <span>Volver</span>
+        </button>
         <button
           onClick={handleNextStep}
           className="h-12 px-6 flex items-center justify-center rounded-xl border-2 border-transparent bg-gray-50 text-gray-600 hover:bg-blue-600 hover:text-white transition-all duration-300 group font-semibold text-sm"

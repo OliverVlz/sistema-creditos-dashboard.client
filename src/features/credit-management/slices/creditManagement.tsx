@@ -1,7 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ClientInformationResponse } from '../models/clientInformationModel';
 import { CreditRequest, UploadedDocument } from '../models/creditRequestModel';
+import { LoanCalculationResponse } from '../models/loanCalculationModel';
 import { createAsyncFetchClientInformationReducer } from './operations/fetchClientInformation.operation';
+import { createAsyncCalculateLoanReducer } from './operations/calculateLoan.operation';
+import { createAsyncSubmitLoanRequestReducer } from './operations/submitLoanRequest.operation';
 
 export interface CreditManagementState {
   clientInformation: ClientInformationResponse | null;
@@ -13,6 +16,10 @@ export interface CreditManagementState {
   uploadedDocuments: UploadedDocument[];
   // Paso actual del proceso
   currentStep: number;
+  // Estado del cálculo del préstamo
+  loanCalculation: LoanCalculationResponse | null;
+  calculatingLoan: boolean;
+  loanCalculationError: string | null;
 }
 
 export const creditManagementSlice = createSlice({
@@ -24,6 +31,9 @@ export const creditManagementSlice = createSlice({
     creditRequest: null,
     uploadedDocuments: [],
     currentStep: 0, // Paso inicial: 0 = Calcular crédito
+    loanCalculation: null,
+    calculatingLoan: false,
+    loanCalculationError: null,
   } as CreditManagementState,
   reducers: {
     setClientInformation: (state, action) => {
@@ -68,10 +78,19 @@ export const creditManagementSlice = createSlice({
       state.creditRequest = null;
       state.uploadedDocuments = [];
       state.currentStep = 0;
+      state.loanCalculation = null;
+      state.loanCalculationError = null;
+    },
+    // Limpiar el cálculo del préstamo
+    clearLoanCalculation: (state) => {
+      state.loanCalculation = null;
+      state.loanCalculationError = null;
     },
   },
   extraReducers: (builder) => {
     createAsyncFetchClientInformationReducer({ builder });
+    createAsyncCalculateLoanReducer({ builder });
+    createAsyncSubmitLoanRequestReducer({ builder });
   },
 });
 
@@ -86,5 +105,6 @@ export const {
   nextStep,
   previousStep,
   resetCreditManagement,
+  clearLoanCalculation,
 } = creditManagementSlice.actions;
 export default creditManagementSlice.reducer;
