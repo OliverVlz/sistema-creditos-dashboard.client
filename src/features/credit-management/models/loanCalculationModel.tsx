@@ -15,7 +15,7 @@ export interface LoanCalculationResponse {
 
 // Modelo para la petición del cálculo del préstamo
 export interface LoanCalculationRequest {
-  loanTypeId: string;
+  loanTypeName: string;
   amountRequested: number;
   termMonths: number;
 }

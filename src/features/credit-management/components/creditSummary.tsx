@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector, RootState } from '@/store'; 
 import { ViewDocumentPreviewComponent } from './creditSummary/viewDocumentPreview';
 import { previousStep } from '../slices/creditManagement';
 import { submitLoanRequest } from '../slices/operations/submitLoanRequest.operation';
 import Swal from 'sweetalert2';
 
-// Loan Type ID (debe coincidir con el usado en LoanCalculator)
-const LOAN_TYPE_ID = 'a0835c2b-cd2d-4347-954c-384aecb5e24a';
+// Loan Type Name (debe coincidir con el usado en LoanCalculator)
+const LOAN_TYPE_NAME = 'Libranza';
 
 // Mapeo de tipos de documentos a códigos del backend
 // Según el backend: CEDULA, NOMINA, CONSTANCIA_TIEMPO, MESADA
@@ -31,6 +32,7 @@ const formatMoney = (value: number) => {
 
 export const CreditSummaryComponent: React.FC = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   // Obtener datos de Redux
@@ -123,11 +125,12 @@ export const CreditSummaryComponent: React.FC = () => {
         documentTypeCodes.push(DOCUMENT_TYPE_MAP[doc.type] || doc.type.toUpperCase());
       });
 
+      // Enviar solicitud al backend y obtener respuesta (loanId, loanNumber)
       // @ts-expect-error - Redux Toolkit types issue with React 19
-      await dispatch(submitLoanRequest({
+      const response = await dispatch(submitLoanRequest({
         clientId: clientInformation.clientInfo.id,
-        loanTypeId: LOAN_TYPE_ID,
-        organizationId: clientInformation.clientInfo.organization.id,
+        loanTypeName: LOAN_TYPE_NAME,
+        organizationName: clientInformation.clientInfo.organization.name,
         amountRequested: creditRequest.amount,
         termMonths: creditRequest.months,
         monthlyPayment: loanCalculation.monthlyPayment,
@@ -135,18 +138,26 @@ export const CreditSummaryComponent: React.FC = () => {
         totalPayable: loanCalculation.totalPayable,
         documentTypeCodes,
         files,
-      })).unwrap();
+      })).unwrap() as { loanId?: string; loanNumber?: string };
 
-      // Mostrar mensaje de éxito
+      const loanNumber = response?.loanNumber ?? '---';
+
+      // Mostrar mensaje de éxito con el número de solicitud
       await Swal.fire({
         title: '¡Éxito!',
-        text: 'Tu solicitud de crédito ha sido enviada correctamente',
+        html: `
+          <p style="margin-bottom: 8px;">Tu solicitud de crédito ha sido enviada correctamente.</p>
+          <p style="font-size: 14px; color: #475467;">
+            <strong>Número de solicitud:</strong> ${loanNumber}
+          </p>
+        `,
         icon: 'success',
         confirmButtonColor: '#FF8546',
+        confirmButtonText: 'Ir a mis solicitudes',
       });
 
-      // Opcional: redirigir o limpiar el estado
-      // dispatch(resetCreditManagement());
+      // Redirigir a la gestión de solicitudes
+      navigate('/gestion-solicitudes');
 
     } catch (error: unknown) {
       console.error('Error al enviar la solicitud:', error);
@@ -216,24 +227,41 @@ export const CreditSummaryComponent: React.FC = () => {
         </div>
 
         {/* COLUMNA 2: DATOS DEL CRÉDITO */}
-        <div className="border border-gray-200 rounded-2xl p-6 flex flex-col h-full justify-center">
+        <div className="border border-gray-200 rounded-2xl p-6 flex flex-col h-full">
           <h3 className="text-lg font-bold text-gray-800 mb-4 border-b border-gray-100 pb-2">
             Detalles de Solicitud
           </h3>
-          {creditData ? (
+          {creditData && loanCalculation ? (
             <div className="space-y-4">
-              <div className="text-center py-2">
-                <p className="text-sm text-gray-500 font-medium mb-1">Monto a Solicitar</p>
-                <p className="text-3xl font-bold text-gray-800">
-                  {formatMoney(creditData.amount)}
-                </p>
+              {/* Cuota mensual destacada */}
+              <div className="bg-blue-50/50 rounded-xl p-4 border border-blue-100">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <p className="text-sm text-blue-800 font-medium">Cuota mensual estimada</p>
+                    <p className="text-xs text-blue-600">Capital + Intereses</p>
+                  </div>
+                  <div className="text-2xl font-bold text-blue-900">
+                    {formatMoney(loanCalculation.monthlyPayment)}
+                  </div>
+                </div>
               </div>
 
-              <div className="text-center py-2 border-t border-gray-100 pt-4">
-                <p className="text-sm text-gray-500 font-medium mb-1">Plazo</p>
-                <p className="text-xl font-bold text-gray-800">
-                  {creditData.months} Meses
-                </p>
+              {/* Detalles del crédito */}
+              <div className="space-y-2">
+                <SimpleRow label="Valor del crédito" value={formatMoney(loanCalculation.amountRequested)} />
+                <SimpleRow label="Plazo" value={`${creditData.months} Meses`} />
+                <SimpleRow label="Tasa de interés anual" value={`${loanCalculation.annualInterestRate}%`} />
+                <SimpleRow label="Tasa de interés mensual (N.M.V)" value={`${(loanCalculation.monthlyRate * 100).toFixed(4)}%`} />
+                <div className="flex justify-between items-center py-2 border-b border-gray-100 bg-blue-50/30 px-2 -mx-2 rounded">
+                  <span className="text-sm text-blue-800 font-medium">Total de intereses</span>
+                  <span className="text-sm text-blue-800 font-bold">{formatMoney(loanCalculation.totalInterest)}</span>
+                </div>
+                <div className="flex justify-between items-center pt-2 mt-2">
+                  <span className="text-base font-bold text-gray-800">Total a pagar aproximado</span>
+                  <span className="text-lg font-bold text-[#FF8546]">
+                    {formatMoney(loanCalculation.totalPayable)}
+                  </span>
+                </div>
               </div>
             </div>
           ) : (

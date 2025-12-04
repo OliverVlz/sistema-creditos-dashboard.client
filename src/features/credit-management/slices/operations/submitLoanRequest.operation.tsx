@@ -4,8 +4,8 @@ import { CreditManagementState } from '../creditManagement';
 
 export interface SubmitLoanRequestPayload {
   clientId: string;
-  loanTypeId: string;
-  organizationId: string;
+  loanTypeName: string;
+  organizationName: string;
   amountRequested: number;
   termMonths: number;
   monthlyPayment: number;
@@ -23,8 +23,8 @@ export const submitLoanRequest = createAsyncThunk(
         
         // Agregar campos de texto
         formData.append('clientId', payload.clientId);
-        formData.append('loanTypeId', payload.loanTypeId);
-        formData.append('organizationId', payload.organizationId);
+        formData.append('loanTypeName', payload.loanTypeName);
+        formData.append('organizationName', payload.organizationName);
         formData.append('amountRequested', payload.amountRequested.toString());
         formData.append('termMonths', payload.termMonths.toString());
         formData.append('monthlyPayment', payload.monthlyPayment.toString());

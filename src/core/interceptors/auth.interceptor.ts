@@ -23,11 +23,22 @@ export const authResponseInterceptor = {
   onRejected: (error: AxiosError<AuthResponse>) => {
     // Si el error es 401 (Unauthorized), limpiar datos y redirigir al login
     if (error.response?.status === 401) {
+      const requestUrl = error.config?.url ?? '';
+
+      // Excepción: si el 401 viene del endpoint de cambio de contraseña,
+      // dejamos que el componente lo maneje sin cerrar sesión ni redirigir.
+      if (requestUrl.includes('/users/me/password')) {
+        return Promise.reject(error);
+      }
+
       // Importar dinámicamente para evitar dependencias circulares
       import('../services/auth.service').then(({ clearAuthData }) => {
         clearAuthData();
         // Redirigir al login solo si no estamos ya en la página de login
-        if (window.location.pathname !== '/login' && window.location.pathname !== '/login2') {
+        if (
+          window.location.pathname !== '/login' &&
+          window.location.pathname !== '/login2'
+        ) {
           window.location.href = '/login';
         }
       });

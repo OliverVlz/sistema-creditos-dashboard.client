@@ -2,6 +2,8 @@ import { Routes, Route, Navigate } from "react-router-dom";
 
 import ProtectedAppLayout from "./layout/ProtectedAppLayout";
 import { ScrollToTop } from "./components/common/ScrollToTop";
+import { RoleProtectedRoute } from "./routes/components/RoleProtectedRoute";
+import { UserRole } from "./types/roles";
 
 import UserProfiles from "./pages/UserProfiles";
 import Calendar from "./pages/Calendar";
@@ -42,6 +44,10 @@ import FormEditUser from "./features/user-management/pages/form-edit-user";
 import FormEditClient from "./features/customer-management/pages/form-edit-client";
 import Home from "./features/home/pages/home";
 import { ProfilePage } from "./features/profile/pages/profilePage";
+import ChangePasswordPage from "./features/auth/pages/change-password";
+import LoanRequestsPage from "./features/loan-requests/pages/loan-requests";
+import LoanRequestDetailPage from "./features/loan-requests/pages/loan-request-detail";
+import LoanTypesPage from "./features/loan-types/pages/loan-types";
 
 export default function App() {
   return (
@@ -63,19 +69,112 @@ export default function App() {
         </Route>
 
         <Route element={<ProtectedAppLayout />}>
+          {/* Rutas accesibles para todos los roles autenticados */}
           <Route path="/home" element={<Home />} />
-
-          <Route path="/dashboard/gestion-de-usuarios" element={<UserManagementComponent />} />
-          <Route path="/dashboard/crear-usuario" element={<FormCreateUser />} />
-          <Route path="/gestion-de-usuarios/editar-usuario/:id" element={<FormEditUser />} />
-
-          <Route path="/dashboard/gestion-de-creditos" element={<CreditManagementComponent />} />
-          <Route path="/gestion-de-clientes" element={<CustomerManagementComponent />} />
-          <Route path="/gestion-de-clientes/crear-cliente" element={<FormCreateClient />} />
-          <Route path="/gestion-de-clientes/editar-cliente/:id" element={<FormEditClient />} />
           <Route path="/dashboard/mi-perfil" element={<ProfilePage />} />
+          <Route path="/dashboard/cambiar-contrasena" element={<ChangePasswordPage />} />
 
+          {/* Rutas solo para ADMIN - Gestión de Usuarios */}
+          <Route
+            path="/dashboard/gestion-de-usuarios"
+            element={
+              <RoleProtectedRoute allowedRoles={[UserRole.ADMIN]}>
+                <UserManagementComponent />
+              </RoleProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard/crear-usuario"
+            element={
+              <RoleProtectedRoute allowedRoles={[UserRole.ADMIN]}>
+                <FormCreateUser />
+              </RoleProtectedRoute>
+            }
+          />
+          <Route
+            path="/gestion-de-usuarios/editar-usuario/:id"
+            element={
+              <RoleProtectedRoute allowedRoles={[UserRole.ADMIN]}>
+                <FormEditUser />
+              </RoleProtectedRoute>
+            }
+          />
 
+          {/* Rutas solo para ADMIN - Tipos de Préstamo */}
+          <Route
+            path="/tipos-prestamo"
+            element={
+              <RoleProtectedRoute allowedRoles={[UserRole.ADMIN]}>
+                <LoanTypesPage />
+              </RoleProtectedRoute>
+            }
+          />
+
+          {/* Rutas para ADMIN y ASESOR - Gestión de Créditos */}
+          <Route
+            path="/dashboard/gestion-de-creditos"
+            element={
+              <RoleProtectedRoute allowedRoles={[UserRole.ADMIN, UserRole.CLIENTE]}>
+                <CreditManagementComponent />
+              </RoleProtectedRoute>
+            }
+          />
+
+          {/* Rutas para ADMIN y ASESOR - Gestión de Solicitudes */}
+          <Route
+            path="/gestion-solicitudes"
+            element={
+              <RoleProtectedRoute allowedRoles={[UserRole.ADMIN, UserRole.ASESOR, UserRole.CLIENTE]}>
+                <LoanRequestsPage />
+              </RoleProtectedRoute>
+            }
+          />
+          <Route
+            path="/gestion-solicitudes/detalle/:id"
+            element={
+              <RoleProtectedRoute allowedRoles={[UserRole.ADMIN, UserRole.ASESOR, UserRole.CLIENTE]}>
+                <LoanRequestDetailPage />
+              </RoleProtectedRoute>
+            }
+          />
+
+          {/* Rutas para ADMIN y ASESOR - Gestión de Clientes */}
+          <Route
+            path="/gestion-de-clientes"
+            element={
+              <RoleProtectedRoute allowedRoles={[UserRole.ADMIN, UserRole.ASESOR]}>
+                <CustomerManagementComponent />
+              </RoleProtectedRoute>
+            }
+          />
+          <Route
+            path="/gestion-de-clientes/crear-cliente"
+            element={
+              <RoleProtectedRoute allowedRoles={[UserRole.ADMIN, UserRole.ASESOR]}>
+                <FormCreateClient />
+              </RoleProtectedRoute>
+            }
+          />
+          <Route
+            path="/gestion-de-clientes/editar-cliente/:id"
+            element={
+              <RoleProtectedRoute allowedRoles={[UserRole.ADMIN, UserRole.ASESOR]}>
+                <FormEditClient />
+              </RoleProtectedRoute>
+            }
+          />
+
+          {/* Rutas solo para CLIENTE - Mis Solicitudes */}
+          <Route
+            path="/mis-solicitudes"
+            element={
+              <RoleProtectedRoute allowedRoles={[UserRole.CLIENTE]}>
+                <Blank /> {/* TODO: Crear página de solicitudes del cliente */}
+              </RoleProtectedRoute>
+            }
+          />
+
+          {/* Rutas legacy/template (mantener acceso general) */}
           <Route path="/dashboard" element={<RebuiltDashboard />} />
           <Route path="/dashboard/clients" element={<ClientsPage />} />
           <Route path="/dashboard/loan-application" element={<Blank />} />

@@ -7,6 +7,8 @@ import organizationsReducer from '../features/customer-management/slices/organiz
 import authReducer from '../features/auth/slices/authSlice'
 import creditManagementReducer from '../features/credit-management/slices/creditManagement'
 import profileReducer from '../features/profile/slices/profile.slices'
+import loanRequestsReducer from '../features/loan-requests/slices/loanRequests.slices'
+import loanTypesReducer from '../features/loan-types/slices/loanTypes.slices'
 
 export const store = configureStore({
     reducer: {
@@ -16,6 +18,8 @@ export const store = configureStore({
         auth: authReducer,
         creditManagement: creditManagementReducer,
         profile: profileReducer,
+        loanRequests: loanRequestsReducer,
+        loanTypes: loanTypesReducer,
     },
 })
 

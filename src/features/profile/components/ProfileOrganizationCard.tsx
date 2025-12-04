@@ -28,9 +28,9 @@ export default function ProfileOrganizationCard({ profile }: ProfileOrganization
   };
 
   return (
-    <div className="p-5 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6 bg-white dark:bg-gray-900">
+    <div >
       <div className="flex flex-col gap-6">
-        <div>
+        {/* <div>
           <h4 className="text-lg font-semibold text-gray-800 dark:text-white/90 lg:mb-6">
             Información Laboral
           </h4>
@@ -98,10 +98,10 @@ export default function ProfileOrganizationCard({ profile }: ProfileOrganization
               </>
             )}
           </div>
-        </div>
+        </div> */}
 
         {/* Información de la cuenta */}
-        <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+        {/* <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
           <h4 className="text-lg font-semibold text-gray-800 dark:text-white/90 lg:mb-6">
             Información de la Cuenta
           </h4>
@@ -134,7 +134,7 @@ export default function ProfileOrganizationCard({ profile }: ProfileOrganization
               </p>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

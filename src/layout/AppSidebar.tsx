@@ -1,144 +1,32 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import {
   ChevronDownIcon,
-  GridIcon,
   HorizontaLDots,
   UserCircleIcon,
-  TaskIcon,
-  DollarLineIcon,  
-  CalenderIcon,
-  ListIcon,
-  TableIcon,
-  PieChartIcon,
-  BoxCubeIcon,
-  PlugInIcon,
 } from "../icons";
 import { useSidebar } from "../context/SidebarContext";
 import { LogoComponent } from "../share/components/logoComponent/logoComponent";
-
-type NavItem = {
-  name: string;
-  icon: React.ReactNode;
-  path?: string;
-  subItems?: { name: string; path: string; }[];
-};
-
-// --- SECCIÓN APLICACIÓN ---
-const aplicacionItems: NavItem[] = [
-  {
-    icon: < GridIcon/>,
-    name: "Inicio",
-    path: "/home",
-  },
-  {
-    icon: <UserCircleIcon />,
-    name: "Gestión de Usuarios",
-    path: "/dashboard/gestion-de-usuarios",
-  },
-  {
-    icon: <TaskIcon />,
-    name: "Gestión de Clientes",
-    path: "/gestion-de-clientes",
-  },
-  {
-    icon: <DollarLineIcon />, 
-    name: "Gestión de Créditos",
-    path: "/dashboard/gestion-de-creditos",
-  },
-  {
-    icon: <UserCircleIcon />,
-    name: "Mi Perfil",
-    path: "/dashboard/mi-perfil",
-  },
- /*  {
-    icon: <GridIcon />,
-    name: "Mi Dashboard",
-    path: "/dashboard",
-  }, */
-  /* {
-    icon: <DocsIcon />,
-    name: "Solicitudes",
-    subItems: [
-      { name: "Nueva Solicitud", path: "/dashboard/loan-application" },
-      { name: "Simulación", path: "/dashboard/simulation" },
-      { name: "Mis Solicitudes", path: "/dashboard/my-loans" },
-    ],
-  }, */
-  /* {
-    icon: <BoltIcon />,
-    name: "Administración",
-    subItems: [
-      { name: "Préstamos", path: "/dashboard/loans" },
-      { name: "Aprobaciones", path: "/dashboard/approvals" },
-      { name: "Tasas de Interés", path: "/dashboard/interest-rates" },
-      { name: "Configuración", path: "/dashboard/settings" },
-      { name: "Reportes", path: "/dashboard/reports" },
-    ],
-  }, */
-];
-
-// --- SECCIÓN TEMPLATE ---
-const templateItems: NavItem[] = [
-  {
-    icon: <GridIcon />,
-    name: "Ecommerce",
-    path: "/ecommerce",
-  },
-  {
-    icon: <CalenderIcon />,
-    name: "Calendar",
-    path: "/calendar",
-  },
-  {
-    icon: <UserCircleIcon />,
-    name: "Profile",
-    path: "/dashboard/profile",
-  },
-  {
-    name: "Forms",
-    icon: <ListIcon />,
-    subItems: [{ name: "Form Elements", path: "/form-elements" }],
-  },
-  {
-    name: "Tables",
-    icon: <TableIcon />,
-    subItems: [{ name: "Basic Tables", path: "/basic-tables" }],
-  },
-  {
-    icon: <PieChartIcon />,
-    name: "Charts",
-    subItems: [
-      { name: "Line Chart", path: "/line-chart" },
-      { name: "Bar Chart", path: "/bar-chart" },
-    ],
-  },
-  {
-    icon: <BoxCubeIcon />,
-    name: "UI Elements",
-    subItems: [
-      { name: "Alerts", path: "/alerts" },
-      { name: "Avatars", path: "/avatars" },
-      { name: "Badge", path: "/badge" },
-      { name: "Buttons", path: "/buttons" },
-      { name: "Images", path: "/images" },
-      { name: "Videos", path: "/videos" },
-    ],
-  },
-  {
-    icon: <PlugInIcon />,
-    name: "Authentication",
-    subItems: [
-      { name: "Sign In", path: "/signin" },
-      { name: "Sign Up", path: "/signup" },
-    ],
-  }
-];
+import { useRoleAccess } from "../hooks/useRoleAccess";
+import { NavItem, getFilteredMenuItems } from "../config/sidebarConfig";
+import { useAuth } from "../hooks/useAuth";
+import { LOGIN_ROUTE, CHANGE_PASSWORD_ROUTE } from "../routes/routes";
+import { useAppDispatch } from "../store";
+import { clearLoanRequests } from "../features/loan-requests/slices/loanRequests.slices";
 
 const AppSidebar: React.FC = () => {
   const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
+  const { userRole } = useRoleAccess();
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
+  const dispatch = useAppDispatch();
+
+  // Filtrar items del menú según el rol del usuario
+  const menuItems = useMemo(() => {
+    return getFilteredMenuItems(userRole);
+  }, [userRole]);
 
   const [openSubmenu, setOpenSubmenu] = useState<{
     type: string;
@@ -148,6 +36,7 @@ const AppSidebar: React.FC = () => {
     {}
   );
   const subMenuRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
   const isActive = useCallback(
     (path: string) => location.pathname === path,
@@ -156,24 +45,21 @@ const AppSidebar: React.FC = () => {
 
   useEffect(() => {
     let submenuMatched = false;
-    ["app", "template"].forEach((menuType) => {
-      const items = menuType === "app" ? aplicacionItems : templateItems;
-      items.forEach((nav, index) => {
-        if (nav.subItems) {
-          nav.subItems.forEach((subItem) => {
-            if (isActive(subItem.path)) {
-              setOpenSubmenu({ type: menuType, index });
-              submenuMatched = true;
-            }
-          });
-        }
-      });
+    menuItems.forEach((nav, index) => {
+      if (nav.subItems) {
+        nav.subItems.forEach((subItem) => {
+          if (isActive(subItem.path)) {
+            setOpenSubmenu({ type: "app", index });
+            submenuMatched = true;
+          }
+        });
+      }
     });
 
     if (!submenuMatched) {
       setOpenSubmenu(null);
     }
-  }, [location, isActive]);
+  }, [location, isActive, menuItems]);
 
   useEffect(() => {
     if (openSubmenu !== null) {
@@ -299,6 +185,31 @@ const AppSidebar: React.FC = () => {
     </ul>
   );
 
+  const handleLogout = () => {
+    logout();
+    // Limpiar solicitudes de crédito al cerrar sesión
+    dispatch(clearLoanRequests());
+    navigate(LOGIN_ROUTE);
+  };
+
+  const displayName =
+    user?.firstName || user?.lastName
+      ? `${user?.firstName ?? ""} ${user?.lastName ?? ""}`.trim()
+      : user?.email ?? "Usuario";
+
+  const displayRole =
+    userRole === "ADMIN"
+      ? "Administrador"
+      : userRole === "ASESOR"
+      ? "Asesor"
+      : userRole === "CLIENTE"
+      ? "Cliente"
+      : "Usuario";
+
+  const handleUserMenuToggle = () => {
+    setIsUserMenuOpen((prev) => !prev);
+  };
+
   return (
     <aside
       className={`fixed mt-16 flex flex-col lg:mt-0 top-0 px-5 left-0 bg-white dark:bg-gray-900 dark:border-gray-800 text-gray-900 h-screen transition-all duration-300 ease-in-out z-50 border-r border-gray-200 
@@ -333,46 +244,86 @@ const AppSidebar: React.FC = () => {
           )}
         </Link>
       </div>
-      <div className="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar">
-        <nav className="mb-6">
-          <div className="flex flex-col gap-4">
-            {/* SECCIÓN DE TU APLICACIÓN */}
-            <div>
-              <h2
-                className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${
-                  !isExpanded && !isHovered
-                    ? "lg:justify-center"
-                    : "justify-start"
-                }`}
-              >
-                {isExpanded || isHovered || isMobileOpen ? (
-                  "Aplicación"
-                ) : (
-                  <HorizontaLDots className="size-6" />
-                )}
-              </h2>
-              {renderMenuItems(aplicacionItems, "app")}
+      <div className="flex flex-col h-full">
+        <div className="flex-1 overflow-y-auto duration-300 ease-linear no-scrollbar">
+          <nav className="mb-6">
+            <div className="flex flex-col gap-4">
+              {/* SECCIÓN DE LA APLICACIÓN - Items filtrados por rol */}
+              <div>
+                <h2
+                  className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${
+                    !isExpanded && !isHovered
+                      ? "lg:justify-center"
+                      : "justify-start"
+                  }`}
+                >
+                  {isExpanded || isHovered || isMobileOpen ? (
+                    "Aplicación"
+                  ) : (
+                    <HorizontaLDots className="size-6" />
+                  )}
+                </h2>
+                {renderMenuItems(menuItems, "app")}
+              </div>
             </div>
+          </nav>
+        </div>
 
-            {/* SECCIÓN DEL TEMPLATE */}
-            <div>
-              <h2
-                className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${
-                  !isExpanded && !isHovered
-                    ? "lg:justify-center"
-                    : "justify-start"
-                }`}
-              >
-                {isExpanded || isHovered || isMobileOpen ? (
-                  "Template"
-                ) : (
-                  <HorizontaLDots />
-                )}
-              </h2>
-              {renderMenuItems(templateItems, "template")}
+        {/* Sección inferior: usuario actual */}
+        <div className="pb-6 pt-4 border-t border-gray-100 dark:border-gray-800 relative">
+          <button
+            type="button"
+            onClick={handleUserMenuToggle}
+            className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl transition-colors ${
+              isUserMenuOpen
+                ? "bg-brand-50 text-gray-900"
+                : "hover:bg-gray-100 dark:hover:bg-white/5"
+            }`}
+          >
+            <div className="flex items-center justify-center w-9 h-9 rounded-full bg-brand-50 text-brand-500">
+              <UserCircleIcon className="w-5 h-5" />
             </div>
-          </div>
-        </nav>
+            {(isExpanded || isHovered || isMobileOpen) && (
+              <div className="flex flex-col text-left min-w-0">
+                <span className="text-sm font-semibold text-gray-900 dark:text-white truncate">
+                  {displayName}
+                </span>
+                <span className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                  {displayRole}
+                </span>
+              </div>
+            )}
+            {(isExpanded || isHovered || isMobileOpen) && (
+              <ChevronDownIcon
+                className={`ml-auto w-4 h-4 text-gray-400 transition-transform ${
+                  isUserMenuOpen ? "rotate-180" : ""
+                }`}
+              />
+            )}
+          </button>
+
+          {isUserMenuOpen && (isExpanded || isHovered || isMobileOpen) && (
+            <div className="mt-2 mx-1 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-lg text-sm overflow-hidden">
+              <button
+                type="button"
+                onClick={() => {
+                  navigate(CHANGE_PASSWORD_ROUTE);
+                  setIsUserMenuOpen(false);
+                }}
+                className="w-full text-left px-4 py-2.5 hover:bg-gray-50 dark:hover:bg-white/5 text-gray-700 dark:text-gray-200"
+              >
+                Cambiar mi contraseña
+              </button>
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="w-full text-left px-4 py-2.5 hover:bg-gray-50 dark:hover:bg-white/5 text-gray-700 dark:text-gray-200"
+              >
+                Cerrar sesión
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </aside>
   );

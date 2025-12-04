@@ -1,19 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useAppDispatch, useAppSelector, RootState } from '../../../store';
 import EditText from '../../ui/EditText';
 import Dropdown from '../../ui/Dropdown';
 import Button from '../../ui/Button';
 import { setCreditRequest, nextStep, clearLoanCalculation } from '../../../features/credit-management/slices/creditManagement';
 import { calculateLoan } from '../../../features/credit-management/slices/operations/calculateLoan.operation';
+import { fetchLoanTypes } from '../../../features/loan-types/slices/operations/fetchLoanTypes.operation';
 
-// Options generator (1 to 24 months)
-const loanTermOptions = Array.from({ length: 24 }, (_, i) => ({
-  label: `${i + 1} ${i === 0 ? 'Mes' : 'Meses'}`, // UI Label remains in Spanish
-  value: String(i + 1),
-}));
-
-// Loan Type ID quemado (temporalmente)
-const LOAN_TYPE_ID = 'a0835c2b-cd2d-4347-954c-384aecb5e24a';
+const LOAN_TYPE_NAME = 'Libranza';
 
 export const LoanCalculator: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -23,27 +17,75 @@ export const LoanCalculator: React.FC = () => {
     (state: RootState) => state.creditManagement
   );
   
-  // State
-  const [loanAmount, setLoanAmount] = useState<string>('$1.000.000');
-  const [loanTerm, setLoanTerm] = useState<string>('6'); 
-  const [showResult, setShowResult] = useState(false);
+  // Obtener tipos de préstamo desde Redux
+  const { loanTypes, loading: loadingLoanTypes } = useAppSelector(
+    (state: RootState) => state.loanTypes
+  );
 
-  // Inicializar Redux con los valores por defecto al montar el componente
+  // Obtener el tipo de préstamo "Libranza"
+  const loanTypeConfig = useMemo(() => {
+    const libranza = loanTypes.find(lt => lt.name === LOAN_TYPE_NAME);
+    if (libranza) {
+      return {
+        minAmount: libranza.minAmount,
+        maxAmount: libranza.maxAmount,
+        minTerm: libranza.minTerm,
+        maxTerm: libranza.maxTerm,
+        interestRate: libranza.interestRate,
+      };
+    }
+    // Valores por defecto mientras carga
+    return {
+      minAmount: 500000,
+      maxAmount: 20000000,
+      minTerm: 6,
+      maxTerm: 60,
+      interestRate: 25,
+    };
+  }, [loanTypes]);
+
+  // Generar opciones de plazo dinámicamente
+  const loanTermOptions = useMemo(() => {
+    const options = [];
+    for (let i = loanTypeConfig.minTerm; i <= loanTypeConfig.maxTerm; i++) {
+      options.push({
+        label: `${i} ${i === 1 ? 'Mes' : 'Meses'}`,
+        value: String(i),
+      });
+    }
+    return options;
+  }, [loanTypeConfig.minTerm, loanTypeConfig.maxTerm]);
+  
+  // State
+  const [loanAmount, setLoanAmount] = useState<string>('');
+  const [loanTerm, setLoanTerm] = useState<string>(''); 
+  const [showResult, setShowResult] = useState(false);
+  const [amountError, setAmountError] = useState<string>('');
+
+  // Cargar tipos de préstamo al montar
   useEffect(() => {
-    const initialAmount = '$1.000.000';
-    const initialTerm = '6';
-    const amountNumber = parseInt(initialAmount.replace(/[^0-9]/g, '')) || 0;
-    const monthsNumber = parseInt(initialTerm) || 6;
-    if (amountNumber > 0) {
+    // @ts-expect-error - Redux Toolkit types issue with React 19
+    dispatch(fetchLoanTypes());
+  }, [dispatch]);
+
+  // Inicializar valores cuando se carga el tipo de préstamo
+  useEffect(() => {
+    if (loanTypes.length > 0 && !loanAmount) {
+      const initialAmount = formatCurrencyInput(String(loanTypeConfig.minAmount));
+      const initialTerm = String(loanTypeConfig.minTerm);
+      setLoanAmount(initialAmount);
+      setLoanTerm(initialTerm);
+      
+      const amountNumber = loanTypeConfig.minAmount;
       dispatch(setCreditRequest({
         amount: amountNumber,
-        months: monthsNumber,
+        months: loanTypeConfig.minTerm,
       }));
     }
     // Limpiar cálculo previo al montar
     dispatch(clearLoanCalculation());
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Solo se ejecuta al montar
+  }, [loanTypes]); // Solo se ejecuta cuando se cargan los tipos
 
   // --- HELPERS ---
   const formatCurrencyInput = (value: string) => {
@@ -77,13 +119,24 @@ export const LoanCalculator: React.FC = () => {
     setShowResult(false);
     // Limpiar cálculo previo cuando cambia el monto
     dispatch(clearLoanCalculation());
-    // Actualizar Redux cuando cambia el monto (remover $ y puntos)
+    
+    // Validar monto
     const amountNumber = parseInt(formattedValue.replace(/[^0-9]/g, '')) || 0;
     if (amountNumber > 0) {
+      if (amountNumber < loanTypeConfig.minAmount) {
+        setAmountError(`El monto mínimo es ${formatMoney(loanTypeConfig.minAmount)}`);
+      } else if (amountNumber > loanTypeConfig.maxAmount) {
+        setAmountError(`El monto máximo es ${formatMoney(loanTypeConfig.maxAmount)}`);
+      } else {
+        setAmountError('');
+      }
+      
       dispatch(setCreditRequest({
         amount: amountNumber,
-        months: parseInt(loanTerm) || 6,
+        months: parseInt(loanTerm) || loanTypeConfig.minTerm,
       }));
+    } else {
+      setAmountError('');
     }
   };
 
@@ -92,15 +145,28 @@ export const LoanCalculator: React.FC = () => {
     setShowResult(false);
     // Limpiar cálculo previo cuando cambia el plazo
     dispatch(clearLoanCalculation());
-    // Actualizar Redux cuando cambia el plazo (remover $ y puntos)
+    // Actualizar Redux cuando cambia el plazo
     const amountNumber = parseInt(loanAmount.replace(/[^0-9]/g, '')) || 0;
     if (amountNumber > 0) {
       dispatch(setCreditRequest({
         amount: amountNumber,
-        months: parseInt(val) || 6,
+        months: parseInt(val) || loanTypeConfig.minTerm,
       }));
     }
   };
+
+  // Validar si se puede calcular
+  const canCalculate = useMemo(() => {
+    const amountNumber = parseInt(loanAmount.replace(/[^0-9]/g, '')) || 0;
+    const termNumber = parseInt(loanTerm) || 0;
+    return (
+      amountNumber >= loanTypeConfig.minAmount &&
+      amountNumber <= loanTypeConfig.maxAmount &&
+      termNumber >= loanTypeConfig.minTerm &&
+      termNumber <= loanTypeConfig.maxTerm &&
+      !amountError
+    );
+  }, [loanAmount, loanTerm, loanTypeConfig, amountError]);
 
   // Función para calcular el préstamo
   const handleCalculateLoan = async () => {
@@ -114,7 +180,7 @@ export const LoanCalculator: React.FC = () => {
     try {
       // @ts-expect-error - Redux Toolkit types issue with React 19
       await dispatch(calculateLoan({
-        loanTypeId: LOAN_TYPE_ID,
+        loanTypeName: LOAN_TYPE_NAME,
         amountRequested: amountNumber,
         termMonths: monthsNumber,
       })).unwrap();
@@ -125,6 +191,20 @@ export const LoanCalculator: React.FC = () => {
     }
   };
 
+  // Loading state
+  if (loadingLoanTypes) {
+    return (
+      <div className="bg-global-11 rounded-xl p-6 md:p-10 shadow-lg border border-global-3/50">
+        <div className="flex items-center justify-center py-12">
+          <div className="text-center">
+            <i className="pi pi-spin pi-spinner text-3xl text-blue-600 mb-3"></i>
+            <p className="text-sm text-global-6">Cargando configuración...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-global-11 rounded-xl p-6 md:p-10 shadow-lg border border-global-3/50">
       
@@ -132,18 +212,24 @@ export const LoanCalculator: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         <div className="flex flex-col flex-1">
           <label className="block text-base font-semibold text-global-9 mb-3 ml-1">
-            ¿Quanto dinero necesitas?
+            ¿Cuánto dinero necesitas?
           </label>
           <EditText
-            placeholder="$0"
+            placeholder={`${formatMoney(loanTypeConfig.minAmount)}`}
             value={loanAmount}
             onChange={handleAmountChange}
-            className="w-full h-12 text-lg font-medium"
+            className={`w-full h-12 text-lg font-medium ${amountError ? 'border-red-500' : ''}`}
             type="text"
           />
-          <p className="mt-2 text-xs text-global-6 ml-1">
-            Monto a solicitar
-          </p>
+          {amountError ? (
+            <p className="mt-2 text-xs text-red-500 ml-1">
+              {amountError}
+            </p>
+          ) : (
+            <p className="mt-2 text-xs text-global-6 ml-1">
+              Monto entre {formatMoney(loanTypeConfig.minAmount)} y {formatMoney(loanTypeConfig.maxAmount)}
+            </p>
+          )}
         </div>
 
         <div className="flex flex-col flex-1">
@@ -158,7 +244,7 @@ export const LoanCalculator: React.FC = () => {
             className="w-full h-12"
           />
           <p className="mt-2 text-xs text-global-6 ml-1">
-            Plazo máximo hasta 24 meses
+            Plazo de {loanTypeConfig.minTerm} a {loanTypeConfig.maxTerm} meses
           </p>
         </div>
       </div>
@@ -171,7 +257,7 @@ export const LoanCalculator: React.FC = () => {
             size="large"
             fullWidth
             onClick={handleCalculateLoan}
-            disabled={calculatingLoan}
+            disabled={calculatingLoan || !canCalculate}
             className="bg-blue-600 hover:bg-blue-700 text-white shadow-md transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {calculatingLoan ? 'Calculando...' : 'Calcular mi crédito'}
