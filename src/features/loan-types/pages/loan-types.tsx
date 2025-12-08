@@ -133,7 +133,7 @@ export default function LoanTypesPage() {
         </div>
         <button
           onClick={handleCreate}
-          className="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors shadow-sm"
+          className="inline-flex items-center gap-2 px-4 py-2.5 bg-brand-500 hover:bg-brand-600 text-white font-medium rounded-lg transition-colors shadow-sm"
         >
           <i className="pi pi-plus"></i>
           Nuevo Tipo
@@ -144,8 +144,8 @@ export default function LoanTypesPage() {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="bg-white dark:bg-gray-800 rounded-xl p-5 border border-gray-200 dark:border-gray-700 shadow-sm">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
-              <i className="pi pi-list text-blue-600 dark:text-blue-400 text-xl"></i>
+            <div className="w-12 h-12 bg-brand-100 dark:bg-brand-900/30 rounded-lg flex items-center justify-center">
+              <i className="pi pi-list text-brand-600 dark:text-brand-400 text-xl"></i>
             </div>
             <div>
               <p className="text-sm text-gray-500 dark:text-gray-400">Total Tipos</p>
