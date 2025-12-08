@@ -31,8 +31,18 @@ RUN npm run build
 # ================================
 FROM nginx:alpine AS production
 
-# Copiar configuración personalizada de nginx
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Instalar gettext para envsubst
+RUN apk add --no-cache gettext
+
+# Crear directorio para templates
+RUN mkdir -p /etc/nginx/templates
+
+# Copiar template de configuración de nginx
+COPY nginx.conf.template /etc/nginx/templates/nginx.conf.template
+
+# Copiar script de inicio
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
 
 # Copiar los archivos construidos desde la etapa de build
 COPY --from=builder /app/dist /usr/share/nginx/html
@@ -40,6 +50,9 @@ COPY --from=builder /app/dist /usr/share/nginx/html
 # Exponer el puerto 80
 EXPOSE 80
 
-# Comando para ejecutar nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Variable de entorno para la URL del backend (puede ser sobrescrita)
+ENV BACKEND_URL=http://host.docker.internal:3000
+
+# Usar el script de inicio
+ENTRYPOINT ["/docker-entrypoint.sh"]
 

@@ -6,11 +6,15 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        - VITE_API_URL=${VITE_API_URL:-http://localhost:3000/api}
+        - VITE_API_URL=${VITE_API_URL:-}
         - VITE_APP_NAME=${VITE_APP_NAME:-Sistema de Créditos}
     container_name: presta-ya-frontend
     ports:
       - "5173:80"
+    environment:
+      # URL del backend. En Docker Desktop usa host.docker.internal
+      # En Linux/WSL2, usa 172.17.0.1 o la IP de tu host
+      - BACKEND_URL=${BACKEND_URL:-http://host.docker.internal:3000}
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "wget", "-q", "--spider", "http://localhost:80"]

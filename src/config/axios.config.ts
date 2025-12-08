@@ -3,6 +3,8 @@ import  { appConfig } from './app.config'
 import { authRequestInterceptor, authResponseInterceptor } from '../core/interceptors/auth.interceptor'
 
 export const mainCustomAxios = axios.create({
+    // Si apiUrl está vacío (producción), axios usará rutas relativas
+    // Si tiene valor (desarrollo), usará esa URL completa
     baseURL: appConfig.apiUrl || 'http://localhost:3000',
 })
 
