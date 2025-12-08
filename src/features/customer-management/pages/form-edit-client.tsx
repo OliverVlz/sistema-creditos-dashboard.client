@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import PageBreadcrumb from '@/components/common/PageBreadCrumb'
 import { fetchClientById } from '../slices/operations/fetchClientById.operations';
 import { useDispatch } from 'react-redux';
@@ -22,7 +22,7 @@ const FormEditClient = () => {
         showTitle={false}
         items={[
           { label: "Home", path: "/dashboard/home" },  
-          { label: "Gestión de Clientes", path: "/dashboard/gestion-de-clientes" },
+          { label: "Gestión de Clientes", path: "/gestion-de-clientes" },
           { label: "Editar Cliente" }
         ]}
       />

@@ -7,7 +7,7 @@ export default function Header() {
   const location = useLocation();
   const navigate = useNavigate();
   const [isServicesDropdownOpen, setIsServicesDropdownOpen] = useState(false);
-  const [dropdownTimeout, setDropdownTimeout] = useState<number | null>(null);
+  const [dropdownTimeout, setDropdownTimeout] = useState<ReturnType<typeof setTimeout> | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const isActiveSection = (sectionId: string) => {
