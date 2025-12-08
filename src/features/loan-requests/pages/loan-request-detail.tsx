@@ -154,7 +154,7 @@ const LoanRequestDetailPage = () => {
         <PageBreadcrumb 
           showTitle={false}
           items={[
-            { label: "Home", path: "/dashboard" },
+            { label: "Home", path: "/dashboard/home" },
             { label: "Gestión de Solicitudes", path: "/gestion-solicitudes" },
             { label: "Detalle de Solicitud" }
           ]}
@@ -186,7 +186,7 @@ const LoanRequestDetailPage = () => {
         <PageBreadcrumb 
           showTitle={false}
           items={[
-            { label: "Home", path: "/dashboard" },
+            { label: "Home", path: "/dashboard/home" },
             { label: "Gestión de Solicitudes", path: "/gestion-solicitudes" },
             { label: "Detalle de Solicitud" }
           ]}
@@ -217,7 +217,7 @@ const LoanRequestDetailPage = () => {
           <PageBreadcrumb 
             showTitle={false}
             items={[
-              { label: "Home", path: "/dashboard" },
+              { label: "Home", path: "/dashboard/home" },
               { label: "Gestión de Solicitudes", path: "/gestion-solicitudes" },
               { label: `Detalle: ${selectedLoanRequest.loanNumber} (Cliente: ${clientName})` }
             ]}

@@ -299,9 +299,9 @@ export default function ProfileUnifiedCard({ profile }: ProfileUnifiedCardProps)
 
         {/* Dirección */}
         <div>
-          <h4 className="text-base font-semibold text-gray-800 dark:text-white/90 mb-4">
+          {/* <h4 className="text-base font-semibold text-gray-800 dark:text-white/90 mb-4">
             Dirección
-          </h4>
+          </h4> */}
 
           <div>
             <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">

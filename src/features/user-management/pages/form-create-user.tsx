@@ -25,7 +25,7 @@ const FormCreateUser: React.FC<FormCreateUserProps> = ({ initialData }) => {
     <PageBreadcrumb 
           showTitle={false}
           items={[
-            { label: "Home", path: "/dashboard" },
+            { label: "Home", path: "/dashboard/home" },
             { label: "Gestión de Usuarios", path: "/dashboard/gestion-de-usuarios" },
             {label: "Crear Usuario"}
           ]}

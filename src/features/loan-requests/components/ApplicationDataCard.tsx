@@ -123,7 +123,10 @@ export default function ApplicationDataCard({ loanRequest }: ApplicationDataCard
           />
           <DataField label="Monto Solicitado" value={formatMoney(loanRequest.amountRequested)} />
           <DataField label="Plazo" value={`${loanRequest.termMonths} meses`} />
-          <DataField label="Tasa de Interés" value={`${loanRequest.appliedInterestRate}% M.V.`} />
+          <DataField 
+            label="Tasa de Interés" 
+            value={`${loanRequest.annualRate ?? loanRequest.appliedInterestRate ?? '---'}%`} 
+          />
           <DataField label="Destino" value={loanRequest.loanType?.name || '---'} />
           <div className="col-span-2">
             <DataField label="Fecha de Solicitud" value={formatDate(loanRequest.createdAt)} />

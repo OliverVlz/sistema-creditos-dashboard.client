@@ -4,7 +4,7 @@ import {
   ListIcon, 
   TimeIcon, 
   CheckCircleIcon,
-  AlertIcon 
+  //AlertIcon 
 } from '../../../icons';
 
 interface StatCard {
@@ -35,9 +35,9 @@ export default function StatsCards() {
 
   const cards: StatCard[] = [
     {
-      title: 'Total Solicitudes',
+      title: 'Solicitudes',
       value: stats.total,
-      icon: <ListIcon className="w-7 h-7" />,
+      icon: <ListIcon className="w-full h-full" />,
       color: 'text-indigo-600 dark:text-indigo-400',
       bgColor: 'bg-indigo-50 dark:bg-indigo-900/20',
       borderColor: 'border-indigo-200 dark:border-indigo-800',
@@ -45,23 +45,23 @@ export default function StatsCards() {
     {
       title: 'Pendientes',
       value: stats.pendientes,
-      icon: <TimeIcon className="w-7 h-7" />,
+      icon: <TimeIcon className="w-full h-full" />,
       color: 'text-amber-600 dark:text-amber-400',
       bgColor: 'bg-amber-50 dark:bg-amber-900/20',
       borderColor: 'border-amber-200 dark:border-amber-800',
     },
-    {
+ /*    {
       title: 'En Revisión',
       value: stats.enRevision,
       icon: <AlertIcon className="w-7 h-7" />,
       color: 'text-blue-600 dark:text-blue-400',
       bgColor: 'bg-blue-50 dark:bg-blue-900/20',
       borderColor: 'border-blue-200 dark:border-blue-800',
-    },
+    }, */
     {
       title: 'Aprobadas',
       value: stats.aprobados,
-      icon: <CheckCircleIcon className="w-7 h-7" />,
+      icon: <CheckCircleIcon className="w-full h-full" />,
       color: 'text-emerald-600 dark:text-emerald-400',
       bgColor: 'bg-emerald-50 dark:bg-emerald-900/20',
       borderColor: 'border-emerald-200 dark:border-emerald-800',
@@ -69,31 +69,33 @@ export default function StatsCards() {
   ];
 
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+    <div className="grid grid-cols-3 gap-3 mb-6">
       {cards.map((card, index) => (
         <div
           key={card.title}
           className={`
-            relative overflow-hidden rounded-2xl border ${card.borderColor} ${card.bgColor}
-            p-4 transition-all duration-300 hover:shadow-lg hover:scale-[1.02]
+            rounded-xl border ${card.borderColor} ${card.bgColor}
+            p-4 transition-all duration-300 hover:shadow-md
             animate-fade-in
           `}
           style={{ animationDelay: `${index * 100}ms` }}
         >
-          {/* Decoración de fondo */}
-          <div className="absolute -right-4 -top-4 w-24 h-24 rounded-full bg-white/20 dark:bg-white/5"></div>
-          
-          <div className="flex items-start justify-between relative z-10">
-            <div>
-              <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">
+          <div className="flex items-center gap-3">
+            {/* Icono */}
+            <div className={`${card.color} shrink-0 p-2 rounded-lg bg-white/50 dark:bg-white/10`}>
+              <div className="w-6 h-6">
+                {card.icon}
+              </div>
+            </div>
+            
+            {/* Contenido */}
+            <div className="flex flex-col">
+              <p className="text-[11px] font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider leading-tight">
                 {card.title}
               </p>
-              <p className={`text-3xl font-bold ${card.color}`}>
+              <p className={`text-xl font-bold ${card.color}`}>
                 {card.value}
               </p>
-            </div>
-            <div className={`${card.color} opacity-80`}>
-              {card.icon}
             </div>
           </div>
         </div>

@@ -19,7 +19,7 @@ const LoanRequestsPage = () => {
         <PageBreadcrumb 
           showTitle={false}
           items={[
-            { label: "Home", path: "/dashboard" },
+            { label: "Home", path: "/dashboard/home" },
             { label: isClient ? "Mis Solicitudes" : "Gestión de Solicitudes" }
           ]}
         />

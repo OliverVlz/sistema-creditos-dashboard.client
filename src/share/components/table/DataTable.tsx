@@ -204,6 +204,11 @@ export default function DataTable<T extends { id: number | string }>({
                               text
                               className={`${getActionColorClasses(action.color)} w-8 h-8 rounded-lg`}
                               tooltip={action.label}
+                              tooltipOptions={{
+                                position: 'top',
+                                showDelay: 300,
+                                className: 'text-xs whitespace-nowrap'
+                              }}
                               onClick={() => action.onClick(row)}
                             />
                           )

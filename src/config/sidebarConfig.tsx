@@ -31,7 +31,7 @@ export const sidebarMenuItems: NavItem[] = [
   {
     icon: <GridIcon />,
     name: 'Inicio',
-    path: '/home',
+    path: '/dashboard/home',
     // Todos los roles pueden ver el inicio
   },
   {

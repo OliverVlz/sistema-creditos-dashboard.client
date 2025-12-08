@@ -870,3 +870,32 @@ span.flatpickr-weekday,
 .animate-bounce-slow {
   animation: bounce-slow 2s infinite ease-in-out;
 }
+
+/* ===== PrimeReact Tooltip Styles ===== */
+.p-tooltip {
+  @apply !z-[99999];
+}
+
+.p-tooltip .p-tooltip-text {
+  @apply !bg-gray-900 !text-white !text-xs !font-medium !py-1.5 !px-3 !rounded-lg !shadow-lg !whitespace-nowrap dark:!bg-gray-700;
+}
+
+.p-tooltip .p-tooltip-arrow {
+  @apply !border-t-gray-900 dark:!border-t-gray-700;
+}
+
+.p-tooltip.p-tooltip-top .p-tooltip-arrow {
+  @apply !border-t-gray-900 dark:!border-t-gray-700;
+}
+
+.p-tooltip.p-tooltip-bottom .p-tooltip-arrow {
+  @apply !border-b-gray-900 dark:!border-b-gray-700;
+}
+
+.p-tooltip.p-tooltip-left .p-tooltip-arrow {
+  @apply !border-l-gray-900 dark:!border-l-gray-700;
+}
+
+.p-tooltip.p-tooltip-right .p-tooltip-arrow {
+  @apply !border-r-gray-900 dark:!border-r-gray-700;
+}

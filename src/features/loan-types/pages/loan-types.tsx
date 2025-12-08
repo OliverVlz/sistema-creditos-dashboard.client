@@ -125,7 +125,7 @@ export default function LoanTypesPage() {
           <PageBreadcrumb 
             showTitle={false}
             items={[
-              { label: "Home", path: "/dashboard" },
+              { label: "Home", path: "/dashboard/home" },  
               { label: "Configuración" },
               { label: "Tipos de Préstamo" }
             ]}

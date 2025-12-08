@@ -30,7 +30,7 @@ const FormEditUser = () => {
     <PageBreadcrumb 
           showTitle={false}
           items={[
-            { label: "Home", path: "/dashboard" },
+            { label: "Home", path: "/dashboard/home" },
             { label: "Gestión de Usuarios", path: "/dashboard/gestion-de-usuarios" },
             {label: "Editar Usuario"}
           ]}
