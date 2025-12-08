@@ -21,7 +21,7 @@ const FormEditClient = () => {
       <PageBreadcrumb 
         showTitle={false}
         items={[
-          { label: "Home", path: "/dashboard" },
+          { label: "Home", path: "/dashboard/home" },  
           { label: "Gestión de Clientes", path: "/dashboard/gestion-de-clientes" },
           { label: "Editar Cliente" }
         ]}

@@ -19,7 +19,7 @@ export const ProfilePage = () => {
         <PageBreadcrumb 
           showTitle={false}
           items={[
-            { label: "Home", path: "/dashboard" },
+            { label: "Home", path: "/dashboard/home" },  
             { label: "Mi Perfil" }
           ]}
         />
@@ -100,7 +100,7 @@ export const ProfilePage = () => {
       <PageBreadcrumb 
         showTitle={false}
         items={[
-          { label: "Home", path: "/dashboard" },
+          { label: "Home", path: "/dashboard/home" },  
           { label: "Mi Perfil" }
         ]}
       />

@@ -70,7 +70,7 @@ export default function App() {
 
         <Route element={<ProtectedAppLayout />}>
           {/* Rutas accesibles para todos los roles autenticados */}
-          <Route path="/home" element={<Home />} />
+          <Route path="/dashboard/home" element={<Home />} />
           <Route path="/dashboard/mi-perfil" element={<ProfilePage />} />
           <Route path="/dashboard/cambiar-contrasena" element={<ChangePasswordPage />} />
 

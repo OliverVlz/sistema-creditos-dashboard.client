@@ -18,7 +18,7 @@ const PageBreadcrumb: React.FC<BreadcrumbProps> = ({
 }) => {
   // Si se proporcionan items personalizados, usar esos; si no, usar pageTitle para compatibilidad
   const breadcrumbItems: BreadcrumbItem[] = items || [
-    { label: "Home", path: "/dashboard" },
+    { label: "Home", path: "/dashboard/home" },
     { label: pageTitle || "Página actual", path: undefined }
   ];
 
