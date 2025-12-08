@@ -35,16 +35,16 @@ export default function HomeRecentRequests({ isClient }: HomeRecentRequestsProps
     return null;
   }
 
-  const items = (loanRequests as LoanRequestTableItem[]).slice(0, 3);
+  const items = (loanRequests as LoanRequestTableItem[]).slice(0, 4);
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-4 sm:p-5 space-y-4">
-      <div className="flex items-center justify-between gap-2">
-        <div>
-          <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
+    <div className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-3 sm:p-4 lg:p-5 space-y-3 sm:space-y-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+        <div className="min-w-0 flex-1">
+          <h3 className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white">
             {isClient ? 'Últimas solicitudes' : 'Solicitudes recientes'}
           </h3>
-          <p className="text-xs text-gray-500 dark:text-gray-400">
+          <p className="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400">
             {isClient
               ? 'Un vistazo rápido al estado de tus créditos.'
               : 'Resumen de actividad reciente en el sistema.'}
@@ -52,13 +52,13 @@ export default function HomeRecentRequests({ isClient }: HomeRecentRequestsProps
         </div>
         <Link
           to="/gestion-solicitudes"
-          className="text-xs font-medium text-[#FF8546] hover:text-[#e86c30] transition-colors"
+          className="text-[10px] sm:text-xs font-medium text-[#FF8546] hover:text-[#e86c30] transition-colors self-start sm:self-auto"
         >
           Ver todas
         </Link>
       </div>
 
-      <div className="space-y-3">
+      <div className="space-y-2 sm:space-y-3">
         {items.map((item) => {
           const statusKey = (item.status || '').toLowerCase();
           const statusClass = statusColors[statusKey] ?? 'bg-gray-50 text-gray-700 border-gray-200';
@@ -67,24 +67,24 @@ export default function HomeRecentRequests({ isClient }: HomeRecentRequestsProps
             <Link
               key={item.id}
               to={`/gestion-solicitudes/detalle/${item.id}`}
-              className="flex items-center justify-between gap-3 rounded-xl border border-gray-100 dark:border-gray-700 bg-gray-50/60 dark:bg-gray-900/40 px-3 py-2.5 hover:border-[#FF8546]/60 hover:bg-white dark:hover:bg-gray-800 transition-colors"
+              className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3 rounded-lg sm:rounded-xl border border-gray-100 dark:border-gray-700 bg-gray-50/60 dark:bg-gray-900/40 px-3 py-2 sm:py-2.5 hover:border-[#FF8546]/60 hover:bg-white dark:hover:bg-gray-800 transition-colors"
             >
-              <div className="min-w-0">
-                <p className="text-xs font-semibold text-gray-900 dark:text-white truncate">
+              <div className="min-w-0 flex-1">
+                <p className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white truncate">
                   {item.loanNumber}
                 </p>
-                <p className="text-[11px] text-gray-500 dark:text-gray-400 truncate">
+                <p className="text-[10px] sm:text-[11px] text-gray-500 dark:text-gray-400 truncate">
                   {isClient ? item.organizationName : item.clientName}
                 </p>
-                <p className="text-[11px] text-gray-400 mt-0.5">{formatDate(item.createdAt)}</p>
+                <p className="text-[10px] sm:text-[11px] text-gray-400 mt-0.5">{formatDate(item.createdAt)}</p>
               </div>
 
-              <div className="flex flex-col items-end gap-1">
-                <span className="text-xs font-semibold text-gray-900 dark:text-white">
+              <div className="flex flex-row sm:flex-col items-center sm:items-end justify-between sm:justify-start gap-2 sm:gap-1">
+                <span className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white">
                   {formatCurrency(item.amountRequested)}
                 </span>
                 <span
-                  className={`inline-flex items-center px-2 py-0.5 rounded-full border text-[10px] font-medium capitalize ${statusClass}`}
+                  className={`inline-flex items-center px-2 py-0.5 rounded-full border text-[9px] sm:text-[10px] font-medium capitalize ${statusClass}`}
                 >
                   {item.status.replace('_', ' ')}
                 </span>
