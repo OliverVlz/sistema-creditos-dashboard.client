@@ -12,8 +12,10 @@ services:
     ports:
       - "5173:80"
     environment:
-      # URL del backend. En Docker Desktop usa host.docker.internal
-      # En Linux/WSL2, usa 172.17.0.1 o la IP de tu host
+      # URL del backend
+      # Desarrollo local: http://host.docker.internal:3000 (Docker Desktop)
+      # Desarrollo Linux/WSL2: http://172.17.0.1:3000 o IP del host
+      # Producción VPS: https://api.tudominio.com o http://IP_DEL_VPS:3000
       - BACKEND_URL=${BACKEND_URL:-http://host.docker.internal:3000}
     restart: unless-stopped
     healthcheck:

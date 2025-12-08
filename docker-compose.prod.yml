@@ -1,0 +1,46 @@
+version: '3.8'
+
+# Configuración para producción en VPS
+# Uso: docker-compose -f docker-compose.prod.yml up -d
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - VITE_API_URL=${VITE_API_URL:-}
+        - VITE_APP_NAME=${VITE_APP_NAME:-Sistema de Créditos}
+    container_name: presta-ya-frontend
+    ports:
+      - "80:80"  # Puerto 80 estándar para producción
+      - "443:443"  # Puerto 443 para HTTPS (si usas SSL)
+    environment:
+      # URL del backend en producción
+      # Opción 1: Si el backend está en el mismo VPS pero en otro contenedor
+      # - BACKEND_URL=http://backend:3000  # Nombre del servicio del backend
+      
+      # Opción 2: Si el backend está en otro VPS o servidor
+      # - BACKEND_URL=https://api.tudominio.com
+      # - BACKEND_URL=http://IP_DEL_VPS_BACKEND:3000
+      
+      # Opción 3: Si el backend está en el mismo VPS pero fuera de Docker
+      # - BACKEND_URL=http://localhost:3000
+      
+      - BACKEND_URL=${BACKEND_URL}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    # Si usas una red de Docker personalizada
+    # networks:
+    #   - app-network
+
+# Descomenta si necesitas una red de Docker
+# networks:
+#   app-network:
+#     driver: bridge
+
