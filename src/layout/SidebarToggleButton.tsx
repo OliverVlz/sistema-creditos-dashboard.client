@@ -13,13 +13,14 @@ const SidebarToggleButton: React.FC = () => {
   };
 
   // En móvil, ocultar cuando el sidebar está abierto (el botón de cerrar está dentro del sidebar)
+  // En desktop, no mostrar este botón (ya está en el header)
   if (isMobileOpen) {
     return null;
   }
 
   return (
     <button
-      className="absolute top-4 right-4 lg:right-auto lg:left-4 z-50 flex items-center justify-center w-10 h-10 text-gray-500 bg-white border border-gray-200 rounded-lg shadow-md hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 lg:w-11 lg:h-11 transition-all duration-200"
+      className="absolute top-4 right-4 lg:hidden z-50 flex items-center justify-center w-10 h-10 text-gray-500 bg-white border border-gray-200 rounded-lg shadow-md hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 transition-all duration-200"
       onClick={handleToggle}
       aria-label="Toggle Sidebar"
     >

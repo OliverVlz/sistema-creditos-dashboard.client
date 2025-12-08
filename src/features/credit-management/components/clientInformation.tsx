@@ -169,7 +169,7 @@ export const ClientInformationComponent: React.FC = () => {
         </button>
         <button
           onClick={handleNextStep}
-          className="h-12 px-6 flex items-center justify-center rounded-xl border-2 border-transparent bg-gray-50 text-gray-600 hover:bg-blue-600 hover:text-white transition-all duration-300 group font-semibold text-sm"
+          className="h-12 px-6 flex items-center justify-center rounded-xl border-2 border-transparent bg-gray-50 text-gray-600 hover:bg-orange-600 hover:text-white transition-all duration-300 group font-semibold text-sm"
         >
           <span>Continuar</span>
           <div className="ml-2 transform group-hover:translate-x-1 transition-transform">

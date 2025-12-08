@@ -125,6 +125,48 @@ const DocumentCard = ({ doc, isEditable, replacementFile, onReplace, onCancelRep
   }
 
   // Vista normal o editable
+  // Si NO es editable, toda la tarjeta es clickeable
+  if (!isEditable) {
+    return (
+      <div
+        onClick={() => window.open(doc.url, '_blank', 'noopener,noreferrer')}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => e.key === 'Enter' && window.open(doc.url, '_blank', 'noopener,noreferrer')}
+        className="group flex items-center p-3 rounded-lg border border-gray-200 bg-white dark:bg-gray-700 dark:border-gray-600 hover:border-blue-400 dark:hover:border-blue-500 hover:shadow-md hover:bg-blue-50/50 dark:hover:bg-blue-900/20 active:scale-[0.98] transition-all duration-200 cursor-pointer select-none"
+        title="Clic para ver documento"
+      >
+        {/* Icono PDF con fondo suave */}
+        <div className="shrink-0 flex items-center justify-center w-10 h-10 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-800 group-hover:bg-white dark:group-hover:bg-gray-700 transition-colors pointer-events-none">
+          <PdfFileIcon />
+        </div>
+
+        {/* Información del archivo */}
+        <div className="ml-3 grow min-w-0 pointer-events-none">
+          <p className="text-sm font-medium text-gray-700 dark:text-gray-300 truncate group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-colors">
+            {doc.documentType.name}
+          </p>
+          <p className="text-[11px] text-gray-400 dark:text-gray-500 font-medium flex items-center gap-1.5">
+            <span>PDF</span>
+            <span className="w-1 h-1 bg-gray-300 dark:bg-gray-600 rounded-full"></span>
+            <span className="text-green-600 dark:text-green-400 font-semibold">Adjuntado</span>
+          </p>
+        </div>
+
+        {/* Indicador visual */}
+        <div className="ml-2 shrink-0 pointer-events-none">
+          <div className="group-hover:hidden text-green-500 dark:text-green-400">
+            <CheckCircleIcon />
+          </div>
+          <div className="hidden group-hover:flex items-center justify-center w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-500 dark:text-blue-400">
+            <ExternalLinkIcon />
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Vista editable con dropzone
   return (
     <div
       {...getRootProps()}
@@ -154,48 +196,30 @@ const DocumentCard = ({ doc, isEditable, replacementFile, onReplace, onCancelRep
         </p>
       </div>
 
-      {/* Acciones */}
+      {/* Acciones para modo editable */}
       <div className="ml-2 shrink-0 flex items-center gap-1">
-        {isEditable ? (
-          <>
-            {/* Botón para reemplazar */}
-            <button
-              onClick={(e) => {
-                e.stopPropagation()
-                open()
-              }}
-              className="p-2 text-gray-400 hover:text-orange-500 hover:bg-orange-50 dark:hover:bg-orange-900/30 rounded-full transition-colors"
-              title="Reemplazar documento"
-            >
-              <ReplaceIcon />
-            </button>
-            {/* Botón para ver */}
-            <a
-              href={doc.url}
-              target="_blank"
-              rel="noreferrer"
-              onClick={(e) => e.stopPropagation()}
-              className="p-2 text-gray-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-full transition-colors"
-              title="Ver documento"
-            >
-              <ExternalLinkIcon />
-            </a>
-          </>
-        ) : (
-          <a
-            href={doc.url}
-            target="_blank"
-            rel="noreferrer"
-            className="flex items-center"
-          >
-            <div className="group-hover:hidden text-green-500 dark:text-green-400">
-              <CheckCircleIcon />
-            </div>
-            <div className="hidden group-hover:block text-blue-500 dark:text-blue-400">
-              <ExternalLinkIcon />
-            </div>
-          </a>
-        )}
+        {/* Botón para reemplazar */}
+        <button
+          onClick={(e) => {
+            e.stopPropagation()
+            open()
+          }}
+          className="p-2 text-gray-400 hover:text-orange-500 hover:bg-orange-50 dark:hover:bg-orange-900/30 rounded-full transition-colors"
+          title="Reemplazar documento"
+        >
+          <ReplaceIcon />
+        </button>
+        {/* Botón para ver */}
+        <a
+          href={doc.url}
+          target="_blank"
+          rel="noreferrer"
+          onClick={(e) => e.stopPropagation()}
+          className="p-2 text-gray-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-full transition-colors"
+          title="Ver documento"
+        >
+          <ExternalLinkIcon />
+        </a>
       </div>
     </div>
   )

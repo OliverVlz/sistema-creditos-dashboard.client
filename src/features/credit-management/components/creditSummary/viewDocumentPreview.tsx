@@ -43,21 +43,29 @@ const DocumentCardCompact = ({ doc }: { doc: UploadedDocument }) => {
     };
   }, [doc]);
 
+  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    if (fileUrl && fileUrl !== '#') {
+      window.open(fileUrl, '_blank', 'noopener,noreferrer');
+    }
+  };
+
   return (
-    <a
-      href={fileUrl}
-      target="_blank"
-      rel="noreferrer"
-      className="group flex items-center p-3 rounded-xl border border-gray-200 bg-white hover:border-blue-300 hover:shadow-md hover:bg-blue-50/30 transition-all duration-200 cursor-pointer text-left"
+    <div
+      onClick={handleClick}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => e.key === 'Enter' && handleClick(e as unknown as React.MouseEvent<HTMLDivElement>)}
+      className="group flex items-center p-3 rounded-xl border border-gray-200 bg-white hover:border-blue-400 hover:shadow-lg hover:bg-blue-50/50 active:scale-[0.98] transition-all duration-200 cursor-pointer text-left select-none"
       title="Clic para ver documento"
     >
       {/* Icono PDF con fondo suave */}
-      <div className="flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-lg bg-red-50 border border-red-100 group-hover:bg-white transition-colors">
+      <div className="flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-lg bg-red-50 border border-red-100 group-hover:bg-white group-hover:border-red-200 transition-colors pointer-events-none">
         <PdfFileIcon />
       </div>
 
       {/* Información del archivo */}
-      <div className="ml-3 flex-grow min-w-0">
+      <div className="ml-3 flex-grow min-w-0 pointer-events-none">
         <p className="text-xs font-bold text-gray-700 truncate group-hover:text-blue-700 transition-colors">
           {doc.name}
         </p>
@@ -69,17 +77,17 @@ const DocumentCardCompact = ({ doc }: { doc: UploadedDocument }) => {
       </div>
 
       {/* Indicadores (Check o Flecha al hover) */}
-      <div className="ml-2 flex-shrink-0">
+      <div className="ml-2 flex-shrink-0 pointer-events-none">
         {/* Por defecto muestra el Check verde */}
         <div className="group-hover:hidden text-green-500">
            <CheckCircleIcon />
         </div>
         {/* Al pasar el mouse muestra icono de "Abrir" */}
-        <div className="hidden group-hover:block text-blue-500 animate-in fade-in zoom-in duration-200">
+        <div className="hidden group-hover:flex items-center justify-center w-6 h-6 rounded-full bg-blue-100 text-blue-600 animate-in fade-in zoom-in duration-200">
            <ExternalLinkIcon />
         </div>
       </div>
-    </a>
+    </div>
   );
 };
 

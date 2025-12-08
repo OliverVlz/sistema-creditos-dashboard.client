@@ -94,7 +94,9 @@ export interface LoanRequestDetail {
   loanNumber: string;
   amountRequested: string;
   termMonths: number;
-  appliedInterestRate: string;
+  appliedInterestRate?: string;
+  annualRate?: number;
+  monthlyRate?: number;
   monthlyPayment: string;
   totalInterest: string;
   totalPayable: string;
