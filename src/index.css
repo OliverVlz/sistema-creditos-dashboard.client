@@ -899,3 +899,11 @@ span.flatpickr-weekday,
 .p-tooltip.p-tooltip-right .p-tooltip-arrow {
   @apply !border-r-gray-900 dark:!border-r-gray-700;
 }
+
+/* SweetAlert2 Customization */
+.swal2-container {
+  z-index: 9999 !important;
+}
+.swal2-container.swal2-top-end {
+  top: 80px !important;
+}

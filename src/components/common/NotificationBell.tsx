@@ -72,19 +72,6 @@ const NotificationBell = () => {
     }
   };
 
-  const getNotificationColor = (type: string) => {
-    switch (type) {
-      case "loan:approved":
-        return "bg-green-50 border-green-200";
-      case "loan:rejected":
-        return "bg-red-50 border-red-200";
-      case "loan:modified_by_client":
-        return "bg-blue-50 border-blue-200";
-      default:
-        return "bg-gray-50 border-gray-200";
-    }
-  };
-
   return (
     <div className="relative" ref={dropdownRef}>
       <button
@@ -121,41 +108,17 @@ const NotificationBell = () => {
       </button>
 
       {isOpen && (
-        <div className="absolute -right-16 sm:right-0 mt-2.5 flex h-90 w-75 sm:w-80 flex-col rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark z-50">
-          <div className="flex items-center justify-between px-4.5 py-3 border-b border-stroke dark:border-strokedark">
-            <h5 className="text-sm font-medium text-bodydark2">
-              Notificaciones {unreadCount > 0 && `(${unreadCount})`}
+        <div className="absolute right-0 mt-2 w-72 rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-800 dark:bg-gray-900 z-[1000]">
+          <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-800">
+            <h5 className="text-sm font-semibold text-gray-900 dark:text-white">
+              Notificaciones
             </h5>
-            {isConnected ? (
-              <span className="flex items-center text-xs text-green-500">
-                <span className="h-2 w-2 rounded-full bg-green-500 mr-1.5"></span>
-                Conectado
-              </span>
-            ) : (
-              <span className="flex items-center text-xs text-red-500">
-                <span className="h-2 w-2 rounded-full bg-red-500 mr-1.5"></span>
-                Desconectado
-              </span>
-            )}
           </div>
 
-          <div className="flex-1 overflow-y-auto">
+          <div className="max-h-[300px] overflow-y-auto">
             {notifications.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-10 text-center px-4">
-                <svg
-                  className="mb-3 h-12 w-12 text-bodydark2"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={1.5}
-                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-                  />
-                </svg>
-                <p className="text-sm text-bodydark2">No hay notificaciones</p>
+              <div className="py-8 text-center px-4">
+                <p className="text-sm text-gray-500">No hay notificaciones</p>
               </div>
             ) : (
               <ul className="flex flex-col">
@@ -163,28 +126,18 @@ const NotificationBell = () => {
                   <li key={index}>
                     <Link
                       to={`/loans/${notification.data.loanId}`}
-                      className={`flex gap-3 border-b border-stroke px-4.5 py-3 hover:bg-gray-2 dark:border-strokedark dark:hover:bg-meta-4 ${getNotificationColor(
-                        notification.type
-                      )}`}
+                      className="flex gap-3 border-b border-gray-100 px-4 py-3 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800 transition-colors"
                       onClick={() => setIsOpen(false)}
                     >
-                      <div className="text-2xl">
+                      <div className="text-lg shrink-0">
                         {getNotificationIcon(notification.type)}
                       </div>
 
-                      <div className="flex-1">
-                        <p className="text-sm font-medium text-black dark:text-white">
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm text-gray-900 dark:text-white leading-snug">
                           {notification.message}
                         </p>
-                        <p className="text-xs text-bodydark2 mt-1">
-                          Préstamo: {notification.data.loanNumber}
-                        </p>
-                        {notification.data.rejectionReason && (
-                          <p className="text-xs text-red-500 mt-1 italic">
-                            {notification.data.rejectionReason}
-                          </p>
-                        )}
-                        <p className="text-xs text-bodydark2 mt-1.5">
+                        <p className="text-xs text-gray-500 mt-1">
                           {formatTimestamp(notification.data.timestamp)}
                         </p>
                       </div>
@@ -196,13 +149,13 @@ const NotificationBell = () => {
           </div>
 
           {notifications.length > 0 && (
-            <div className="border-t border-stroke dark:border-strokedark">
+            <div className="border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/50 rounded-b-lg">
               <Link
                 to="/notifications"
-                className="flex items-center justify-center py-3 text-sm font-medium text-primary hover:bg-gray-2 dark:hover:bg-meta-4"
+                className="block w-full py-2 text-center text-xs font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
                 onClick={() => setIsOpen(false)}
               >
-                Ver todas las notificaciones
+                Ver todo
               </Link>
             </div>
           )}

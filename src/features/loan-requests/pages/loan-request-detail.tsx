@@ -33,7 +33,6 @@ const LoanRequestDetailPage = () => {
 
   useEffect(() => {
     if (id) {
-      // @ts-expect-error - Redux Toolkit types issue with React 19
       dispatch(fetchLoanRequestDetail(id));
     }
   }, [id, dispatch]);
@@ -42,13 +41,12 @@ const LoanRequestDetailPage = () => {
   useEffect(() => {
     if (!socket || !id) return;
 
-    const handleLoanNotification = (notification: any) => {
+    const handleLoanNotification = (notification: { data?: { loanId?: string } }) => {
       // Solo refrescar si la notificación es para este préstamo
       if (notification.data?.loanId === id) {
         console.log(
           "🔄 Notificación recibida para este préstamo, refrescando..."
         );
-        // @ts-expect-error - Redux Toolkit types issue with React 19
         dispatch(fetchLoanRequestDetail(id));
       }
     };
@@ -101,7 +99,6 @@ const LoanRequestDetailPage = () => {
     setIsEditingDocuments(false);
     // Recargar los datos
     if (id) {
-      // @ts-expect-error - Redux Toolkit types issue with React 19
       dispatch(fetchLoanRequestDetail(id));
     }
   };
@@ -141,9 +138,9 @@ const LoanRequestDetailPage = () => {
       documentChanges.documentsToReplace.forEach((change) => {
         replaceDocumentIds.push(change.documentId);
         files.push(change.file);
+        files.push(change.file);
       });
 
-      // @ts-expect-error - Redux Toolkit types issue with React 19
       await dispatch(
         updateClientDocuments({
           loanId: selectedLoanRequest.id,
@@ -151,7 +148,6 @@ const LoanRequestDetailPage = () => {
           files,
         })
       ).unwrap();
-
       // Mostrar mensaje de éxito
       await Swal.fire({
         title: "¡Documentos enviados!",
