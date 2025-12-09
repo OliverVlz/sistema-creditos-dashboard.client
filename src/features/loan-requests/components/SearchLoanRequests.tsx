@@ -23,18 +23,24 @@ export default function SearchLoanRequests() {
   // Determinar si el usuario es cliente (solo cuando auth ya cargó)
   const isClient = !authLoading && user?.role === 'CLIENTE'
   
-  // Obtener el clientId del perfil cuando es un cliente
+  // Verificar si el profile corresponde al usuario actual
+  const isProfileValid = profile && user && profile.id === user.id
+  
+  // Obtener el clientId del perfil cuando es un cliente y el profile es válido
   // IMPORTANTE: Es clientInfo.id, NO el id del usuario
-  const clientId = isClient && profile?.clientInfo ? profile.clientInfo.id : undefined
+  const clientId = isClient && isProfileValid && profile?.clientInfo ? profile.clientInfo.id : undefined
 
-  // Cargar el perfil si es cliente y no lo tenemos
+  // Cargar el perfil si es cliente y no lo tenemos o si es de otro usuario
   useEffect(() => {
-    if (isClient && !profile && !profileLoading) {
-      console.log('Cargando perfil del cliente...')
-      // @ts-expect-error - Redux Toolkit types issue with React 19
-      dispatch(fetchMyProfile())
+    if (isClient && user && !profileLoading) {
+      // Cargar si no hay profile o si el profile es de otro usuario
+      if (!profile || profile.id !== user.id) {
+        console.log('Cargando perfil del cliente...')
+        // @ts-expect-error - Redux Toolkit types issue with React 19
+        dispatch(fetchMyProfile())
+      }
     }
-  }, [isClient, profile, profileLoading, dispatch])
+  }, [isClient, user, profile, profileLoading, dispatch])
 
   // Hacer la petición de loans cuando tengamos todo listo
   useEffect(() => {
@@ -44,10 +50,10 @@ export default function SearchLoanRequests() {
       return
     }
 
-    // Si es cliente, esperar a tener el clientId
+    // Si es cliente, esperar a tener el clientId válido
     if (isClient) {
       if (!clientId) {
-        console.log('Esperando clientId... (clientInfo.id)')
+        console.log('Esperando clientId válido... (clientInfo.id)')
         return
       }
       console.log('ClientId obtenido de clientInfo.id:', clientId)
@@ -94,8 +100,8 @@ export default function SearchLoanRequests() {
 
   const hasActiveFilters = filters.loanNumber || filters.status
 
-  // Si es cliente y aún no tenemos el perfil, mostrar loading
-  if (isClient && !clientId) {
+  // Si es cliente y aún no tenemos el perfil válido, mostrar loading
+  if (isClient && (!clientId || profileLoading)) {
     return (
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-4 mb-4">
         <div className="flex items-center justify-center gap-2 text-gray-500">

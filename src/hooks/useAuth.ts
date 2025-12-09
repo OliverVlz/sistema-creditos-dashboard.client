@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { getUser, isAuthenticated, clearAuthData } from '../core/services/auth.service';
 import { AuthUser } from '../core/models/loginResponseModel';
 
@@ -7,28 +7,33 @@ import { AuthUser } from '../core/models/loginResponseModel';
  * Proporciona acceso al usuario actual y estado de autenticación
  */
 export const useAuth = () => {
-  const [user, setUser] = useState<AuthUser | null>(null);
+  const [user, setUser] = useState<AuthUser | null>(() => getUser());
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Cargar usuario del localStorage al montar el componente
-    const loadUser = () => {
-      const savedUser = getUser();
-      setUser(savedUser);
-      setLoading(false);
-    };
-
-    loadUser();
+    const savedUser = getUser();
+    setUser(savedUser);
+    setLoading(false);
   }, []);
 
-  const logout = () => {
+  const logout = useCallback(() => {
     clearAuthData();
     setUser(null);
-  };
+  }, []);
 
-  const updateUser = (newUser: AuthUser | null) => {
+  const updateUser = useCallback((newUser: AuthUser | null) => {
     setUser(newUser);
-  };
+    // Cuando se actualiza el usuario, asegurar que loading sea false
+    setLoading(false);
+  }, []);
+
+  // Refrescar usuario desde localStorage (útil después de login)
+  const refreshUser = useCallback(() => {
+    const savedUser = getUser();
+    setUser(savedUser);
+    setLoading(false);
+  }, []);
 
   return {
     user,
@@ -36,6 +41,7 @@ export const useAuth = () => {
     loading,
     logout,
     updateUser,
+    refreshUser,
   };
 };
 

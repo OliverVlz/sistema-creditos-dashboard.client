@@ -12,16 +12,14 @@ import { useRoleAccess } from "../hooks/useRoleAccess";
 import { NavItem, getFilteredMenuItems } from "../config/sidebarConfig";
 import { useAuth } from "../hooks/useAuth";
 import { LOGIN_ROUTE, CHANGE_PASSWORD_ROUTE } from "../routes/routes";
-import { useAppDispatch } from "../store";
-import { clearLoanRequests } from "../features/loan-requests/slices/loanRequests.slices";
+import { clearAuthData } from "../core/services/auth.service";
 
 const AppSidebar: React.FC = () => {
   const { isExpanded, isMobileOpen, isHovered, toggleMobileSidebar } = useSidebar();
   const { userRole } = useRoleAccess();
   const location = useLocation();
   const navigate = useNavigate();
-  const { user, logout } = useAuth();
-  const dispatch = useAppDispatch();
+  const { user } = useAuth();
 
   // Filtrar items del menú según el rol del usuario
   const menuItems = useMemo(() => {
@@ -186,10 +184,10 @@ const AppSidebar: React.FC = () => {
   );
 
   const handleLogout = () => {
-    logout();
-    // Limpiar solicitudes de crédito al cerrar sesión
-    dispatch(clearLoanRequests());
-    navigate(LOGIN_ROUTE);
+    // Limpiar localStorage y navegar inmediatamente
+    clearAuthData();
+    // Recargar la página para limpiar todo el estado de Redux
+    window.location.href = LOGIN_ROUTE;
   };
 
   const displayName =

@@ -16,29 +16,37 @@ import HomeRecentRequests from './HomeRecentRequests';
  */
 export default function HomeRequestsPanel() {
   const dispatch = useAppDispatch();
-  const { loading: authLoading } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const { isCliente, isAdmin, isAsesor } = useRoleAccess();
   
   const { loanRequests, loading } = useAppSelector((state) => state.loanRequests);
   const { profile, loading: profileLoading } = useAppSelector((state) => state.profile);
   
-  // Obtener clientId del perfil cuando es cliente (solo después de que auth cargó)
-  const clientId = !authLoading && isCliente && profile?.clientInfo ? profile.clientInfo.id : undefined;
+  // Verificar si el profile corresponde al usuario actual
+  const isProfileValid = profile && user && profile.id === user.id;
+  
+  // Obtener clientId del perfil cuando es cliente (solo si el profile es válido)
+  const clientId = !authLoading && isCliente && isProfileValid && profile?.clientInfo 
+    ? profile.clientInfo.id 
+    : undefined;
 
-  // Cargar perfil si es cliente
+  // Cargar perfil si es cliente y el profile no existe o no corresponde al usuario actual
   useEffect(() => {
-    if (!authLoading && isCliente && !profile && !profileLoading) {
-      // @ts-expect-error - Redux Toolkit types issue with React 19
-      dispatch(fetchMyProfile());
+    if (!authLoading && isCliente && user && !profileLoading) {
+      // Cargar si no hay profile o si el profile es de otro usuario
+      if (!profile || profile.id !== user.id) {
+        // @ts-expect-error - Redux Toolkit types issue with React 19
+        dispatch(fetchMyProfile());
+      }
     }
-  }, [authLoading, isCliente, profile, profileLoading, dispatch]);
+  }, [authLoading, isCliente, user, profile, profileLoading, dispatch]);
 
   // Cargar solicitudes
   useEffect(() => {
     // Esperar a que cargue la autenticación
     if (authLoading) return;
     
-    // Si es cliente, esperar el clientId
+    // Si es cliente, esperar el clientId válido
     if (isCliente && !clientId) return;
 
     // @ts-expect-error - Redux Toolkit types issue with React 19
@@ -49,8 +57,8 @@ export default function HomeRequestsPanel() {
     }));
   }, [dispatch, clientId, isCliente, authLoading]);
 
-  // Loading state
-  if (loading || (isCliente && !clientId)) {
+  // Loading state - esperar hasta que tengamos un clientId válido para clientes
+  if (loading || (isCliente && !clientId) || (isCliente && profileLoading)) {
     return (
       <div className="flex items-center justify-center h-48 sm:h-64">
         <div className="flex flex-col items-center gap-3">

@@ -67,11 +67,16 @@ export const saveAuthData = (authData: AuthResponse): void => {
 };
 
 /**
- * Limpia todos los datos de autenticación
+ * Limpia todos los datos de autenticación del localStorage
+ * Elimina todas las posibles claves usadas para auth
  */
 export const clearAuthData = (): void => {
+  // Limpiar claves del servicio
   removeToken();
   removeUser();
+  // Limpiar claves alternativas (usadas en loginOperations)
+  localStorage.removeItem('token');
+  localStorage.removeItem('user');
 };
 
 /**
