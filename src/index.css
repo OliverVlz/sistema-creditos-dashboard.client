@@ -849,7 +849,8 @@ span.flatpickr-weekday,
 }
 
 @keyframes bounce-slow {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0);
   }
   50% {
@@ -898,4 +899,19 @@ span.flatpickr-weekday,
 
 .p-tooltip.p-tooltip-right .p-tooltip-arrow {
   @apply !border-r-gray-900 dark:!border-r-gray-700;
+}
+
+/* SweetAlert2 Customization */
+.swal2-container {
+  z-index: 9999 !important;
+}
+.swal2-container.swal2-top-end {
+  top: 80px !important;
+}
+
+.swal2-popup.swal2-toast {
+  width: auto !important;
+  height: auto !important;
+  padding: 0.75rem 1rem !important;
+  align-items: center !important;
 }

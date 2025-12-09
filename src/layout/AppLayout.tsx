@@ -2,10 +2,16 @@ import { SidebarProvider, useSidebar } from "../context/SidebarContext";
 import { Outlet } from "react-router";
 import Backdrop from "./Backdrop";
 import AppSidebar from "./AppSidebar";
-import SidebarToggleButton from "./SidebarToggleButton";
+import Header from "../components/header/Header";
 
 const LayoutContent: React.FC = () => {
-  const { isExpanded, isHovered, isMobileOpen } = useSidebar();
+  const {
+    isExpanded,
+    isHovered,
+    isMobileOpen,
+    toggleSidebar,
+    toggleMobileSidebar,
+  } = useSidebar();
 
   return (
     <div className="min-h-screen xl:flex">
@@ -18,7 +24,7 @@ const LayoutContent: React.FC = () => {
           isExpanded || isHovered ? "lg:ml-[290px]" : "lg:ml-[90px]"
         } ${isMobileOpen ? "ml-0" : ""}`}
       >
-        <SidebarToggleButton />
+        <Header onClick={toggleSidebar} onToggle={toggleMobileSidebar} />
         <div className="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
           <Outlet />
         </div>

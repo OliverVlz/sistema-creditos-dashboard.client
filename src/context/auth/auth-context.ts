@@ -1,8 +1,9 @@
-import { createContext } from 'react';
-import type { IAuthContext } from './auth-context.interfaces';
+import { createContext } from "react";
+import type { IAuthContext } from "./auth-context.interfaces";
 
 export const initialState: IAuthContext = {
   user: undefined,
+  token: undefined,
   login: () => {},
   logout: () => {},
   updateLoggedUser: () => {},
