@@ -41,7 +41,9 @@ const LoanRequestDetailPage = () => {
   useEffect(() => {
     if (!socket || !id) return;
 
-    const handleLoanNotification = (notification: { data?: { loanId?: string } }) => {
+    const handleLoanNotification = (notification: {
+      data?: { loanId?: string };
+    }) => {
       // Solo refrescar si la notificación es para este préstamo
       if (notification.data?.loanId === id) {
         console.log(
