@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ThemeToggleButton } from "../common/ThemeToggleButton";
-import NotificationDropdown from "./NotificationDropdown";
+import NotificationBell from "../common/NotificationBell";
 import UserDropdown from "./UserDropdown";
 import { Link } from "react-router";
 import { LogoComponent } from "../../share/components/logoComponent/logoComponent";
@@ -148,7 +148,7 @@ const Header: React.FC<HeaderProps> = ({ onClick, onToggle }) => {
             {/* <!-- Dark Mode Toggler --> */}
             <ThemeToggleButton />
             {/* <!-- Dark Mode Toggler --> */}
-            <NotificationDropdown />
+            <NotificationBell />
             {/* <!-- Notification Menu Area --> */}
           </div>
           {/* <!-- User Area --> */}

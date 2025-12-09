@@ -7,6 +7,7 @@ export interface ILoginForm {
 
 export interface IAuthContext {
   user?: IUser | null;
+  token?: string | null;
   login: (body: ILoginForm) => void;
   logout: () => void;
   updateLoggedUser: (user: IUser) => void;

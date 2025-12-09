@@ -10,6 +10,7 @@ import AttachedDocumentsCard, { DocumentChanges } from '../components/AttachedDo
 import ApprovalPanelCard from '../components/ApprovalPanelCard'
 import StatusMessageBanner from '../components/StatusMessageBanner'
 import { useAuth } from '../../../hooks/useAuth'
+import { useNotifications } from '../../../context/NotificationsContext'
 
 const LoanRequestDetailPage = () => {
   const { id } = useParams<{ id: string }>()
@@ -17,6 +18,7 @@ const LoanRequestDetailPage = () => {
   const dispatch = useAppDispatch()
   const { user } = useAuth()
   const { selectedLoanRequest, loading, error, updating } = useAppSelector((state) => state.loanRequests)
+  const { socket } = useNotifications()
   
   // Estado para manejar cambios en documentos
   const [documentChanges, setDocumentChanges] = useState<DocumentChanges | null>(null)
@@ -30,6 +32,33 @@ const LoanRequestDetailPage = () => {
       dispatch(fetchLoanRequestDetail(id))
     }
   }, [id, dispatch])
+
+  // Escuchar notificaciones de WebSocket para refrescar el detalle
+  useEffect(() => {
+    if (!socket || !id) return
+
+    const handleLoanNotification = (notification: any) => {
+      // Solo refrescar si la notificación es para este préstamo
+      if (notification.data?.loanId === id) {
+        console.log('🔄 Notificación recibida para este préstamo, refrescando...')
+        // @ts-expect-error - Redux Toolkit types issue with React 19
+        dispatch(fetchLoanRequestDetail(id))
+      }
+    }
+
+    // Escuchar todos los eventos de préstamos
+    socket.on('loan:approved', handleLoanNotification)
+    socket.on('loan:rejected', handleLoanNotification)
+    socket.on('loan:updated', handleLoanNotification)
+    socket.on('loan:modified_by_client', handleLoanNotification)
+
+    return () => {
+      socket.off('loan:approved', handleLoanNotification)
+      socket.off('loan:rejected', handleLoanNotification)
+      socket.off('loan:updated', handleLoanNotification)
+      socket.off('loan:modified_by_client', handleLoanNotification)
+    }
+  }, [socket, id, dispatch])
 
   // Determinar si el usuario es asesor/admin (roles que pueden aprobar/rechazar)
   const isManagerOrAdmin = user?.role === 'ASESOR' || user?.role === 'ADMIN'
