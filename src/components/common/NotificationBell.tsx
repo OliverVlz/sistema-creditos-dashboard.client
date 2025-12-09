@@ -15,6 +15,7 @@ const NotificationBell = () => {
         !dropdownRef.current.contains(event.target as Node)
       ) {
         setIsOpen(false);
+        markAsRead();
       }
     };
 
@@ -25,7 +26,7 @@ const NotificationBell = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isOpen]);
+  }, [isOpen, markAsRead]);
 
   const handleToggle = () => {
     if (!isOpen) {
@@ -88,7 +89,7 @@ const NotificationBell = () => {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={handleToggle}
-        className="relative flex h-10 w-10 items-center justify-center rounded-full border border-stroke bg-gray-100 text-gray-600 hover:text-primary dark:border-strokedark dark:bg-meta-4 dark:text-white"
+        className="relative flex items-center justify-center text-gray-500 transition-colors bg-white border border-gray-200 rounded-full hover:text-dark-900 h-11 w-11 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
       >
         <span className="relative">
           <svg
@@ -110,15 +111,11 @@ const NotificationBell = () => {
           </svg>
 
           {unreadCount > 0 && (
-            <span className="absolute -top-1 -right-1 z-1 h-4 w-4 rounded-full bg-meta-1 flex items-center justify-center">
-              <span className="text-[10px] font-medium text-white">
-                {unreadCount > 9 ? "9+" : unreadCount}
-              </span>
-            </span>
+            <span className="absolute top-0 right-0 block h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-white dark:ring-gray-900"></span>
           )}
 
           {!isConnected && (
-            <span className="absolute -bottom-0.5 -right-0.5 h-2 w-2 rounded-full bg-meta-7 border border-white dark:border-boxdark"></span>
+            <span className="absolute -bottom-0.5 -right-0.5 h-2 w-2 rounded-full bg-red-500 border border-white dark:border-boxdark"></span>
           )}
         </span>
       </button>
@@ -130,13 +127,13 @@ const NotificationBell = () => {
               Notificaciones {unreadCount > 0 && `(${unreadCount})`}
             </h5>
             {isConnected ? (
-              <span className="flex items-center text-xs text-meta-3">
-                <span className="h-2 w-2 rounded-full bg-meta-3 mr-1.5"></span>
+              <span className="flex items-center text-xs text-green-500">
+                <span className="h-2 w-2 rounded-full bg-green-500 mr-1.5"></span>
                 Conectado
               </span>
             ) : (
-              <span className="flex items-center text-xs text-meta-7">
-                <span className="h-2 w-2 rounded-full bg-meta-7 mr-1.5"></span>
+              <span className="flex items-center text-xs text-red-500">
+                <span className="h-2 w-2 rounded-full bg-red-500 mr-1.5"></span>
                 Desconectado
               </span>
             )}
@@ -183,7 +180,7 @@ const NotificationBell = () => {
                           Préstamo: {notification.data.loanNumber}
                         </p>
                         {notification.data.rejectionReason && (
-                          <p className="text-xs text-meta-1 mt-1 italic">
+                          <p className="text-xs text-red-500 mt-1 italic">
                             {notification.data.rejectionReason}
                           </p>
                         )}
