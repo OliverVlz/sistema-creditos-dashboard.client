@@ -80,9 +80,7 @@ const Header: React.FC<HeaderProps> = ({ onClick, onToggle }) => {
           </button>
 
           <Link to="/" className="lg:hidden">
-            <LogoComponent
-              className="w-10 h-10"
-            />
+            <LogoComponent className="w-10 h-10" />
           </Link>
 
           <button

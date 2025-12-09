@@ -1,25 +1,29 @@
-import { useState, useRef, useEffect } from 'react';
-import { useNotifications } from '../../context/NotificationsContext';
-import { Link } from 'react-router-dom';
+import { useState, useRef, useEffect } from "react";
+import { useNotifications } from "../../context/NotificationsContext";
+import { Link } from "react-router-dom";
 
 const NotificationBell = () => {
-  const { notifications, unreadCount, markAsRead, isConnected } = useNotifications();
+  const { notifications, unreadCount, markAsRead, isConnected } =
+    useNotifications();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
 
     if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener("mousedown", handleClickOutside);
     }
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isOpen]);
 
@@ -35,44 +39,48 @@ const NotificationBell = () => {
   const formatTimestamp = (timestamp: Date) => {
     const now = new Date();
     const notificationDate = new Date(timestamp);
-    const diffInSeconds = Math.floor((now.getTime() - notificationDate.getTime()) / 1000);
+    const diffInSeconds = Math.floor(
+      (now.getTime() - notificationDate.getTime()) / 1000
+    );
 
-    if (diffInSeconds < 60) return 'Hace unos segundos';
-    if (diffInSeconds < 3600) return `Hace ${Math.floor(diffInSeconds / 60)} minutos`;
-    if (diffInSeconds < 86400) return `Hace ${Math.floor(diffInSeconds / 3600)} horas`;
-    return notificationDate.toLocaleDateString('es-ES', {
-      day: '2-digit',
-      month: 'short',
-      hour: '2-digit',
-      minute: '2-digit',
+    if (diffInSeconds < 60) return "Hace unos segundos";
+    if (diffInSeconds < 3600)
+      return `Hace ${Math.floor(diffInSeconds / 60)} minutos`;
+    if (diffInSeconds < 86400)
+      return `Hace ${Math.floor(diffInSeconds / 3600)} horas`;
+    return notificationDate.toLocaleDateString("es-ES", {
+      day: "2-digit",
+      month: "short",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
   const getNotificationIcon = (type: string) => {
     switch (type) {
-      case 'loan:created':
-        return '📝';
-      case 'loan:approved':
-        return '✅';
-      case 'loan:rejected':
-        return '❌';
-      case 'loan:modified_by_client':
-        return '🔄';
+      case "loan:created":
+        return "📝";
+      case "loan:approved":
+        return "✅";
+      case "loan:rejected":
+        return "❌";
+      case "loan:modified_by_client":
+        return "🔄";
       default:
-        return '🔔';
+        return "🔔";
     }
   };
 
   const getNotificationColor = (type: string) => {
     switch (type) {
-      case 'loan:approved':
-        return 'bg-green-50 border-green-200';
-      case 'loan:rejected':
-        return 'bg-red-50 border-red-200';
-      case 'loan:modified_by_client':
-        return 'bg-blue-50 border-blue-200';
+      case "loan:approved":
+        return "bg-green-50 border-green-200";
+      case "loan:rejected":
+        return "bg-red-50 border-red-200";
+      case "loan:modified_by_client":
+        return "bg-blue-50 border-blue-200";
       default:
-        return 'bg-gray-50 border-gray-200';
+        return "bg-gray-50 border-gray-200";
     }
   };
 
@@ -104,7 +112,7 @@ const NotificationBell = () => {
           {unreadCount > 0 && (
             <span className="absolute -top-1 -right-1 z-1 h-4 w-4 rounded-full bg-meta-1 flex items-center justify-center">
               <span className="text-[10px] font-medium text-white">
-                {unreadCount > 9 ? '9+' : unreadCount}
+                {unreadCount > 9 ? "9+" : unreadCount}
               </span>
             </span>
           )}
@@ -158,10 +166,14 @@ const NotificationBell = () => {
                   <li key={index}>
                     <Link
                       to={`/loans/${notification.data.loanId}`}
-                      className={`flex gap-3 border-b border-stroke px-4.5 py-3 hover:bg-gray-2 dark:border-strokedark dark:hover:bg-meta-4 ${getNotificationColor(notification.type)}`}
+                      className={`flex gap-3 border-b border-stroke px-4.5 py-3 hover:bg-gray-2 dark:border-strokedark dark:hover:bg-meta-4 ${getNotificationColor(
+                        notification.type
+                      )}`}
                       onClick={() => setIsOpen(false)}
                     >
-                      <div className="text-2xl">{getNotificationIcon(notification.type)}</div>
+                      <div className="text-2xl">
+                        {getNotificationIcon(notification.type)}
+                      </div>
 
                       <div className="flex-1">
                         <p className="text-sm font-medium text-black dark:text-white">

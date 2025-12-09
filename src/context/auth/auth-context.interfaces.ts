@@ -1,4 +1,4 @@
-import type { IUser } from '../../types/user.interfaces';
+import type { IUser } from "../../types/user.interfaces";
 
 export interface ILoginForm {
   email: string;
