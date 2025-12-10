@@ -1,32 +1,45 @@
-import Button from '../../../../../components/ui/Button';
+import Button from "../../../../../components/ui/Button";
+import { useNavigate } from "react-router-dom";
 
 export default function CreditProcess() {
+  const navigate = useNavigate();
   const steps = [
     {
       number: "1",
       title: "Regístrate o inicia sesión",
-      description: "Crea tu cuenta o accede con tus credenciales para guardar el avance de tu solicitud."
+      description:
+        "Crea tu cuenta o accede con tus credenciales para guardar el avance de tu solicitud.",
     },
     {
-      number: "2", 
+      number: "2",
       title: "Haz clic en Solicitar y completa la información",
-      description: "Ingresa tus datos básicos, selecciona tu perfil (pensionado, servidor público, militar o policía) y define el monto que deseas solicitar. Verás una estimación inmediata de tu cuota."
+      description:
+        "Ingresa tus datos básicos, selecciona tu perfil (pensionado, servidor público, militar o policía) y define el monto que deseas solicitar. Verás una estimación inmediata de tu cuota.",
     },
     {
       number: "3",
-      title: "Sube los documentos requeridos", 
-      description: "Carga cédula, desprendible de pago y los soportes que te indiquemos; todo 100% digital."
+      title: "Sube los documentos requeridos",
+      description:
+        "Carga cédula, desprendible de pago y los soportes que te indiquemos; todo a un solo clic.",
     },
     {
       number: "4",
       title: "Envía tu solicitud",
-      description: "Revisa el resumen y confirma. ¡Listo! Comenzamos el análisis."
+      description:
+        "Revisa el resumen y confirma. ¡Listo! Comenzamos el análisis.",
     },
     {
       number: "5",
       title: "Recibe respuesta en menos de 24 h",
-      description: "Te notificaremos por correo si tu solicitud fue aprobada. – Si es aprobada, un asesor se comunicará contigo para formalizar el desembolso. – Acto seguido, recibirás el dinero directamente en tu cuenta y las cuotas se descontarán automáticamente de tu salario o mesada pensional."
-    }
+      description:
+        "Te notificaremos por correo si tu solicitud fue aprobada. Si es aprobada, recibirás el contrato físico junto con las instrucciones detalladas para completar el proceso.",
+    },
+    {
+      number: "6",
+      title: "Firma y envía el contrato, ¡recibe tu dinero!",
+      description:
+        "Firma el contrato físicamente y envíalo a través de una transportadora. Una vez recibido y validado, procesaremos el desembolso directamente en tu cuenta bancaria.",
+    },
   ];
 
   return (
@@ -40,7 +53,7 @@ export default function CreditProcess() {
             Proceso simple y transparente para obtener tu crédito por libranza
           </p>
         </div>
-        
+
         {/* Process Steps */}
         <div className="max-w-6xl mx-auto">
           <div className="grid gap-8 md:gap-12">
@@ -63,16 +76,30 @@ export default function CreditProcess() {
                   {/* Step Number */}
                   <div className="flex-shrink-0 relative">
                     <div className="w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-orange-100 to-button-background1/30 rounded-full flex items-center justify-center shadow-xs transform hover:scale-110 transition-transform duration-300">
-                      <span className="text-2xl md:text-3xl font-bold text-white" style={{ textShadow: '-1px -1px 0 #FF8546, 1px -1px 0 #FF8546, -1px 1px 0 #FF8546, 1px 1px 0 #FF8546, -2px 0 0 #FF8546, 2px 0 0 #FF8546, 0 -2px 0 #FF8546, 0 2px 0 #FF8546' }}>
+                      <span
+                        className="text-2xl md:text-3xl font-bold text-white"
+                        style={{
+                          textShadow:
+                            "-1px -1px 0 #FF8546, 1px -1px 0 #FF8546, -1px 1px 0 #FF8546, 1px 1px 0 #FF8546, -2px 0 0 #FF8546, 2px 0 0 #FF8546, 0 -2px 0 #FF8546, 0 2px 0 #FF8546",
+                        }}
+                      >
                         {step.number}
                       </span>
                     </div>
 
                     {/* Indicador especial para el último paso */}
-                    {index === 4 && (
+                    {index === 5 && (
                       <div className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center shadow-md border border-green-300">
-                        <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        <svg
+                          className="w-4 h-4 text-white"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                            clipRule="evenodd"
+                          />
                         </svg>
                       </div>
                     )}
@@ -83,8 +110,18 @@ export default function CreditProcess() {
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 bg-button-background1/10 rounded-lg flex items-center justify-center">
-                          <svg className="w-4 h-4 text-button-background1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          <svg
+                            className="w-4 h-4 text-button-background1"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                            />
                           </svg>
                         </div>
                         <h3 className="text-xl font-semibold text-global-12 leading-tight">
@@ -106,7 +143,9 @@ export default function CreditProcess() {
                       <div className="flex-1 h-1 bg-gray-200 rounded-full overflow-hidden">
                         <div
                           className="h-full bg-gradient-to-r from-button-background1 to-blue-600 transition-all duration-1000 ease-out rounded-full"
-                          style={{ width: `${((index + 1) / steps.length) * 100}%` }}
+                          style={{
+                            width: `${((index + 1) / steps.length) * 100}%`,
+                          }}
                         ></div>
                       </div>
                       <span className="text-sm text-global-6 font-medium">
@@ -137,8 +176,18 @@ export default function CreditProcess() {
               <div className="relative">
                 <div className="flex items-center justify-center gap-3 mb-4">
                   <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center backdrop-blur-sm">
-                    <svg className="w-5 h-5 text-global-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    <svg
+                      className="w-5 h-5 text-global-12"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M13 10V3L4 14h7v7l9-11h-7z"
+                      />
                     </svg>
                   </div>
                   <h3 className="text-2xl md:text-3xl font-bold text-global-12">
@@ -147,7 +196,8 @@ export default function CreditProcess() {
                 </div>
 
                 <p className="text-lg mb-8 text-global-7 max-w-2xl mx-auto">
-                  Inicia tu solicitud de crédito por libranza de manera segura y sencilla
+                  Inicia tu solicitud de crédito por libranza de manera segura y
+                  sencilla
                 </p>
 
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -155,6 +205,7 @@ export default function CreditProcess() {
                     variant="cta"
                     size="xlarge"
                     className="w-full sm:w-auto"
+                    onClick={() => navigate("/registro")}
                   >
                     ¡Solicita tu crédito ya!
                   </Button>
@@ -167,4 +218,3 @@ export default function CreditProcess() {
     </section>
   );
 }
-

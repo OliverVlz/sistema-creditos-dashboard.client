@@ -1,8 +1,11 @@
-import React from 'react';
-import Button from '../../../../../components/ui/Button';
-import ejercitoImage from '../../../../../assets_landing/images/landing/soldier1.png';
+import React from "react";
+import Button from "../../../../../components/ui/Button";
+import ejercitoImage from "../../../../../assets_landing/images/landing/soldier1.png";
+import { useNavigate } from "react-router-dom";
 
 export const EjercitoHero: React.FC = () => {
+  const navigate = useNavigate();
+
   return (
     <section className="w-full bg-white">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-15 md:py-20">
@@ -19,12 +22,17 @@ export const EjercitoHero: React.FC = () => {
                 <h1 className="text-3xl md:text-5xl font-bold text-gray-900 mb-2">
                   Ejército Nacional
                 </h1>
-                <p className="text-orange-600 text-lg">Defensa y Honor Nacional</p>
+                <p className="text-orange-600 text-lg">
+                  Defensa y Honor Nacional
+                </p>
               </div>
             </div>
 
             <p className="text-base pr-12 leading-relaxed text-gray-600">
-              Como parte de las Fuerzas Armadas de Colombia, puedes acceder a un crédito por libranza hecho a tu medida. Tramítalo desde donde estés, con asesoría personalizada y sin preocuparte por los pagos: las cuotas se descuentan automáticamente de tu nómina.
+              Como parte de las Fuerzas Armadas de Colombia, puedes acceder a un
+              crédito por libranza hecho a tu medida. Tramítalo desde donde
+              estés, con asesoría personalizada y sin preocuparte por los pagos:
+              las cuotas se descuentan automáticamente de tu nómina.
             </p>
 
             <div className="mt-8 flex flex-col sm:flex-row gap-4">
@@ -32,6 +40,7 @@ export const EjercitoHero: React.FC = () => {
                 variant="primary"
                 size="large"
                 className="w-full sm:w-auto font-semibold"
+                onClick={() => navigate("/login")}
               >
                 Solicitar Crédito
               </Button>
@@ -40,6 +49,7 @@ export const EjercitoHero: React.FC = () => {
                 variant="outline"
                 size="large"
                 className="w-full sm:w-auto"
+                onClick={() => navigate("/#contacto")}
               >
                 Conocer Más
               </Button>

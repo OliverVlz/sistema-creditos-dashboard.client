@@ -46,7 +46,7 @@ export default function ContactSection() {
   ];
 
   return (
-    <section id="contacto" className="w-full bg-[#F6F6F6] py-20 md:pt-20 md:pb-32 relative overflow-hidden">
+    <section id="contacto" className="w-full bg-white py-20 md:pt-20 md:pb-32 relative overflow-hidden">
       {/* Elementos decorativos de fondo */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-20 left-10 w-32 h-32 bg-orange-200/30 rounded-full blur-3xl"></div>

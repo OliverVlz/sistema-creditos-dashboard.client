@@ -1,8 +1,11 @@
 import React from 'react';
 import Button from '../../../../../components/ui/Button';
 import policiaImage from '../../../../../assets_landing/images/landing/policia1.png';
+import { useNavigate } from 'react-router-dom';
 
 export const PoliciaHero: React.FC = () => {
+  const navigate = useNavigate();
+
   return (
     <section className="w-full bg-white">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-15 md:py-20">
@@ -32,6 +35,7 @@ export const PoliciaHero: React.FC = () => {
                 variant="primary"
                 size="large"
                 className="w-full sm:w-auto font-semibold"
+                onClick={() => navigate('/login')}
               >
                 Solicitar Crédito
               </Button>
@@ -40,6 +44,7 @@ export const PoliciaHero: React.FC = () => {
                 variant="outline"
                 size="large"
                 className="w-full sm:w-auto"
+                onClick={() => navigate('/#contacto')}
               >
                 Conocer Más
               </Button>
