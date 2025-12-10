@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAppDispatch, useAppSelector, RootState } from "../../../store";
+import { CREDIT_MANAGEMENT_ROUTE } from "../../../routes/routes";
+import { useAuth } from "../../../hooks/useAuth";
 import EditText from "../../ui/EditText";
 import Dropdown from "../../ui/Dropdown";
 import Button from "../../ui/Button";
@@ -17,6 +19,8 @@ const LOAN_TYPE_NAME = "Libranza";
 export const LoanCalculator: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+  const { isAuthenticated } = useAuth();
 
   // Obtener estado del cálculo del préstamo desde Redux
   const { loanCalculation, calculatingLoan, loanCalculationError } =
@@ -195,7 +199,6 @@ export const LoanCalculator: React.FC = () => {
     }
 
     try {
-      // @ts-expect-error - Redux Toolkit types issue with React 19
       await dispatch(
         calculateLoan({
           loanTypeName: LOAN_TYPE_NAME,
@@ -370,12 +373,20 @@ export const LoanCalculator: React.FC = () => {
               size="large"
               fullWidth
               className="shadow-md"
-              onClick={() => navigate("/registro")}
+              onClick={() => {
+                if (isAuthenticated) {
+                  dispatch(nextStep());
+                  if (location.pathname !== CREDIT_MANAGEMENT_ROUTE) {
+                    navigate(CREDIT_MANAGEMENT_ROUTE);
+                  }
+                } else {
+                  navigate("/registro");
+                }
+              }}
             >
               Continuar con la solicitud
             </Button>
           </div>
-
           <p className="mt-4 text-xs text-center text-global-6 leading-relaxed">
             * Los valores presentados son una simulación y pueden variar según
             el análisis de crédito definitivo.
