@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector, RootState } from "@/store";
 import { ViewDocumentPreviewComponent } from "./creditSummary/viewDocumentPreview";
-import { previousStep } from "../slices/creditManagement";
+import {
+  previousStep,
+  resetCreditManagement,
+} from "../slices/creditManagement";
 import { submitLoanRequest } from "../slices/operations/submitLoanRequest.operation";
 import Swal from "sweetalert2";
 
@@ -167,8 +170,9 @@ export const CreditSummaryComponent: React.FC = () => {
         confirmButtonText: "Ir a mis solicitudes",
       });
 
-      // Redirigir a la gestión de solicitudes
-      navigate("/gestion-solicitudes");
+      // Redirigir a la gestión de solicitudes y limpiar estado
+      navigate("/gestion-solicitudes", { replace: true });
+      dispatch(resetCreditManagement());
     } catch (error: unknown) {
       console.error("Error al enviar la solicitud:", error);
 
