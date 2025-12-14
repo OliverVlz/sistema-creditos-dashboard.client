@@ -10,10 +10,10 @@ const LoanRequestsPage = () => {
   const isClient = user?.role === 'CLIENTE';
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-5 lg:space-y-6">
       {/* Header con Título y Breadcrumb */}
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-3">
+      <div className="mb-4 sm:mb-5 lg:mb-6">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2 sm:mb-3">
           {isClient ? 'Mis Solicitudes de Crédito' : 'Gestión de Solicitudes'}
         </h1>
         <PageBreadcrumb 

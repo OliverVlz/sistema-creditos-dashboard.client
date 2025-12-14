@@ -65,15 +65,15 @@ const DataField = ({ label, value, highlight = false, isStatus = false, statusCl
   statusClass?: string
 }) => (
   <div className="min-w-0">
-    <label className="block text-[11px] font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">
+    <label className="block text-[10px] sm:text-[11px] font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-0.5 sm:mb-1">
       {label}
     </label>
     {isStatus ? (
-      <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${statusClass}`}>
+      <span className={`inline-flex items-center px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-medium ${statusClass}`}>
         {value}
       </span>
     ) : (
-      <p className={`text-sm font-medium truncate ${highlight ? 'text-blue-600 dark:text-blue-400 font-semibold' : 'text-gray-900 dark:text-white'}`}>
+      <p className={`text-xs sm:text-sm font-medium truncate ${highlight ? 'text-blue-600 dark:text-blue-400 font-semibold' : 'text-gray-900 dark:text-white'}`}>
         {value}
       </p>
     )}
@@ -90,17 +90,17 @@ export default function ApplicationDataCard({ loanRequest }: ApplicationDataCard
   const clientEmail = loanRequest.client?.user?.email || '---'
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-5 h-full">
-      <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 pb-3 border-b border-gray-200 dark:border-gray-700">
+    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 sm:p-5 h-full">
+      <h2 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4 pb-2 sm:pb-3 border-b border-gray-200 dark:border-gray-700">
         Datos de la Solicitud
       </h2>
 
       {/* Información Personal - Grid de 2 columnas */}
-      <div className="mb-5">
-        <h3 className="text-[11px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-3">
+      <div className="mb-4 sm:mb-5">
+        <h3 className="text-[11px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2 sm:mb-3">
           Información Personal
         </h3>
-        <div className="grid grid-cols-2 gap-x-4 gap-y-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-3 sm:gap-x-4 gap-y-2 sm:gap-y-3">
           <DataField label="Nombre" value={clientName} />
           <DataField label="Cédula/ID" value={clientId} />
           <DataField label="Teléfono" value={clientPhone} />
@@ -109,11 +109,11 @@ export default function ApplicationDataCard({ loanRequest }: ApplicationDataCard
       </div>
 
       {/* Detalles de la Solicitud - Grid de 2 columnas */}
-      <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
-        <h3 className="text-[11px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-3">
+      <div className="pt-3 sm:pt-4 border-t border-gray-200 dark:border-gray-700">
+        <h3 className="text-[11px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2 sm:mb-3">
           Detalles de la Solicitud
         </h3>
-        <div className="grid grid-cols-2 gap-x-4 gap-y-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-3 sm:gap-x-4 gap-y-2 sm:gap-y-3">
           <DataField label="ID Solicitud" value={loanRequest.loanNumber} highlight />
           <DataField 
             label="Estado" 
