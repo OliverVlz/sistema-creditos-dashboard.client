@@ -119,11 +119,11 @@ export default function LoanTypeFormModal({
       />
       
       {/* Modal */}
-      <div className="flex min-h-full items-center justify-center p-4">
-        <div className="relative w-full max-w-2xl bg-white dark:bg-gray-800 rounded-2xl shadow-xl">
+      <div className="flex min-h-full items-center justify-center p-3 sm:p-4">
+        <div className="relative w-full max-w-2xl bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl shadow-xl">
           {/* Header */}
-          <div className="flex items-center justify-between p-5 border-b border-gray-200 dark:border-gray-700">
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+          <div className="flex items-center justify-between p-4 sm:p-5 border-b border-gray-200 dark:border-gray-700">
+            <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">
               {initialData ? 'Editar Tipo de Préstamo' : 'Nuevo Tipo de Préstamo'}
             </h3>
             <button
@@ -135,17 +135,17 @@ export default function LoanTypeFormModal({
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="p-5 space-y-5">
+          <form onSubmit={handleSubmit} className="p-4 sm:p-5 space-y-4 sm:space-y-5 max-h-[calc(100vh-200px)] overflow-y-auto">
             {/* Nombre */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+              <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
                 Nombre *
               </label>
               <input
                 type="text"
                 value={formData.name}
                 onChange={(e) => handleChange('name', e.target.value)}
-                className={`w-full px-4 py-2.5 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                className={`w-full px-3 sm:px-4 py-2 sm:py-2.5 text-sm border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
                   errors.name ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
                 }`}
                 placeholder="Ej: Libranza"
@@ -155,14 +155,14 @@ export default function LoanTypeFormModal({
 
             {/* Descripción */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+              <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
                 Descripción *
               </label>
               <textarea
                 value={formData.description}
                 onChange={(e) => handleChange('description', e.target.value)}
                 rows={3}
-                className={`w-full px-4 py-2.5 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors resize-none ${
+                className={`w-full px-3 sm:px-4 py-2 sm:py-2.5 text-sm border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors resize-none ${
                   errors.description ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
                 }`}
                 placeholder="Descripción del tipo de préstamo..."
@@ -172,7 +172,7 @@ export default function LoanTypeFormModal({
 
             {/* Tasa de interés */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+              <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
                 Tasa de Interés Anual (%) *
               </label>
               <div className="relative">
@@ -181,7 +181,7 @@ export default function LoanTypeFormModal({
                   step="0.01"
                   value={formData.interestRate || ''}
                   onChange={(e) => handleChange('interestRate', parseFloat(e.target.value) || 0)}
-                  className={`w-full px-4 py-2.5 pr-12 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                  className={`w-full px-3 sm:px-4 py-2 sm:py-2.5 pr-12 sm:pr-14 text-sm border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
                     errors.interestRate ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
                   }`}
                   placeholder="25"
@@ -194,18 +194,18 @@ export default function LoanTypeFormModal({
             </div>
 
             {/* Montos */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
                   Monto Mínimo *
                 </label>
                 <div className="relative">
-                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400">$</span>
+                  <span className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 text-sm">$</span>
                   <input
                     type="text"
                     value={formData.minAmount ? formData.minAmount.toLocaleString('es-CO') : ''}
                     onChange={(e) => handleChange('minAmount', formatMoneyInput(e.target.value))}
-                    className={`w-full pl-8 pr-4 py-2.5 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                    className={`w-full pl-7 sm:pl-8 pr-3 sm:pr-4 py-2 sm:py-2.5 text-sm border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
                       errors.minAmount ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
                     }`}
                     placeholder="500.000"
@@ -215,16 +215,16 @@ export default function LoanTypeFormModal({
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
                   Monto Máximo *
                 </label>
                 <div className="relative">
-                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400">$</span>
+                  <span className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 text-sm">$</span>
                   <input
                     type="text"
                     value={formData.maxAmount ? formData.maxAmount.toLocaleString('es-CO') : ''}
                     onChange={(e) => handleChange('maxAmount', formatMoneyInput(e.target.value))}
-                    className={`w-full pl-8 pr-4 py-2.5 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                    className={`w-full pl-7 sm:pl-8 pr-3 sm:pr-4 py-2 sm:py-2.5 text-sm border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
                       errors.maxAmount ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
                     }`}
                     placeholder="20.000.000"
@@ -235,9 +235,9 @@ export default function LoanTypeFormModal({
             </div>
 
             {/* Plazos */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
                   Plazo Mínimo (meses) *
                 </label>
                 <input
@@ -245,7 +245,7 @@ export default function LoanTypeFormModal({
                   min="1"
                   value={formData.minTerm || ''}
                   onChange={(e) => handleChange('minTerm', parseInt(e.target.value) || 0)}
-                  className={`w-full px-4 py-2.5 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                  className={`w-full px-3 sm:px-4 py-2 sm:py-2.5 text-sm border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
                     errors.minTerm ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
                   }`}
                   placeholder="6"
@@ -254,7 +254,7 @@ export default function LoanTypeFormModal({
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
                   Plazo Máximo (meses) *
                 </label>
                 <input
@@ -262,7 +262,7 @@ export default function LoanTypeFormModal({
                   min="1"
                   value={formData.maxTerm || ''}
                   onChange={(e) => handleChange('maxTerm', parseInt(e.target.value) || 0)}
-                  className={`w-full px-4 py-2.5 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                  className={`w-full px-3 sm:px-4 py-2 sm:py-2.5 text-sm border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
                     errors.maxTerm ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
                   }`}
                   placeholder="60"
@@ -272,7 +272,7 @@ export default function LoanTypeFormModal({
             </div>
 
             {/* Estado activo */}
-            <div className="flex items-center gap-3 pt-2">
+            <div className="flex items-center gap-2 sm:gap-3 pt-2">
               <label className="relative inline-flex items-center cursor-pointer">
                 <input
                   type="checkbox"
@@ -282,19 +282,19 @@ export default function LoanTypeFormModal({
                 />
                 <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
               </label>
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              <span className="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">
                 Tipo de préstamo activo
               </span>
             </div>
           </form>
 
           {/* Footer */}
-          <div className="flex items-center justify-end gap-3 p-5 border-t border-gray-200 dark:border-gray-700">
+          <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2 sm:gap-3 p-4 sm:p-5 border-t border-gray-200 dark:border-gray-700">
             <button
               type="button"
               onClick={onClose}
               disabled={saving}
-              className="px-5 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors disabled:opacity-50"
+              className="px-4 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors disabled:opacity-50"
             >
               Cancelar
             </button>
@@ -302,7 +302,7 @@ export default function LoanTypeFormModal({
               type="submit"
               onClick={handleSubmit}
               disabled={saving}
-              className="px-5 py-2.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors disabled:opacity-50 flex items-center gap-2"
+              className="px-4 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
             >
               {saving ? (
                 <>
