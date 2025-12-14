@@ -119,8 +119,8 @@ export default function LoanTypeFormModal({
       />
       
       {/* Modal */}
-      <div className="flex min-h-full items-center justify-center p-3 sm:p-4">
-        <div className="relative w-full max-w-2xl bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl shadow-xl">
+      <div className="flex min-h-full items-start sm:items-center justify-center p-3 sm:p-4 py-8 sm:py-8">
+        <div className="relative w-full max-w-2xl bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl shadow-xl my-15">
           {/* Header */}
           <div className="flex items-center justify-between p-4 sm:p-5 border-b border-gray-200 dark:border-gray-700">
             <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">
