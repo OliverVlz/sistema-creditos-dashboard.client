@@ -128,7 +128,7 @@ export default function SearchLoanRequests() {
         </div>
 
         {/* Estado */}
-        <div className="w-[200px]">
+        <div className="w-full sm:w-[140px]">
           <Dropdown
             options={statusOptions}
             value={filters.status}

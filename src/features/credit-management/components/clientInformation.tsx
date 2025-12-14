@@ -50,11 +50,11 @@ export const ClientInformationComponent: React.FC = () => {
 
   // Componente auxiliar para las filas
   const InfoRow = ({ label, value }: { label: string; value: string | undefined | null }) => (
-    <div className="grid grid-cols-1 sm:grid-cols-3 py-3 border-b border-gray-100 last:border-0 hover:bg-gray-50/50 transition-colors rounded-lg px-2 group">
-      <dt className="text-sm font-medium text-gray-500 sm:col-span-1 flex items-center">
+    <div className="grid grid-cols-1 sm:grid-cols-3 py-2 sm:py-3 border-b border-gray-100 last:border-0 hover:bg-gray-50/50 transition-colors rounded-lg px-2 group">
+      <dt className="text-xs sm:text-sm font-medium text-gray-500 sm:col-span-1 flex items-center">
         {label}
       </dt>
-      <dd className="text-base font-semibold text-gray-900 sm:col-span-2 mt-1 sm:mt-0 break-words group-hover:text-blue-900 transition-colors">
+      <dd className="text-sm sm:text-base font-semibold text-gray-900 sm:col-span-2 mt-1 sm:mt-0 break-words group-hover:text-blue-900 transition-colors">
         {value || '---'}
       </dd>
     </div>
@@ -63,14 +63,14 @@ export const ClientInformationComponent: React.FC = () => {
   // --- ESTADO DE CARGA ---
   if (loading) {
     return (
-      <div className="bg-white rounded-3xl p-8 shadow-lg border border-gray-100 w-full animate-pulse">
-        <div className="flex justify-between mb-8">
-           <div className="h-8 w-48 bg-gray-200 rounded-lg"></div>
-           <div className="h-10 w-10 bg-gray-200 rounded-lg"></div>
+      <div className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 shadow-lg border border-gray-100 w-full animate-pulse">
+        <div className="flex justify-between mb-6 sm:mb-8">
+           <div className="h-6 sm:h-8 w-36 sm:w-48 bg-gray-200 rounded-lg"></div>
+           <div className="h-8 sm:h-10 w-8 sm:w-10 bg-gray-200 rounded-lg"></div>
         </div>
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
            {[1, 2, 3, 4, 5].map((i) => (
-             <div key={i} className="h-10 w-full bg-gray-100 rounded-lg"></div>
+             <div key={i} className="h-8 sm:h-10 w-full bg-gray-100 rounded-lg"></div>
            ))}
         </div>
       </div>
@@ -80,11 +80,11 @@ export const ClientInformationComponent: React.FC = () => {
   // --- ESTADO DE ERROR ---
   if (error) {
     return (
-      <div className="bg-red-50 rounded-3xl p-8 border border-red-100 text-center">
-        <p className="text-red-600 font-medium mb-4">No pudimos cargar tu información</p>
+      <div className="bg-red-50 rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 border border-red-100 text-center">
+        <p className="text-sm sm:text-base text-red-600 font-medium mb-3 sm:mb-4">No pudimos cargar tu información</p>
         <button 
           onClick={() => dispatch(fetchClientInformation())}
-          className="text-sm text-red-700 underline hover:text-red-900"
+          className="text-xs sm:text-sm text-red-700 underline hover:text-red-900"
         >
           Intentar nuevamente
         </button>
@@ -94,16 +94,16 @@ export const ClientInformationComponent: React.FC = () => {
 
   // --- COMPONENTE PRINCIPAL ---
   return (
-    <div className="bg-white rounded-[32px] p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/50 relative mx-auto w-full">
+    <div className="bg-white rounded-2xl sm:rounded-3xl lg:rounded-[32px] p-4 sm:p-6 lg:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/50 relative mx-auto w-full">
       
       {/* HEADER: Título y Botón Editar */}
-      <div className="flex justify-between items-start mb-6">
+      <div className="flex justify-between items-start mb-4 sm:mb-5 lg:mb-6">
         <div>
-          <h2 className="text-2xl font-bold text-gray-800 tracking-tight font-plus-jakarta">
+          <h2 className="text-xl sm:text-2xl lg:text-2xl font-bold text-gray-800 tracking-tight font-plus-jakarta">
             Información de cliente
           </h2>
           {clientInformation && (
-            <p className="text-sm text-gray-500 mt-1">
+            <p className="text-xs sm:text-sm text-gray-500 mt-1">
               Hola, {clientInformation.firstName} {clientInformation.lastName}
             </p>
           )}
@@ -123,7 +123,7 @@ export const ClientInformationComponent: React.FC = () => {
 
       {/* BODY: Lista de Datos */}
       {clientInformation && (
-        <dl className="space-y-1 mb-8 bg-white rounded-2xl">
+        <dl className="space-y-1 mb-4 sm:mb-6 lg:mb-8 bg-white rounded-2xl">
           {/* Cédula */}
           <InfoRow 
             label="Cédula" 
@@ -157,10 +157,10 @@ export const ClientInformationComponent: React.FC = () => {
       )}
 
       {/* FOOTER: Botones Navegación */}
-      <div className="flex justify-between pt-4 border-t border-gray-100">
+      <div className="flex flex-col-reverse sm:flex-row justify-between gap-3 sm:gap-4 pt-3 sm:pt-4 border-t border-gray-100">
         <button
           onClick={handlePreviousStep}
-          className="h-12 px-6 flex items-center justify-center rounded-xl border-2 border-gray-200 bg-white text-gray-600 hover:bg-gray-50 hover:border-gray-300 transition-all duration-300 group font-semibold text-sm"
+          className="h-11 sm:h-12 px-5 sm:px-6 w-full sm:w-auto flex items-center justify-center rounded-xl border-2 border-gray-200 bg-white text-gray-600 hover:bg-gray-50 hover:border-gray-300 transition-all duration-300 group font-semibold text-sm"
         >
           <div className="mr-2 transform group-hover:-translate-x-1 transition-transform">
              <ArrowLeftIcon />
@@ -169,7 +169,7 @@ export const ClientInformationComponent: React.FC = () => {
         </button>
         <button
           onClick={handleNextStep}
-          className="h-12 px-6 flex items-center justify-center rounded-xl border-2 border-transparent bg-gray-50 text-gray-600 hover:bg-orange-600 hover:text-white transition-all duration-300 group font-semibold text-sm"
+          className="h-11 sm:h-12 px-5 sm:px-6 w-full sm:w-auto flex items-center justify-center rounded-xl border-2 border-transparent bg-gray-50 text-gray-600 hover:bg-orange-600 hover:text-white transition-all duration-300 group font-semibold text-sm"
         >
           <span>Continuar</span>
           <div className="ml-2 transform group-hover:translate-x-1 transition-transform">

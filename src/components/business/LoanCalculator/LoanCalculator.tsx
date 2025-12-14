@@ -199,7 +199,8 @@ export const LoanCalculator: React.FC = () => {
     }
 
     try {
-      await dispatch(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await (dispatch as any)(
         calculateLoan({
           loanTypeName: LOAN_TYPE_NAME,
           amountRequested: amountNumber,
@@ -387,10 +388,10 @@ export const LoanCalculator: React.FC = () => {
               Continuar con la solicitud
             </Button>
           </div>
-          <p className="mt-4 text-xs text-center text-global-6 leading-relaxed">
+          {/* <p className="mt-4 text-xs text-center text-global-6 leading-relaxed">
             * Los valores presentados son una simulación y pueden variar según
             el análisis de crédito definitivo.
-          </p>
+          </p> */}
         </div>
       )}
     </div>

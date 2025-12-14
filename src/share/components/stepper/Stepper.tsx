@@ -18,7 +18,56 @@ export interface StepperProps {
 export const Stepper: React.FC<StepperProps> = ({ steps, currentStep, className = '', onStepClick }) => {
   return (
     <div className={`w-full ${className}`}>
-      <div className="flex items-center justify-between">
+      {/* Vista móvil - Mostrar solo el paso activo con indicador */}
+      <div className="sm:hidden">
+        <div className="flex items-center justify-center space-x-2 mb-3">
+          {steps.map((step, index) => {
+            const isCompleted = step.completed || index < currentStep;
+            const isActive = step.active || index === currentStep;
+            
+            return (
+              <div
+                key={step.id}
+                className={`
+                  h-2 rounded-full transition-all duration-300
+                  ${isActive ? 'w-8 bg-[#5966a0]' : 'w-2'}
+                  ${isCompleted && !isActive ? 'bg-[#FF8546]' : ''}
+                  ${!isCompleted && !isActive ? 'bg-gray-200' : ''}
+                `}
+              />
+            );
+          })}
+        </div>
+        
+        {/* Información del paso actual */}
+        {steps[currentStep] && (
+          <div className="text-center">
+            <div className="flex items-center justify-center space-x-2 mb-2">
+              <div
+                className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold bg-[#5966a0] text-white shadow-md"
+              >
+                <span>{steps[currentStep].id}</span>
+              </div>
+              <div className="text-left">
+                <p className="text-sm font-semibold text-[#5966a0]">
+                  {steps[currentStep].title}
+                </p>
+                {steps[currentStep].description && (
+                  <p className="text-xs text-gray-500">
+                    {steps[currentStep].description}
+                  </p>
+                )}
+              </div>
+            </div>
+            <p className="text-xs text-gray-400">
+              Paso {currentStep + 1} de {steps.length}
+            </p>
+          </div>
+        )}
+      </div>
+
+      {/* Vista desktop - Stepper horizontal completo */}
+      <div className="hidden sm:flex items-center justify-between">
         {steps.map((step, index) => {
           const isCompleted = step.completed || index < currentStep;
           const isActive = step.active || index === currentStep;
@@ -35,7 +84,7 @@ export const Stepper: React.FC<StepperProps> = ({ steps, currentStep, className 
                 {/* Círculo del paso */}
                 <div
                   className={`
-                    w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300
+                    w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold transition-all duration-300
                     ${isCompleted
                       ? 'bg-[#FF8546] text-white shadow-lg'
                       : isActive
@@ -48,14 +97,15 @@ export const Stepper: React.FC<StepperProps> = ({ steps, currentStep, className 
                   {isCompleted ? (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
+                      width="14"
+                      height="14"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
                       strokeWidth="3"
                       strokeLinecap="round"
                       strokeLinejoin="round"
+                      className="sm:w-4 sm:h-4"
                     >
                       <polyline points="20 6 9 17 4 12"></polyline>
                     </svg>
@@ -65,17 +115,17 @@ export const Stepper: React.FC<StepperProps> = ({ steps, currentStep, className 
                 </div>
 
                 {/* Información del paso */}
-                <div className="mt-2 text-center max-w-[120px]">
+                <div className="mt-1.5 sm:mt-2 text-center max-w-[80px] sm:max-w-[100px] lg:max-w-[120px]">
                   <p
                     className={`
-                      text-xs font-semibold transition-colors
+                      text-[10px] sm:text-xs font-semibold transition-colors
                       ${isActive ? 'text-[#5966a0]' : isCompleted ? 'text-[#FF8546]' : 'text-gray-400'}
                     `}
                   >
                     {step.title}
                   </p>
                   {step.description && (
-                    <p className="text-[10px] text-gray-500 mt-0.5 line-clamp-2">
+                    <p className="hidden lg:block text-[10px] text-gray-500 mt-0.5 line-clamp-2">
                       {step.description}
                     </p>
                   )}
@@ -86,7 +136,7 @@ export const Stepper: React.FC<StepperProps> = ({ steps, currentStep, className 
               {!isLast && (
                 <div
                   className={`
-                    flex-1 h-0.5 mx-2 transition-colors duration-300
+                    flex-1 h-0.5 mx-1 sm:mx-2 transition-colors duration-300
                     ${isCompleted ? 'bg-[#FF8546]' : 'bg-gray-200'}
                   `}
                 />

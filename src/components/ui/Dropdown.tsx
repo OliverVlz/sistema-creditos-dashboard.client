@@ -70,8 +70,8 @@ const Dropdown: React.FC<DropdownProps> = ({
     <div className={`relative ${className}`} ref={dropdownRef}>
       <div
         className={`
-          relative w-full h-11 rounded-lg border border-gray-300 dark:border-gray-600 
-          bg-white dark:bg-gray-800 px-4 py-2.5 pr-10 
+          relative w-full rounded-lg border border-gray-300 dark:border-gray-600 
+          bg-white dark:bg-gray-800 px-3 py-2 pr-10 
           text-sm text-gray-800 dark:text-gray-200 
           transition-colors duration-200 
           focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500

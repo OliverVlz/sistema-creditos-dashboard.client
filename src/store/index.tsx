@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
-import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import type { ThunkAction, UnknownAction } from '@reduxjs/toolkit'
 import usersReducer from '../features/user-management/slices/users.slices'
 import clientsReducer from '../features/customer-management/slices/client.slices'
@@ -33,5 +33,5 @@ export type AppThunk<ReturnType = void> = ThunkAction<
 >
 
 // Hooks tipados - Usar estos hooks en lugar de los de react-redux
-export const useAppDispatch: () => AppDispatch = useDispatch
-export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
+export const useAppDispatch = useDispatch.withTypes<AppDispatch>()
+export const useAppSelector = useSelector.withTypes<RootState>()

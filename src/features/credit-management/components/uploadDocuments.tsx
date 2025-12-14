@@ -54,12 +54,12 @@ const SingleDocumentUpload: React.FC<SingleDocumentUploadProps> = ({ label, file
   };
 
   return (
-    <div className="mb-4">
-      <p className="mb-2 text-sm font-semibold text-gray-700">{label}</p>
+    <div className="mb-3 sm:mb-4">
+      <p className="mb-2 text-xs sm:text-sm font-semibold text-gray-700">{label}</p>
       
       <div
         {...getRootProps()}
-        className={`relative flex flex-col items-center justify-center w-full p-4 transition-all border-2 border-dashed rounded-xl cursor-pointer
+        className={`relative flex flex-col items-center justify-center w-full p-3 sm:p-4 transition-all border-2 border-dashed rounded-xl cursor-pointer
           ${isDragActive ? 'border-blue-500 bg-blue-50' : ''}
           ${file ? 'border-green-200 bg-green-50/30' : 'border-gray-300 hover:border-blue-400 hover:bg-gray-50'}
         `}
@@ -68,16 +68,16 @@ const SingleDocumentUpload: React.FC<SingleDocumentUploadProps> = ({ label, file
 
         {file ? (
           // ESTADO: Archivo cargado
-          <div className="flex items-center justify-between w-full">
-            <div className="flex items-center gap-3 overflow-hidden">
-              <div className="p-2 bg-white rounded-lg shadow-sm border border-gray-100">
+          <div className="flex items-center justify-between w-full gap-2">
+            <div className="flex items-center gap-2 sm:gap-3 overflow-hidden flex-1 min-w-0">
+              <div className="p-1.5 sm:p-2 bg-white rounded-lg shadow-sm border border-gray-100 flex-shrink-0">
                 <PdfIcon />
               </div>
-              <div className="flex flex-col min-w-0">
-                <span className="text-sm font-medium text-gray-900 truncate pr-2">
+              <div className="flex flex-col min-w-0 flex-1">
+                <span className="text-xs sm:text-sm font-medium text-gray-900 truncate">
                   {file.name}
                 </span>
-                <span className="text-xs text-gray-500">
+                <span className="text-[10px] sm:text-xs text-gray-500">
                   {(file.size / 1024 / 1024).toFixed(2)} MB
                 </span>
               </div>
@@ -85,7 +85,7 @@ const SingleDocumentUpload: React.FC<SingleDocumentUploadProps> = ({ label, file
             
             <button 
               onClick={removeFile}
-              className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors z-10"
+              className="p-1.5 sm:p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors z-10 flex-shrink-0"
               title="Eliminar archivo"
             >
               <TrashIcon />
@@ -93,9 +93,9 @@ const SingleDocumentUpload: React.FC<SingleDocumentUploadProps> = ({ label, file
           </div>
         ) : (
           // ESTADO: Sin archivo (Dropzone pequeño)
-          <div className="flex items-center gap-3 text-gray-500 py-1">
+          <div className="flex items-center gap-2 sm:gap-3 text-gray-500 py-1">
             <UploadIcon />
-            <span className="text-sm">
+            <span className="text-xs sm:text-sm">
               {isDragActive ? "Suelta el PDF aquí" : "Clic o arrastra tu PDF aquí"}
             </span>
           </div>
@@ -202,14 +202,14 @@ export const UploadDocumentsComponent: React.FC = () => {
     : (cedulaFile && extraFile1 && extraFile2);
 
   return (
-    <div className="bg-white rounded-[32px] p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 mx-auto w-full">
-      <h2 className="text-2xl font-bold text-gray-800 tracking-tight font-plus-jakarta mb-6 text-center">
+    <div className="bg-white rounded-2xl sm:rounded-3xl lg:rounded-[32px] p-4 sm:p-6 lg:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 mx-auto w-full">
+      <h2 className="text-xl sm:text-2xl lg:text-2xl font-bold text-gray-800 tracking-tight font-plus-jakarta mb-4 sm:mb-5 lg:mb-6 text-center">
         Adjuntar documentos
       </h2>
 
      
 
-      <div className="space-y-4">
+      <div className="space-y-3 sm:space-y-4">
         {/* Documento Común: Cédula (siempre requerido) */}
         <div>
           <SingleDocumentUpload 
@@ -252,11 +252,11 @@ export const UploadDocumentsComponent: React.FC = () => {
 
       
 
-      <div className="mt-8 flex justify-between gap-4">
+      <div className="mt-6 sm:mt-8 flex flex-col-reverse sm:flex-row justify-between gap-3 sm:gap-4">
         <button
           onClick={() => dispatch(previousStep())}
           className="
-            px-6 py-3 rounded-xl font-semibold transition-all duration-300
+            w-full sm:w-auto px-5 sm:px-6 py-3 rounded-xl font-semibold transition-all duration-300
             bg-gray-100 text-gray-700 hover:bg-gray-200 shadow-sm
           "
         >
@@ -270,7 +270,7 @@ export const UploadDocumentsComponent: React.FC = () => {
           }}
           disabled={!isFormValid}
           className="
-            px-8 py-3 rounded-xl font-semibold transition-all duration-300
+            w-full sm:w-auto px-6 sm:px-8 py-3 rounded-xl font-semibold transition-all duration-300
             bg-gradient-to-r from-[#FF8546] to-[#FF6B35] text-white shadow-lg hover:shadow-xl hover:-translate-y-0.5
             disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none disabled:translate-y-0
           "

@@ -52,10 +52,10 @@ export default function CreditManagementComponent() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-50 py-4 sm:py-6 lg:py-8 px-3 sm:px-4 lg:px-8">
       <div className="max-w-7xl mx-auto">
         {/* Stepper */}
-        <div className="mb-8 bg-white rounded-2xl p-6 shadow-sm border border-gray-200">
+        <div className="mb-4 sm:mb-6 lg:mb-8 bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 lg:p-6 shadow-sm border border-gray-200">
           <Stepper 
             steps={steps.map((step, index) => ({
               ...step,

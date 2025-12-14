@@ -15,7 +15,15 @@ export interface SubmitLoanRequestPayload {
   files: File[];
 }
 
-export const submitLoanRequest = createAsyncThunk(
+export interface SubmitLoanRequestResponse {
+  loanId: string;
+  loanNumber: string;
+}
+
+export const submitLoanRequest = createAsyncThunk<
+  SubmitLoanRequestResponse,
+  SubmitLoanRequestPayload
+>(
     'creditManagement/submitLoanRequest',
     async (payload: SubmitLoanRequestPayload) => {
         // Crear FormData para multipart/form-data
