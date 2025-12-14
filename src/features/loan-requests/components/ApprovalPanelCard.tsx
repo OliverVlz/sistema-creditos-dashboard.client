@@ -124,12 +124,12 @@ export default function ApprovalPanelCard({
   const isAlreadyProcessed = loanRequest.status === 'aprobado' || loanRequest.status === 'rechazado'
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-5 h-full flex flex-col">
-      <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 pb-3 border-b border-gray-200 dark:border-gray-700">
+    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 sm:p-5 h-full flex flex-col">
+      <h2 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4 pb-2 sm:pb-3 border-b border-gray-200 dark:border-gray-700">
         Panel de Aprobación
       </h2>
 
-      <div className="flex-1 flex flex-col space-y-4">
+      <div className="flex-1 flex flex-col space-y-3 sm:space-y-4">
         {/* Estado actual */}
         {isAlreadyProcessed && (
           <div className={`p-3 rounded-lg text-sm ${
@@ -163,7 +163,7 @@ export default function ApprovalPanelCard({
           <button
             onClick={handleApprove}
             disabled={isActionDisabled}
-            className="w-full px-3 py-2.5 bg-green-600 hover:bg-green-700 active:bg-green-800 text-white font-semibold rounded-lg transition-colors flex items-center justify-center gap-2 shadow-sm text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full px-3 py-2 sm:py-2.5 bg-green-600 hover:bg-green-700 active:bg-green-800 text-white font-semibold rounded-lg transition-colors flex items-center justify-center gap-2 shadow-sm text-xs sm:text-sm disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {updating ? (
               <i className="pi pi-spin pi-spinner text-xs"></i>
@@ -175,7 +175,7 @@ export default function ApprovalPanelCard({
           <button
             onClick={handleReject}
             disabled={isActionDisabled}
-            className="w-full px-3 py-2.5 bg-red-600 hover:bg-red-700 active:bg-red-800 text-white font-semibold rounded-lg transition-colors flex items-center justify-center gap-2 shadow-sm text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full px-3 py-2 sm:py-2.5 bg-red-600 hover:bg-red-700 active:bg-red-800 text-white font-semibold rounded-lg transition-colors flex items-center justify-center gap-2 shadow-sm text-xs sm:text-sm disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {updating ? (
               <i className="pi pi-spin pi-spinner text-xs"></i>

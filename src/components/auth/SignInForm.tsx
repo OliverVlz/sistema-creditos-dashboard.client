@@ -11,22 +11,22 @@ export default function SignInForm() {
   const [isChecked, setIsChecked] = useState(false);
   return (
     <div className="flex flex-col flex-1">
-      <div className="w-full max-w-md pt-10 mx-auto">
+      <div className="w-full max-w-md pt-6 sm:pt-10 px-4 sm:px-0 mx-auto">
         <Link
           to="/"
-          className="inline-flex items-center text-sm text-gray-500 transition-colors hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
+          className="inline-flex items-center text-xs sm:text-sm text-gray-500 transition-colors hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
         >
-          <ChevronLeftIcon className="size-5" />
+          <ChevronLeftIcon className="size-4 sm:size-5" />
           Back to dashboard
         </Link>
       </div>
-      <div className="flex flex-col justify-center flex-1 w-full max-w-md mx-auto">
+      <div className="flex flex-col justify-center flex-1 w-full max-w-md mx-auto px-4 sm:px-0">
         <div>
-          <div className="mb-5 sm:mb-8">
-            <h1 className="mb-2 font-semibold text-gray-800 text-title-sm dark:text-white/90 sm:text-title-md">
+          <div className="mb-4 sm:mb-5 lg:mb-8">
+            <h1 className="mb-2 font-semibold text-gray-800 text-2xl sm:text-title-sm dark:text-white/90 lg:text-title-md">
               Sign In
             </h1>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
               Enter your email and password to sign in!
             </p>
           </div>
@@ -73,18 +73,18 @@ export default function SignInForm() {
                 Sign in with X
               </button>
             </div>
-            <div className="relative py-3 sm:py-5">
+            <div className="relative py-4 sm:py-3 lg:py-5">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-gray-200 dark:border-gray-800"></div>
               </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="p-2 text-gray-400 bg-white dark:bg-gray-900 sm:px-5 sm:py-2">
+              <div className="relative flex justify-center text-xs sm:text-sm">
+                <span className="px-3 py-1 sm:p-2 lg:px-5 lg:py-2 text-gray-400 bg-white dark:bg-gray-900">
                   Or
                 </span>
               </div>
             </div>
             <form>
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-5 lg:space-y-6">
                 <div>
                   <Label>
                     Email <span className="text-error-500">*</span>{" "}
@@ -112,16 +112,16 @@ export default function SignInForm() {
                     </span>
                   </div>
                 </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                  <div className="flex items-center gap-2 sm:gap-3">
                     <Checkbox checked={isChecked} onChange={setIsChecked} />
-                    <span className="block font-normal text-gray-700 text-theme-sm dark:text-gray-400">
+                    <span className="block text-xs sm:text-sm font-normal text-gray-700 dark:text-gray-400">
                       Keep me logged in
                     </span>
                   </div>
                   <Link
                     to="/reset-password"
-                    className="text-sm text-brand-500 hover:text-brand-600 dark:text-brand-400"
+                    className="text-xs sm:text-sm text-brand-500 hover:text-brand-600 dark:text-brand-400"
                   >
                     Forgot password?
                   </Link>
@@ -134,8 +134,8 @@ export default function SignInForm() {
               </div>
             </form>
 
-            <div className="mt-5">
-              <p className="text-sm font-normal text-center text-gray-700 dark:text-gray-400 sm:text-start">
+            <div className="mt-4 sm:mt-5">
+              <p className="text-xs sm:text-sm font-normal text-center text-gray-700 dark:text-gray-400 sm:text-start">
                 Don&apos;t have an account? {""}
                 <Link
                   to="/signup"

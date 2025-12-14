@@ -6,7 +6,7 @@ import {
   previousStep,
   resetCreditManagement,
 } from "../slices/creditManagement";
-import { submitLoanRequest } from "../slices/operations/submitLoanRequest.operation";
+import { submitLoanRequest, SubmitLoanRequestResponse } from "../slices/operations/submitLoanRequest.operation";
 import Swal from "sweetalert2";
 
 // Loan Type Name (debe coincidir con el usado en LoanCalculator)
@@ -138,8 +138,8 @@ export const CreditSummaryComponent: React.FC = () => {
       });
 
       // Enviar solicitud al backend y obtener respuesta (loanId, loanNumber)
-      // @ts-expect-error - Redux Toolkit types issue with React 19
-      const response = (await dispatch(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const response = await (dispatch as any)(
         submitLoanRequest({
           clientId: clientInformation.clientInfo.id,
           loanTypeName: LOAN_TYPE_NAME,
@@ -152,7 +152,7 @@ export const CreditSummaryComponent: React.FC = () => {
           documentTypeCodes,
           files,
         })
-      ).unwrap()) as { loanId?: string; loanNumber?: string };
+      ).unwrap() as SubmitLoanRequestResponse;
 
       const loanNumber = response?.loanNumber ?? "---";
 
@@ -204,25 +204,25 @@ export const CreditSummaryComponent: React.FC = () => {
 
   // Componente de Fila Simple
   const SimpleRow = ({ label, value }: { label: string; value: string }) => (
-    <div className="flex justify-between py-2 border-b border-gray-100 last:border-0">
-      <span className="text-sm font-medium text-gray-500">{label}</span>
-      <span className="text-sm font-semibold text-gray-800 text-right">
+    <div className="flex justify-between py-1.5 sm:py-2 border-b border-gray-100 last:border-0 gap-2">
+      <span className="text-xs sm:text-sm font-medium text-gray-500">{label}</span>
+      <span className="text-xs sm:text-sm font-semibold text-gray-800 text-right break-words">
         {value}
       </span>
     </div>
   );
 
   return (
-    <div className="bg-white rounded-[32px] p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 w-full mx-auto mt-6">
-      <h2 className="text-2xl font-bold text-gray-800 tracking-tight font-plus-jakarta mb-8 text-center">
+    <div className="bg-white rounded-2xl sm:rounded-3xl lg:rounded-[32px] p-4 sm:p-6 lg:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 w-full mx-auto mt-3 sm:mt-4 lg:mt-6">
+      <h2 className="text-xl sm:text-2xl lg:text-2xl font-bold text-gray-800 tracking-tight font-plus-jakarta mb-4 sm:mb-6 lg:mb-8 text-center">
         Información de crédito
       </h2>
 
       {/* --- SECCIÓN SUPERIOR: DATOS (2 COLUMNAS) --- */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8 mb-4 sm:mb-6 lg:mb-8">
         {/* COLUMNA 1: DATOS DEL CLIENTE */}
-        <div className="border border-gray-200 rounded-2xl p-6 flex flex-col h-full">
-          <h3 className="text-lg font-bold text-gray-800 mb-4 border-b border-gray-100 pb-2">
+        <div className="border border-gray-200 rounded-xl sm:rounded-2xl p-4 sm:p-5 lg:p-6 flex flex-col h-full">
+          <h3 className="text-base sm:text-lg font-bold text-gray-800 mb-3 sm:mb-4 border-b border-gray-100 pb-2">
             Datos del Cliente
           </h3>
           {clientData ? (
@@ -257,28 +257,28 @@ export const CreditSummaryComponent: React.FC = () => {
         </div>
 
         {/* COLUMNA 2: DATOS DEL CRÉDITO */}
-        <div className="border border-gray-200 rounded-2xl p-6 flex flex-col h-full">
-          <h3 className="text-lg font-bold text-gray-800 mb-4 border-b border-gray-100 pb-2">
+        <div className="border border-gray-200 rounded-xl sm:rounded-2xl p-4 sm:p-5 lg:p-6 flex flex-col h-full">
+          <h3 className="text-base sm:text-lg font-bold text-gray-800 mb-3 sm:mb-4 border-b border-gray-100 pb-2">
             Detalles de Solicitud
           </h3>
           {creditData && loanCalculation ? (
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {/* Cuota mensual destacada */}
-              <div className="bg-blue-50/50 rounded-xl p-4 border border-blue-100">
-                <div className="flex justify-between items-center">
+              <div className="bg-blue-50/50 rounded-xl p-3 sm:p-4 border border-blue-100">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
                   <div>
-                    <p className="text-sm text-blue-800 font-medium">
+                    <p className="text-xs sm:text-sm text-blue-800 font-medium">
                       Cuota mensual estimada
                     </p>
                   </div>
-                  <div className="text-2xl font-bold text-blue-900">
+                  <div className="text-xl sm:text-2xl font-bold text-blue-900">
                     {formatMoney(loanCalculation.monthlyPayment)}
                   </div>
                 </div>
               </div>
 
               {/* Detalles del crédito */}
-              <div className="space-y-2">
+              <div className="space-y-1.5 sm:space-y-2">
                 <SimpleRow
                   label="Valor del crédito"
                   value={formatMoney(loanCalculation.amountRequested)}
@@ -292,19 +292,19 @@ export const CreditSummaryComponent: React.FC = () => {
                   label="Tasa de interés mensual"
                   value={`${(loanCalculation.monthlyRate * 100).toFixed(4)}%`}
                 />
-                <div className="flex justify-between items-center py-2 border-b border-gray-100 bg-blue-50/30 px-2 -mx-2 rounded">
-                  <span className="text-sm text-blue-800 font-medium">
+                <div className="flex justify-between items-center py-1.5 sm:py-2 border-b border-gray-100 bg-blue-50/30 px-2 -mx-2 rounded">
+                  <span className="text-xs sm:text-sm text-blue-800 font-medium">
                     Total de intereses
                   </span>
-                  <span className="text-sm text-blue-800 font-bold">
+                  <span className="text-xs sm:text-sm text-blue-800 font-bold">
                     {formatMoney(loanCalculation.totalInterest)}
                   </span>
                 </div>
-                <div className="flex justify-between items-center pt-2 mt-2">
-                  <span className="text-base font-bold text-gray-800">
+                <div className="flex flex-col sm:flex-row justify-between sm:items-center pt-2 mt-2 gap-1 sm:gap-0">
+                  <span className="text-sm sm:text-base font-bold text-gray-800">
                     Total a pagar aproximado
                   </span>
-                  <span className="text-lg font-bold text-[#FF8546]">
+                  <span className="text-base sm:text-lg font-bold text-[#FF8546]">
                     {formatMoney(loanCalculation.totalPayable)}
                   </span>
                 </div>
@@ -322,11 +322,11 @@ export const CreditSummaryComponent: React.FC = () => {
       <ViewDocumentPreviewComponent documents={uploadedDocuments} />
 
       {/* BOTONES DE NAVEGACIÓN */}
-      <div className="flex justify-between gap-4 pt-2 border-t border-gray-100 mt-6">
+      <div className="flex flex-col-reverse sm:flex-row justify-between gap-3 sm:gap-4 pt-2 border-t border-gray-100 mt-4 sm:mt-6">
         <button
           onClick={() => dispatch(previousStep())}
           className="
-            px-6 py-3 rounded-xl font-semibold transition-all duration-300
+            w-full sm:w-auto px-5 sm:px-6 py-3 rounded-xl font-semibold transition-all duration-300
             bg-gray-100 text-gray-700 hover:bg-gray-200 shadow-sm
           "
         >
@@ -336,7 +336,7 @@ export const CreditSummaryComponent: React.FC = () => {
           onClick={handleSendRequest}
           disabled={isSubmitting || loading}
           className="
-            flex-1 py-3 rounded-xl font-bold text-white text-lg shadow-lg transition-transform hover:-translate-y-0.5
+            flex-1 py-3 rounded-xl font-bold text-white text-base sm:text-lg shadow-lg transition-transform hover:-translate-y-0.5
             bg-gradient-to-r from-[#FF8546] to-[#FF6B35]
             disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none
           "

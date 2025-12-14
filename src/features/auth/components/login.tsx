@@ -128,42 +128,42 @@ export default function LoginForm() {
   }, [formData, validateForm, navigate, dispatch, location, updateUser]);
 
   return (
-    <div className="h-screen bg-gradient-to-br from-slate-50 via-white to-orange-50 flex flex-col">
-        <section className="w-full py-4">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-orange-50 flex flex-col py-2 sm:py-6 lg:py-8">
+        <section className="w-full flex-1 flex items-start sm:items-center pt-4 sm:pt-0">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 items-start sm:items-center">
               {/* Columna del formulario */}
-              <div className="order-1 max-w-sm mx-auto lg:order-2 bg-white/80 backdrop-blur-sm rounded-3xl p-6 md:p-8 shadow-2xl border border-white/20">
+              <div className="order-2 lg:order-2 max-w-sm mx-auto bg-white/80 backdrop-blur-sm rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 shadow-2xl border border-white/20">
 
-                <div className="text-center mb-4">
+                <div className="text-center mb-4 sm:mb-5">
                 <img
                   src={logoColor}
                   alt="Logo Sistema de Créditos"
-                  className="w-14 h-14 mx-auto mb-2"
+                  className="w-12 h-12 sm:w-14 sm:h-14 mx-auto mb-2"
                 />
-                <h2 className="font-plus-jakarta text-xl md:text-2xl font-bold text-gray-900 mb-1">
+                <h2 className="font-plus-jakarta text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-1">
                   Iniciar Sesión
                 </h2>
-                <p className="text-gray-600 text-sm mb-4">
+                <p className="text-gray-600 text-xs sm:text-sm mb-3 sm:mb-4">
                   Accede a tu cuenta para continuar con tu solicitud
                 </p>
               </div>
 
               {/* Error general */}
               {errors.general && (
-                <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl">
-                  <div className="flex items-center">
-                    <svg className="w-5 h-5 text-red-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-red-50 border border-red-200 rounded-lg sm:rounded-xl">
+                  <div className="flex items-start sm:items-center">
+                    <svg className="w-4 h-4 sm:w-5 sm:h-5 text-red-500 mr-2 sm:mr-3 flex-shrink-0 mt-0.5 sm:mt-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    <p className="text-sm text-red-700">{errors.general}</p>
+                    <p className="text-xs sm:text-sm text-red-700">{errors.general}</p>
                   </div>
                 </div>
               )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
             <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                  <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1">
                 Correo electrónico
               </label>
               <EditText
@@ -174,8 +174,8 @@ export default function LoginForm() {
                     disabled={isLoading}
                   />
                   {errors.email && touched.email && (
-                    <p className="mt-1 text-sm text-red-600 flex items-center">
-                      <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <p className="mt-1 text-xs sm:text-sm text-red-600 flex items-center">
+                      <svg className="w-3 h-3 sm:w-4 sm:h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
                       {errors.email}
@@ -184,7 +184,7 @@ export default function LoginForm() {
             </div>
 
             <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                  <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1">
                 Contraseña
               </label>
               <div className="relative">
@@ -215,8 +215,8 @@ export default function LoginForm() {
                 </button>
               </div>
                   {errors.password && touched.password && (
-                    <p className="mt-1 text-sm text-red-600 flex items-center">
-                      <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <p className="mt-1 text-xs sm:text-sm text-red-600 flex items-center">
+                      <svg className="w-3 h-3 sm:w-4 sm:h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
                       {errors.password}
@@ -224,11 +224,11 @@ export default function LoginForm() {
                   )}
             </div>
 
-            <div className="flex justify-between items-center text-sm">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-0 text-xs sm:text-sm">
               <label className="flex items-center">
                     <input
                       type="checkbox"
-                      className="mr-2 w-4 h-4 text-[#FF8546] focus:ring-[#FF8546] rounded border-gray-300"
+                      className="mr-2 w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#FF8546] focus:ring-[#FF8546] rounded border-gray-300"
                       disabled={isLoading}
                     />
                     <span className={`text-gray-600 ${isLoading ? 'opacity-50' : ''}`}>Recordarme</span>
@@ -263,8 +263,8 @@ export default function LoginForm() {
             </Button>
           </form>
 
-          <div className="text-center mt-6">
-                <p className="text-gray-600">
+          <div className="text-center mt-4 sm:mt-6">
+                <p className="text-xs sm:text-sm text-gray-600">
               ¿No tienes cuenta?{' '}
                   <Link to="/registro" className="text-[#FF8546] font-semibold hover:underline transition-colors">
                 Regístrate aquí
@@ -275,38 +275,38 @@ export default function LoginForm() {
 
             
               {/* Columna con pasos */}
-            <div className="order-2 lg:order-1 flex items-center">
-              <div className="space-y-8">
-                <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
-                  <div className="flex items-center justify-center mb-6">
-                    <div className="flex items-center space-x-4">
+            <div className="order-1 lg:order-1 flex items-center">
+              <div className="w-full">
+                <div className="max-w-4xl mx-auto">
+                  <div className="flex items-center justify-center mb-4 sm:mb-6">
+                    <div className="flex items-center space-x-2 sm:space-x-4">
                       <div className="flex items-center">
-                        <div className="w-8 h-8 bg-[#FF8546] text-white rounded-full flex items-center justify-center text-sm font-bold">
+                        <div className="w-7 h-7 sm:w-8 sm:h-8 bg-[#FF8546] text-white rounded-full flex items-center justify-center text-xs sm:text-sm font-bold">
                           1
                         </div>
-                        <span className="ml-2 text-sm font-medium text-gray-700">Acceso</span>
+                        <span className="ml-1.5 sm:ml-2 text-xs sm:text-sm font-medium text-gray-700">Acceso</span>
                       </div>
-                      <div className="w-8 h-px bg-gray-300"></div>
+                      <div className="w-4 sm:w-8 h-px bg-gray-300"></div>
                       <div className="flex items-center">
-                        <div className="w-8 h-8 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center text-sm font-bold">
+                        <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold">
                           2
                         </div>
-                        <span className="ml-2 text-sm font-medium text-gray-500">Solicitud</span>
+                        <span className="ml-1.5 sm:ml-2 text-xs sm:text-sm font-medium text-gray-500">Solicitud</span>
                       </div>
-                      <div className="w-8 h-px bg-gray-300"></div>
+                      <div className="w-4 sm:w-8 h-px bg-gray-300"></div>
                       <div className="flex items-center">
-                        <div className="w-8 h-8 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center text-sm font-bold">
+                        <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold">
                           3
                         </div>
-                        <span className="ml-2 text-sm font-medium text-gray-500">Aprobación</span>
+                        <span className="ml-1.5 sm:ml-2 text-xs sm:text-sm font-medium text-gray-500">Aprobación</span>
                       </div>
                     </div>
                   </div>
                   <div className="text-center">
-                    <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+                    <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-2">
                       Paso 1: Accede a tu cuenta
                     </h1>
-                    <p className="text-gray-600 max-w-2xl mx-auto">
+                    <p className="text-xs sm:text-sm md:text-base text-gray-600 max-w-2xl mx-auto px-4">
                       Para solicitar tu crédito por libranza, necesitas tener una cuenta activa.
                       Inicia sesión o regístrate si aún no lo has hecho.
                     </p>

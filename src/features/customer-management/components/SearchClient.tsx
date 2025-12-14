@@ -69,11 +69,11 @@ export default function SearchClient({ onFiltersChange }: SearchClientProps) {
                           filters.organizationId
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-4 mb-4">
+    <div className="bg-white dark:bg-gray-800 rounded-lg sm:rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-3 sm:p-4 mb-3 sm:mb-4">
       {/* Línea principal con todos los filtros */}
-      <div className="flex items-center gap-3 flex-wrap">
-        {/* Búsqueda */}
-        <div className="flex-1 min-w-[250px] relative">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3">
+        {/* Búsqueda - Full width en móvil */}
+        <div className="flex-1 sm:min-w-[250px] relative">
           <InputText 
             value={filters.searchTerm}
             onChange={(e) => updateFilters({ searchTerm: e.target.value })}
@@ -83,56 +83,58 @@ export default function SearchClient({ onFiltersChange }: SearchClientProps) {
           <i className="pi pi-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 text-sm"></i>
         </div>
 
-        {/* Estado */}
-        <div className="w-[200px]">
-          <Dropdown
-            options={employmentStatusOptions}
-            value={filters.employmentStatus}
-            onChange={handleStatusChange}
-            placeholder="Estado Laboral"
-            showClear
-            className="w-full text-sm"
-          />
-        </div>
-
-        {/* Organización */}
-        <div className="w-[200px]">
-          <Dropdown
-            options={organizationOptions}
-            value={filters.organizationId}
-            onChange={handleOrganizationChange}
-            placeholder="Organización"
-            showClear
-            className="w-full text-sm"
-          />
-        </div>
-
-        {/* Botones de acción */}
-        <div className="flex items-center gap-2">
-          {hasActiveFilters && (
-            <Button 
-              icon="pi pi-times"
-              size="small"
-              text
-              tooltipOptions={{ position: 'bottom' }}
-              className="text-gray-600 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 h-[38px] w-[38px]" 
-              onClick={clearFilters}
+        {/* Filtros y botones - Grid en móvil, flex en desktop */}
+        <div className="grid grid-cols-2 sm:flex sm:items-center gap-2">
+          {/* Estado */}
+          <div className="w-full sm:w-[200px]">
+            <Dropdown
+              options={employmentStatusOptions}
+              value={filters.employmentStatus}
+              onChange={handleStatusChange}
+              placeholder="Estado Laboral"
+              showClear
+              className="w-full text-sm"
             />
-          )}
-          
-          <Button 
-            label="Crear Cliente"
-/*             icon="pi pi-plus"
- */            size="small"
-            className="bg-orange-600 hover:bg-orange-700 text-white border-0 rounded-lg px-4 py-2 text-sm font-medium transition-colors whitespace-nowrap"
-            onClick={() => navigate('/gestion-de-clientes/crear-cliente')}
-          />
+          </div>
+
+          {/* Organización */}
+          <div className="w-full sm:w-[200px]">
+            <Dropdown
+              options={organizationOptions}
+              value={filters.organizationId}
+              onChange={handleOrganizationChange}
+              placeholder="Organización"
+              showClear
+              className="w-full text-sm"
+            />
+          </div>
+
+          {/* Botones de acción */}
+          <div className="col-span-2 flex items-center justify-end sm:justify-start gap-2">
+            {hasActiveFilters && (
+              <Button 
+                icon="pi pi-times"
+                size="small"
+                text
+                tooltipOptions={{ position: 'bottom' }}
+                className="text-gray-600 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 h-[38px] w-[38px]" 
+                onClick={clearFilters}
+              />
+            )}
+            
+            <Button 
+              label="Crear Cliente"
+              size="small"
+              className="bg-orange-600 hover:bg-orange-700 text-white border-0 rounded-lg px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium transition-colors whitespace-nowrap flex-1 sm:flex-initial"
+              onClick={() => navigate('/gestion-de-clientes/crear-cliente')}
+            />
+          </div>
         </div>
       </div>
 
       {/* Indicador de filtros activos (opcional, compacto) */}
       {hasActiveFilters && (
-        <div className="flex items-center gap-2 mt-3 pt-3 border-t border-gray-100 dark:border-gray-700">
+        <div className="flex items-center gap-2 mt-3 pt-3 border-t border-gray-100 dark:border-gray-700 flex-wrap">
           <span className="text-xs text-gray-500 dark:text-gray-400">Filtros:</span>
           {filters.searchTerm && (
             <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300">

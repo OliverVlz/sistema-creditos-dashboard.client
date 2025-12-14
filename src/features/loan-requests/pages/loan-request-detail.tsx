@@ -254,11 +254,11 @@ const LoanRequestDetailPage = () => {
   }
 
   return (
-    <div className="space-y-6 pb-6">
+    <div className="space-y-4 sm:space-y-5 lg:space-y-6 pb-4 sm:pb-6">
       {/* Header con Título y Breadcrumb */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+      <div className="flex flex-col gap-3 sm:gap-4 mb-4 sm:mb-6">
         <div className="flex-1">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2">
+          <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white mb-2">
             Detalle de Solicitud Crédito: #{selectedLoanRequest.loanNumber}
           </h1>
           <PageBreadcrumb
@@ -272,7 +272,7 @@ const LoanRequestDetailPage = () => {
             ]}
           />
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-2">
           {/* Botón para activar/desactivar modo edición */}
           {canEditDocuments() && (
             <button
@@ -282,7 +282,7 @@ const LoanRequestDetailPage = () => {
                   setDocumentChanges(null);
                 }
               }}
-              className={`flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium rounded-lg transition-colors shrink-0 ${
+              className={`flex items-center justify-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-medium rounded-lg transition-colors ${
                 isEditingDocuments
                   ? "bg-orange-100 text-orange-700 border border-orange-300 hover:bg-orange-200 dark:bg-orange-900/30 dark:text-orange-300 dark:border-orange-700"
                   : "bg-blue-100 text-blue-700 border border-blue-300 hover:bg-blue-200 dark:bg-blue-900/30 dark:text-blue-300 dark:border-blue-700"
@@ -298,7 +298,7 @@ const LoanRequestDetailPage = () => {
           )}
           <button
             onClick={() => navigate("/gestion-solicitudes")}
-            className="flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600 transition-colors shrink-0"
+            className="flex items-center justify-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600 transition-colors"
           >
             <i className="pi pi-arrow-left"></i>
             Volver
@@ -310,14 +310,14 @@ const LoanRequestDetailPage = () => {
       <StatusMessageBanner loanRequest={selectedLoanRequest} />
 
       {/* Layout principal: 3 columnas en desktop (siempre mostrar panel de aprobación para gestores) */}
-      <div className="grid grid-cols-1 xl:grid-cols-12 gap-5">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-4 lg:gap-5">
         {/* Panel Izquierdo: Datos de la Solicitud */}
-        <div className={isManagerOrAdmin ? "xl:col-span-5" : "xl:col-span-6"}>
+        <div className={isManagerOrAdmin ? "lg:col-span-5" : "lg:col-span-6"}>
           <ApplicationDataCard loanRequest={selectedLoanRequest} />
         </div>
 
         {/* Panel Central: Documentos Adjuntos */}
-        <div className={isManagerOrAdmin ? "xl:col-span-4" : "xl:col-span-6"}>
+        <div className={isManagerOrAdmin ? "lg:col-span-4" : "lg:col-span-6"}>
           <AttachedDocumentsCard
             loanRequest={selectedLoanRequest}
             isEditable={isEditingDocuments}
@@ -327,7 +327,7 @@ const LoanRequestDetailPage = () => {
 
         {/* Panel Derecho: Panel de Aprobación (solo para gestores/admins) */}
         {isManagerOrAdmin && (
-          <div className="xl:col-span-3">
+          <div className="lg:col-span-3">
             <ApprovalPanelCard
               loanRequest={selectedLoanRequest}
               documentChanges={documentChanges}
@@ -339,13 +339,13 @@ const LoanRequestDetailPage = () => {
 
       {/* Panel de envío de corrección para CLIENTES cuando la solicitud fue rechazada */}
       {!isManagerOrAdmin && selectedLoanRequest.status === "rechazado" && (
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-5">
-          <div className="flex items-start gap-4">
-            <div className="shrink-0 w-12 h-12 bg-orange-100 dark:bg-orange-900/30 rounded-full flex items-center justify-center">
-              <i className="pi pi-file-edit text-orange-600 dark:text-orange-400 text-xl"></i>
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 sm:p-5">
+          <div className="flex flex-col sm:flex-row items-start gap-3 sm:gap-4">
+            <div className="shrink-0 w-10 h-10 sm:w-12 sm:h-12 bg-orange-100 dark:bg-orange-900/30 rounded-full flex items-center justify-center">
+              <i className="pi pi-file-edit text-orange-600 dark:text-orange-400 text-lg sm:text-xl"></i>
             </div>
-            <div className="flex-1">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+            <div className="flex-1 w-full">
+              <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-2">
                 Corregir y Reenviar Solicitud
               </h3>
 
@@ -387,11 +387,11 @@ const LoanRequestDetailPage = () => {
                     </div>
                   )}
 
-                  <div className="flex flex-wrap gap-3">
+                  <div className="flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-3">
                     <button
                       onClick={handleSendCorrection}
                       disabled={updating || pendingChangesCount === 0}
-                      className="px-6 py-3 bg-gradient-to-r from-[#FF8546] to-[#FF6B35] text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none flex items-center gap-2"
+                      className="w-full sm:w-auto px-4 sm:px-6 py-2.5 sm:py-3 bg-gradient-to-r from-[#FF8546] to-[#FF6B35] text-white text-sm sm:text-base font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none flex items-center justify-center gap-2"
                     >
                       {updating ? (
                         <i className="pi pi-spin pi-spinner"></i>
@@ -406,7 +406,7 @@ const LoanRequestDetailPage = () => {
                         setDocumentChanges(null);
                       }}
                       disabled={updating}
-                      className="px-5 py-2.5 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 font-medium rounded-lg transition-colors"
+                      className="w-full sm:w-auto px-4 sm:px-5 py-2 sm:py-2.5 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 text-sm sm:text-base font-medium rounded-lg transition-colors"
                     >
                       Cancelar
                     </button>

@@ -356,9 +356,9 @@ const FormClient: React.FC<FormClientProps> = ({
   }, [navigate]);
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 md:p-8">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+    <div className="w-full max-w-4xl mx-auto">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 sm:p-6 lg:p-8">
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-4 sm:mb-6">
           {isEditMode ? 'Editar Cliente' : 'Crear Nuevo Cliente'}
         </h2>
 
@@ -368,9 +368,9 @@ const FormClient: React.FC<FormClientProps> = ({
           </div>
         )}
 
-        <Form onSubmit={handleSubmit} className="space-y-6">
+        <Form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
           {/* Primera fila: Nombre y Apellido */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
             <div>
               <Label htmlFor="firstName">Nombre *</Label>
               <Input
@@ -403,7 +403,7 @@ const FormClient: React.FC<FormClientProps> = ({
           </div>
 
           {/* Segunda fila: Email y Teléfono */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
             <div>
               <Label htmlFor="email">Correo Electrónico *</Label>
               <Input
@@ -436,7 +436,7 @@ const FormClient: React.FC<FormClientProps> = ({
           </div>
 
           {/* Tercera fila: Número de Documento y Fecha de Nacimiento */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
             <div>
               <Label htmlFor="documentNumber">Número de Documento *</Label>
               <Input
@@ -486,7 +486,7 @@ const FormClient: React.FC<FormClientProps> = ({
           </div>
 
           {/* Quinta fila: Estado Laboral y Campo Condicional */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
             <div>
               <Label htmlFor="employmentStatus">Estado Laboral *</Label>
               <Select
@@ -534,7 +534,7 @@ const FormClient: React.FC<FormClientProps> = ({
 
           {/* Sexta fila: Contraseña - SOLO EN MODO CREAR */}
           {!isEditMode && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
               <div>
                 <Label htmlFor="password">Contraseña *</Label>
                 <div className="relative">
@@ -573,11 +573,11 @@ const FormClient: React.FC<FormClientProps> = ({
           )}
 
           {/* Botones de acción */}
-          <div className="flex justify-end gap-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+          <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 sm:gap-4 pt-4 border-t border-gray-200 dark:border-gray-700">
           <button
               type="button"
               onClick={handleCancel}
-              className="inline-flex items-center justify-center gap-2 rounded-lg transition px-5 py-3.5 text-sm font-medium bg-white text-gray-700 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-white/[0.03] dark:hover:text-gray-300"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg transition px-5 py-3.5 text-sm font-medium bg-white text-gray-700 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-white/[0.03] dark:hover:text-gray-300"
             >
               <CloseIcon className="size-5" />
               Cancelar
@@ -588,7 +588,7 @@ const FormClient: React.FC<FormClientProps> = ({
               <button
                 type="submit"
                 disabled={isLoadingState}
-                className={`inline-flex items-center justify-center gap-2 rounded-lg transition px-5 py-3.5 text-sm font-medium ${
+                className={`w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg transition px-5 py-3.5 text-sm font-medium ${
                   isLoadingState 
                     ? 'cursor-not-allowed opacity-50 bg-brand-300 text-white' 
                     : 'bg-brand-500 text-white shadow-theme-xs hover:bg-brand-600 disabled:bg-brand-300'
@@ -603,7 +603,7 @@ const FormClient: React.FC<FormClientProps> = ({
               <button
                 type="submit"
                 disabled={isLoadingState}
-                className={`inline-flex items-center justify-center gap-2 rounded-lg transition px-5 py-3.5 text-sm font-medium ${
+                className={`w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg transition px-5 py-3.5 text-sm font-medium ${
                   isLoadingState 
                     ? 'cursor-not-allowed opacity-50 bg-brand-300 text-white' 
                     : 'bg-brand-500 text-white shadow-theme-xs hover:bg-brand-600 disabled:bg-brand-300'

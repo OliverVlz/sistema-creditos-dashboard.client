@@ -117,10 +117,10 @@ export default function DataTable<T extends { id: number | string }>({
 
   if (loading) {
     return (
-      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 p-12">
+      <div className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 p-8 sm:p-12">
         <div className="flex flex-col items-center justify-center">
-          <i className="pi pi-spin pi-spinner text-4xl text-blue-500 dark:text-blue-400 mb-4"></i>
-          <p className="text-gray-600 dark:text-gray-300">Cargando datos...</p>
+          <i className="pi pi-spin pi-spinner text-3xl sm:text-4xl text-blue-500 dark:text-blue-400 mb-3 sm:mb-4"></i>
+          <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300">Cargando datos...</p>
         </div>
       </div>
     )
@@ -128,6 +128,7 @@ export default function DataTable<T extends { id: number | string }>({
 
   return (
     <div className={`bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 ${className}`}>
+      {/* Tabla con scroll horizontal en móvil */}
       <div className="overflow-x-auto rounded-t-2xl">
         <table className="w-full">
           {/* HEADER */}
@@ -225,11 +226,11 @@ export default function DataTable<T extends { id: number | string }>({
 
       {/* FOOTER CON PAGINACIÓN */}
       {showPagination && sortedData.length > 0 && (
-        <div className="bg-gray-50 dark:bg-gray-900 px-8 py-4 border-t border-gray-200 dark:border-gray-700 rounded-b-2xl overflow-visible">
-          <div className="flex items-center justify-between">
+        <div className="bg-gray-50 dark:bg-gray-900 px-4 sm:px-8 py-3 sm:py-4 border-t border-gray-200 dark:border-gray-700 rounded-b-2xl overflow-visible">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0">
             {/* Items por página */}
             <div className="flex items-center gap-2">
-              <span className="text-gray-600 dark:text-gray-300 text-sm">Mostrar:</span>
+              <span className="text-gray-600 dark:text-gray-300 text-xs sm:text-sm">Mostrar:</span>
               <Dropdown
                 value={state.itemsPerPage}
                 options={itemsPerPageOptions}
@@ -238,8 +239,8 @@ export default function DataTable<T extends { id: number | string }>({
               />
             </div>
 
-            {/* Información */}
-            <div className="text-sm text-gray-700 dark:text-gray-300">
+            {/* Información - oculta en móviles pequeños */}
+            <div className="hidden sm:block text-xs sm:text-sm text-gray-700 dark:text-gray-300">
               Mostrando {startIndex + 1} a {Math.min(endIndex, sortedData.length)} de {sortedData.length}
             </div>
 

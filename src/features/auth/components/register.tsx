@@ -514,12 +514,18 @@ export default function RegisterForm() {
                   <label className="block text-sm font-semibold text-gray-700 mb-1.5 ml-1">
                     Fecha de nacimiento
                   </label>
-                  <DatePicker
-                    id="birthDate"
-                    mode="single"
-                    onChange={handleDateChange}
-                    placeholder="Seleccionar fecha"
-                    maxDate={new Date().toISOString().split("T")[0]}
+                  <input
+                    type="date"
+                    value={formData.birthDate}
+                    onChange={(e) => handleInputChange("birthDate", e.target.value)}
+                    onBlur={() => handleBlur("birthDate")}
+                    max={new Date().toISOString().split("T")[0]}
+                    className={`h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 bg-white text-gray-800 border-gray-300 focus:border-brand-300 focus:ring-brand-500/20 dark:border-gray-700 dark:focus:border-brand-800 ${
+                      errors.birthDate && touched.birthDate
+                        ? "border-red-300 focus:border-red-500"
+                        : ""
+                    }`}
+                    disabled={isLoading}
                   />
                   {errors.birthDate && touched.birthDate && (
                     <p className="mt-1 text-xs text-red-500 ml-1">

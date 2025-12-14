@@ -115,9 +115,9 @@ export default function LoanTypesPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-5 lg:space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
             Tipos de Préstamo
@@ -133,7 +133,7 @@ export default function LoanTypesPage() {
         </div>
         <button
           onClick={handleCreate}
-          className="inline-flex items-center gap-2 px-4 py-2.5 bg-brand-500 hover:bg-brand-600 text-white font-medium rounded-lg transition-colors shadow-sm"
+          className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-brand-500 hover:bg-brand-600 text-white text-sm font-medium rounded-lg transition-colors shadow-sm w-full sm:w-auto"
         >
           <i className="pi pi-plus"></i>
           Nuevo Tipo
@@ -141,22 +141,22 @@ export default function LoanTypesPage() {
       </div>
 
       {/* Stats Card */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-5 border border-gray-200 dark:border-gray-700 shadow-sm">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+        <div className="bg-white dark:bg-gray-800 rounded-xl p-4 sm:p-5 border border-gray-200 dark:border-gray-700 shadow-sm">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-brand-100 dark:bg-brand-900/30 rounded-lg flex items-center justify-center">
-              <i className="pi pi-list text-brand-600 dark:text-brand-400 text-xl"></i>
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-brand-100 dark:bg-brand-900/30 rounded-lg flex items-center justify-center">
+              <i className="pi pi-list text-brand-600 dark:text-brand-400 text-lg sm:text-xl"></i>
             </div>
             <div>
-              <p className="text-sm text-gray-500 dark:text-gray-400">Total Tipos</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{pagination.total}</p>
+              <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Total Tipos</p>
+              <p className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">{pagination.total}</p>
             </div>
           </div>
         </div>
       </div>
 
       {/* Table */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
+      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
         <LoanTypesTable 
           onEdit={handleEdit}
           onDelete={handleDelete}
