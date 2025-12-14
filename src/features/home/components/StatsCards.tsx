@@ -69,31 +69,31 @@ export default function StatsCards() {
   ];
 
   return (
-    <div className="grid grid-cols-3 gap-3 mb-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 mb-4 sm:mb-6">
       {cards.map((card, index) => (
         <div
           key={card.title}
           className={`
-            rounded-xl border ${card.borderColor} ${card.bgColor}
-            p-4 transition-all duration-300 hover:shadow-md
+            rounded-lg sm:rounded-xl border ${card.borderColor} ${card.bgColor}
+            p-3 sm:p-4 transition-all duration-300 hover:shadow-md
             animate-fade-in
           `}
           style={{ animationDelay: `${index * 100}ms` }}
         >
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             {/* Icono */}
-            <div className={`${card.color} shrink-0 p-2 rounded-lg bg-white/50 dark:bg-white/10`}>
-              <div className="w-6 h-6">
+            <div className={`${card.color} shrink-0 p-1.5 sm:p-2 rounded-lg bg-white/50 dark:bg-white/10`}>
+              <div className="w-5 h-5 sm:w-6 sm:h-6">
                 {card.icon}
               </div>
             </div>
             
             {/* Contenido */}
-            <div className="flex flex-col">
-              <p className="text-[11px] font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider leading-tight">
+            <div className="flex flex-col min-w-0">
+              <p className="text-[10px] sm:text-[11px] font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider leading-tight truncate">
                 {card.title}
               </p>
-              <p className={`text-xl font-bold ${card.color}`}>
+              <p className={`text-lg sm:text-xl font-bold ${card.color}`}>
                 {card.value}
               </p>
             </div>
