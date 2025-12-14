@@ -78,7 +78,7 @@ const ChangePasswordPage = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-5 lg:space-y-6">
       <PageBreadcrumb
         showTitle={false}
         items={[
@@ -88,24 +88,24 @@ const ChangePasswordPage = () => {
         ]}
       />
 
-      <div className="max-w-xl mx-auto bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-6 md:p-8">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+      <div className="max-w-xl mx-auto bg-white dark:bg-gray-900 rounded-xl sm:rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-4 sm:p-6 lg:p-8">
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-2">
           Cambiar contraseña
         </h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
+        <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mb-4 sm:mb-5 lg:mb-6">
           Por seguridad, utiliza una contraseña que combine letras mayúsculas,
           minúsculas, números y caracteres especiales.
         </p>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
+            <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
               Contraseña actual
             </label>
             <div className="relative">
               <input
                 type={showCurrent ? 'text' : 'password'}
-                className="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 pr-10 py-2 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#FF8546] focus:border-[#FF8546]"
+                className="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 pr-10 py-2 sm:py-2.5 text-xs sm:text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#FF8546] focus:border-[#FF8546]"
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
                 autoComplete="current-password"
@@ -125,13 +125,13 @@ const ChangePasswordPage = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
+            <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
               Nueva contraseña
             </label>
             <div className="relative">
               <input
                 type={showNew ? 'text' : 'password'}
-                className="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 pr-10 py-2 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#FF8546] focus:border-[#FF8546]"
+                className="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 pr-10 py-2 sm:py-2.5 text-xs sm:text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#FF8546] focus:border-[#FF8546]"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 autoComplete="new-password"
@@ -151,13 +151,13 @@ const ChangePasswordPage = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
+            <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
               Confirmar nueva contraseña
             </label>
             <div className="relative">
               <input
                 type={showConfirm ? 'text' : 'password'}
-                className="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 pr-10 py-2 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#FF8546] focus:border-[#FF8546]"
+                className="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 pr-10 py-2 sm:py-2.5 text-xs sm:text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#FF8546] focus:border-[#FF8546]"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 autoComplete="new-password"
@@ -176,11 +176,11 @@ const ChangePasswordPage = () => {
             </div>
           </div>
 
-          <div className="pt-2">
+          <div className="pt-1 sm:pt-2">
             <button
               type="submit"
               disabled={loading}
-              className="inline-flex items-center justify-center w-full px-4 py-2.5 text-sm font-semibold text-white bg-[#FF8546] rounded-lg shadow-sm hover:bg-[#e46f35] disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
+              className="inline-flex items-center justify-center w-full px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold text-white bg-[#FF8546] rounded-lg shadow-sm hover:bg-[#e46f35] disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
             >
               {loading ? 'Guardando...' : 'Actualizar contraseña'}
             </button>
