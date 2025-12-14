@@ -4,10 +4,10 @@ import SearchUsers from '../components/SearchUsers'
 
 const UserManagementComponent = () => {
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Header con Título y Breadcrumb */}
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-3">
+      <div className="mb-4 sm:mb-6">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2 sm:mb-3">
           Gestión de Usuarios
         </h1>
         <PageBreadcrumb 
@@ -23,7 +23,7 @@ const UserManagementComponent = () => {
       <SearchUsers />  
 
       {/* Tabla de usuarios */}
-      <div className="mt-6">
+      <div className="mt-4 sm:mt-6">
         <UserTable />
       </div>
     </div>

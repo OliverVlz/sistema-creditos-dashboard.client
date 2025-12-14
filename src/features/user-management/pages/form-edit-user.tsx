@@ -25,8 +25,8 @@ const FormEditUser = () => {
   const handleError = () => {};
   
   return (
-    <div className="p-6">
-    <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">Editar Usuario</h1>
+    <div className="p-3 sm:p-4 lg:p-6">
+    <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-2 sm:mb-3">Editar Usuario</h1>
     <PageBreadcrumb 
           showTitle={false}
           items={[
