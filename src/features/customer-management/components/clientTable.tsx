@@ -13,7 +13,7 @@ export default function ClientTable() {
   const { clients, loading } = useAppSelector((state) => state.clients)  
   
 useEffect(() => {
-    dispatch(fetchClients())
+    dispatch(fetchClients({}))
   }, [dispatch])
 
   return (

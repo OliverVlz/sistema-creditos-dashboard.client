@@ -13,7 +13,7 @@ export default function UserTable() {
   const { users, loading } = useAppSelector((state) => state.users)  
   
   useEffect(() => {
-    dispatch(fetchUsers())
+    dispatch(fetchUsers({}))
   }, [dispatch])
   
 

@@ -19,7 +19,7 @@ export default function SearchClient({ onFiltersChange }: SearchClientProps) {
   })
 
   useEffect(() => {
-    dispatch(fetchClients({ page: 1, limit: 100, searchTerm: filters.searchTerm, status: filters.employmentStatus, organizationId: filters.organizationId }))
+    dispatch(fetchClients({ page: 1, limit: 100, searchTerm: filters.searchTerm, status: filters.employmentStatus ?? undefined, organizationId: filters.organizationId ?? undefined }))
   }, [filters.searchTerm, filters.employmentStatus, filters.organizationId, dispatch])
 
 

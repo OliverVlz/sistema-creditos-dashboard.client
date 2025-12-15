@@ -22,7 +22,7 @@ export interface UserFormData {
   }
   
   export interface FormUsersProps {
-    initialData?: Partial<UserFormData>;
+    initialData?: Partial<UserFormData> & { id?: string };
     onSuccess?: (data: UserFormData) => void | Promise<void>;
     onError?: (error: Error) => void;
     onCancel?: () => void;
