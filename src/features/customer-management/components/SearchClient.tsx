@@ -1,70 +1,93 @@
-import { InputText } from "primereact/inputtext"
-import { Button } from "primereact/button"
-import { useEffect, useState } from "react"
-import { SearchFilters, SearchClientProps } from "../models/SearchFiltersClientModel"
-import Dropdown, { DropdownOption } from "../../../components/ui/Dropdown"
-import { useNavigate } from "react-router-dom"
-import { fetchClients } from "../slices/operations/fetchClients.operation"
-import { useAppDispatch, useAppSelector, RootState } from "../../../store/index"
-import { fetchOrganizations } from "../slices/operations/fetchOrganizations.operation"
+import { InputText } from "primereact/inputtext";
+import { Button } from "primereact/button";
+import { useEffect, useState } from "react";
+import {
+  SearchFilters,
+  SearchClientProps,
+} from "../models/SearchFiltersClientModel";
+import Dropdown, { DropdownOption } from "../../../components/ui/Dropdown";
+import { useNavigate } from "react-router-dom";
+import { fetchClients } from "../slices/operations/fetchClients.operation";
+import {
+  useAppDispatch,
+  useAppSelector,
+  RootState,
+} from "../../../store/index";
+import { fetchOrganizations } from "../slices/operations/fetchOrganizations.operation";
 
 export default function SearchClient({ onFiltersChange }: SearchClientProps) {
-  const navigate = useNavigate()
-  const dispatch = useAppDispatch()
-  const { organizations } = useAppSelector((state: RootState) => state.organizations);
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const { organizations } = useAppSelector(
+    (state: RootState) => state.organizations
+  );
   const [filters, setFilters] = useState<SearchFilters>({
-    searchTerm: '',
+    searchTerm: "",
     employmentStatus: undefined,
-    organizationId: undefined
-  })
+    organizationId: undefined,
+  });
 
   useEffect(() => {
-    dispatch(fetchClients({ page: 1, limit: 100, searchTerm: filters.searchTerm, status: filters.employmentStatus ?? undefined, organizationId: filters.organizationId ?? undefined }))
-  }, [filters.searchTerm, filters.employmentStatus, filters.organizationId, dispatch])
-
+    dispatch(
+      fetchClients({
+        page: 1,
+        limit: 100,
+        searchTerm: filters.searchTerm,
+        status: filters.employmentStatus ?? undefined,
+        organizationId: filters.organizationId ?? undefined,
+      })
+    );
+  }, [
+    filters.searchTerm,
+    filters.employmentStatus,
+    filters.organizationId,
+    dispatch,
+  ]);
 
   useEffect(() => {
     dispatch(fetchOrganizations({ page: 1, limit: 100 }));
-}, [dispatch]);
+  }, [dispatch]);
 
   const employmentStatusOptions: DropdownOption[] = [
-    { value: 'ACTIVE', label: 'Activo' },
-    { value: 'JUBILADO', label: 'Jubilado' }
+    { value: "ACTIVE", label: "Activo" },
+    { value: "JUBILADO", label: "Jubilado" },
   ];
 
-  const organizationOptions: DropdownOption[] = organizations.map((organization) => ({
-    value: organization.id,
-    label: organization.name,
-  }));
+  const organizationOptions: DropdownOption[] = organizations.map(
+    (organization) => ({
+      value: organization.id,
+      label: organization.name,
+    })
+  );
 
   const handleStatusChange = (value: string | number | null | undefined) => {
-    updateFilters({ employmentStatus: value as string | null | undefined })
-  }
+    updateFilters({ employmentStatus: value as string | null | undefined });
+  };
 
-  const handleOrganizationChange = (value: string | number | null | undefined) => {
-    updateFilters({ organizationId: value as string | null | undefined })
-  }
-
+  const handleOrganizationChange = (
+    value: string | number | null | undefined
+  ) => {
+    updateFilters({ organizationId: value as string | null | undefined });
+  };
 
   const updateFilters = (newFilters: Partial<SearchFilters>) => {
-    const updatedFilters = { ...filters, ...newFilters }
-    setFilters(updatedFilters)
-    onFiltersChange?.(updatedFilters)
-  }
+    const updatedFilters = { ...filters, ...newFilters };
+    setFilters(updatedFilters);
+    onFiltersChange?.(updatedFilters);
+  };
 
   const clearFilters = () => {
     const clearedFilters: SearchFilters = {
-      searchTerm: '',
+      searchTerm: "",
       employmentStatus: undefined,
-      organizationId: undefined
-    }
-    setFilters(clearedFilters)
-    onFiltersChange?.(clearedFilters)
-  }
+      organizationId: undefined,
+    };
+    setFilters(clearedFilters);
+    onFiltersChange?.(clearedFilters);
+  };
 
-  const hasActiveFilters = filters.searchTerm || 
-                          filters.employmentStatus ||
-                          filters.organizationId
+  const hasActiveFilters =
+    filters.searchTerm || filters.employmentStatus || filters.organizationId;
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg sm:rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-3 sm:p-4 mb-3 sm:mb-4">
@@ -72,10 +95,10 @@ export default function SearchClient({ onFiltersChange }: SearchClientProps) {
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3">
         {/* Búsqueda - Full width en móvil */}
         <div className="flex-1 sm:min-w-[250px] relative">
-          <InputText 
+          <InputText
             value={filters.searchTerm}
             onChange={(e) => updateFilters({ searchTerm: e.target.value })}
-            placeholder="Buscar por nombre, documento, correo..." 
+            placeholder="Buscar por nombre, documento, correo..."
             className="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           />
           <i className="pi pi-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 text-sm"></i>
@@ -110,21 +133,21 @@ export default function SearchClient({ onFiltersChange }: SearchClientProps) {
           {/* Botones de acción */}
           <div className="col-span-2 flex items-center justify-end sm:justify-start gap-2">
             {hasActiveFilters && (
-              <Button 
+              <Button
                 icon="pi pi-times"
                 size="small"
                 text
-                tooltipOptions={{ position: 'bottom' }}
-                className="text-gray-600 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 h-[38px] w-[38px]" 
+                tooltipOptions={{ position: "bottom" }}
+                className="text-gray-600 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 h-[38px] w-[38px]"
                 onClick={clearFilters}
               />
             )}
-            
-            <Button 
+
+            <Button
               label="Crear Cliente"
               size="small"
               className="bg-orange-600 hover:bg-orange-700 text-white border-0 rounded-lg px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium transition-colors whitespace-nowrap flex-1 sm:flex-initial"
-              onClick={() => navigate('/gestion-de-clientes/crear-cliente')}
+              onClick={() => navigate("/gestion-de-clientes/crear-cliente")}
             />
           </div>
         </div>
@@ -133,7 +156,9 @@ export default function SearchClient({ onFiltersChange }: SearchClientProps) {
       {/* Indicador de filtros activos (opcional, compacto) */}
       {hasActiveFilters && (
         <div className="flex items-center gap-2 mt-3 pt-3 border-t border-gray-100 dark:border-gray-700 flex-wrap">
-          <span className="text-xs text-gray-500 dark:text-gray-400">Filtros:</span>
+          <span className="text-xs text-gray-500 dark:text-gray-400">
+            Filtros:
+          </span>
           {filters.searchTerm && (
             <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300">
               "{filters.searchTerm}"
@@ -141,16 +166,24 @@ export default function SearchClient({ onFiltersChange }: SearchClientProps) {
           )}
           {filters.employmentStatus && (
             <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300">
-              {employmentStatusOptions.find(s => s.value === filters.employmentStatus)?.label}
+              {
+                employmentStatusOptions.find(
+                  (s) => s.value === filters.employmentStatus
+                )?.label
+              }
             </span>
           )}
           {filters.organizationId && (
             <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300">
-              {organizationOptions.find(o => o.value === filters.organizationId)?.label}
+              {
+                organizationOptions.find(
+                  (o) => o.value === filters.organizationId
+                )?.label
+              }
             </span>
           )}
         </div>
       )}
     </div>
-  )
+  );
 }
