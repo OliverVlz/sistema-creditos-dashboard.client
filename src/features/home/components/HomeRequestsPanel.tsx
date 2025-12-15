@@ -35,7 +35,6 @@ export default function HomeRequestsPanel() {
     if (!authLoading && isCliente && user && !profileLoading) {
       // Cargar si no hay profile o si el profile es de otro usuario
       if (!profile || profile.id !== user.id) {
-        // @ts-expect-error - Redux Toolkit types issue with React 19
         dispatch(fetchMyProfile());
       }
     }
@@ -49,7 +48,6 @@ export default function HomeRequestsPanel() {
     // Si es cliente, esperar el clientId válido
     if (isCliente && !clientId) return;
 
-    // @ts-expect-error - Redux Toolkit types issue with React 19
     dispatch(fetchLoanRequests({ 
       page: 1, 
       limit: 10,

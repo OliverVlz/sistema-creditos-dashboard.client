@@ -58,12 +58,10 @@ export default function ProfileUnifiedCard({ profile }: ProfileUnifiedCardProps)
 
   const handleSave = async () => {
     try {
-      // @ts-expect-error - Redux Toolkit types issue with React 19
       const result = await dispatch(updateMyProfile(formData));
       
       if (updateMyProfile.fulfilled.match(result)) {
         // Recargar el perfil actualizado
-        // @ts-expect-error - Redux Toolkit types issue with React 19
         await dispatch(fetchMyProfile());
         
         // Mostrar mensaje de éxito

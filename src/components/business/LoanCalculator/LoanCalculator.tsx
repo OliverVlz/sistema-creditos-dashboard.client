@@ -71,10 +71,8 @@ export const LoanCalculator: React.FC = () => {
   const [showResult, setShowResult] = useState(false);
   const [amountError, setAmountError] = useState<string>("");
 
-  // Cargar tipos de préstamo al montar
   useEffect(() => {
-    // @ts-expect-error - Redux Toolkit types issue with React 19
-    dispatch(fetchLoanTypes());
+    dispatch(fetchLoanTypes({}));
   }, [dispatch]);
 
   // Inicializar valores cuando se carga el tipo de préstamo
@@ -199,8 +197,7 @@ export const LoanCalculator: React.FC = () => {
     }
 
     try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await (dispatch as any)(
+      await dispatch(
         calculateLoan({
           loanTypeName: LOAN_TYPE_NAME,
           amountRequested: amountNumber,
@@ -210,7 +207,6 @@ export const LoanCalculator: React.FC = () => {
       setShowResult(true);
     } catch (error) {
       console.error("Error al calcular el préstamo:", error);
-      // El error se maneja en el estado de Redux
     }
   };
 

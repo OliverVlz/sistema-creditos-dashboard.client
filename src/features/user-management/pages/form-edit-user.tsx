@@ -16,7 +16,6 @@ const FormEditUser = () => {
     dispatch(clearSelectedUser());
     
     if (id) {
-      // @ts-expect-error - Redux Toolkit types issue with React 19
       dispatch(fetchUserById(id));
     }
   }, [dispatch, id]);

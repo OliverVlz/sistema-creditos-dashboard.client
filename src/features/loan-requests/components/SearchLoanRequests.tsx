@@ -36,7 +36,6 @@ export default function SearchLoanRequests() {
       // Cargar si no hay profile o si el profile es de otro usuario
       if (!profile || profile.id !== user.id) {
         console.log('Cargando perfil del cliente...')
-        // @ts-expect-error - Redux Toolkit types issue with React 19
         dispatch(fetchMyProfile())
       }
     }
@@ -64,7 +63,6 @@ export default function SearchLoanRequests() {
       clientId: clientId || '(sin filtro - ASESOR/ADMIN)'
     })
 
-    // @ts-expect-error - Redux Toolkit types issue with React 19
     dispatch(fetchLoanRequests({ 
       page: filters.page, 
       limit: filters.limit, 

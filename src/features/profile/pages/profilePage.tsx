@@ -9,7 +9,6 @@ export const ProfilePage = () => {
   const { profile, loading, error } = useAppSelector((state) => state.profile);
 
   useEffect(() => {
-    // @ts-expect-error - Redux Toolkit types issue with React 19
     dispatch(fetchMyProfile());
   }, [dispatch]);
 
@@ -55,7 +54,6 @@ export const ProfilePage = () => {
           </h3>
           <p className="text-red-600 dark:text-red-400">{error}</p>
           <button
-            // @ts-expect-error - Redux Toolkit types issue with React 19
             onClick={() => dispatch(fetchMyProfile())}
             className="px-4 py-2 mt-4 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700"
           >

@@ -33,7 +33,6 @@ const LoanRequestDetailPage = () => {
 
   useEffect(() => {
     if (id) {
-      // @ts-expect-error - Redux Toolkit types issue with React 19
       dispatch(fetchLoanRequestDetail(id));
     }
   }, [id, dispatch]);
@@ -50,7 +49,6 @@ const LoanRequestDetailPage = () => {
         console.log(
           "🔄 Notificación recibida para este préstamo, refrescando..."
         );
-        // @ts-expect-error - Redux Toolkit types issue with React 19
         dispatch(fetchLoanRequestDetail(id));
       }
     };
@@ -103,7 +101,6 @@ const LoanRequestDetailPage = () => {
     setIsEditingDocuments(false);
     // Recargar los datos
     if (id) {
-      // @ts-expect-error - Redux Toolkit types issue with React 19
       dispatch(fetchLoanRequestDetail(id));
     }
   };
@@ -145,7 +142,6 @@ const LoanRequestDetailPage = () => {
         files.push(change.file);
       });
 
-      // @ts-expect-error - Redux Toolkit types issue with React 19
       await dispatch(updateClientDocuments({
         loanId: selectedLoanRequest.id,
         replaceDocumentIds,

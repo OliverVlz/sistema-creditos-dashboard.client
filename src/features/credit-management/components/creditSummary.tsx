@@ -137,9 +137,7 @@ export const CreditSummaryComponent: React.FC = () => {
         );
       });
 
-      // Enviar solicitud al backend y obtener respuesta (loanId, loanNumber)
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const response = await (dispatch as any)(
+      const response = await dispatch(
         submitLoanRequest({
           clientId: clientInformation.clientInfo.id,
           loanTypeName: LOAN_TYPE_NAME,

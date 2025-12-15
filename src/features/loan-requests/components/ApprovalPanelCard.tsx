@@ -86,7 +86,6 @@ export default function ApprovalPanelCard({
       }
 
       // Ejecutar actualización - usa endpoint /loans/{id}/manage
-      // @ts-expect-error - Redux Toolkit types issue with React 19
       await dispatch(manageLoan(payload)).unwrap()
 
       // Mostrar mensaje de éxito

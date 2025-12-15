@@ -13,7 +13,6 @@ export default function ClientTable() {
   const { clients, loading } = useAppSelector((state) => state.clients)  
   
 useEffect(() => {
-    // @ts-expect-error - Redux Toolkit types issue with React 19
     dispatch(fetchClients())
   }, [dispatch])
 

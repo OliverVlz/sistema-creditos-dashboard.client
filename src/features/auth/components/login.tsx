@@ -104,7 +104,6 @@ export default function LoginForm() {
 
     try {
       // Ejecutar la operación de login
-      // @ts-expect-error - Redux Toolkit types issue with React 19
       const result = await dispatch(login(formData)).unwrap();
       
       // Guardar token y usuario en localStorage

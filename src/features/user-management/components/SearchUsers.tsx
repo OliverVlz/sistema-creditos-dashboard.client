@@ -30,7 +30,6 @@ export default function SearchUsers({ onFiltersChange }: SearchUsersProps) {
   ]
 
   useEffect(() => {
-    // @ts-expect-error - Redux Toolkit types issue with React 19
     dispatch(fetchUsers({ page: 1, limit: 100, searchTerm: filters.searchTerm, role: filters.role }))
   }, [filters.searchTerm, filters.role, dispatch])
 

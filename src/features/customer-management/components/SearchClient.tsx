@@ -19,13 +19,11 @@ export default function SearchClient({ onFiltersChange }: SearchClientProps) {
   })
 
   useEffect(() => {
-    // @ts-expect-error - Redux Toolkit types issue with React 19
     dispatch(fetchClients({ page: 1, limit: 100, searchTerm: filters.searchTerm, status: filters.employmentStatus, organizationId: filters.organizationId }))
   }, [filters.searchTerm, filters.employmentStatus, filters.organizationId, dispatch])
 
 
   useEffect(() => {
-    // @ts-expect-error - Redux Toolkit types issue with React 19
     dispatch(fetchOrganizations({ page: 1, limit: 100 }));
 }, [dispatch]);
 

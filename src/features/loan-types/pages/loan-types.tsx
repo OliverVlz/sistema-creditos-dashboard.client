@@ -18,8 +18,7 @@ export default function LoanTypesPage() {
   const [selectedLoanType, setSelectedLoanType] = useState<LoanTypeTableItem | null>(null)
 
   useEffect(() => {
-    // @ts-expect-error - Redux Toolkit types issue with React 19
-    dispatch(fetchLoanTypes())
+    dispatch(fetchLoanTypes({}))
   }, [dispatch])
 
   const handleCreate = () => {
@@ -49,7 +48,6 @@ export default function LoanTypesPage() {
 
     if (result.isConfirmed) {
       try {
-        // @ts-expect-error - Redux Toolkit types issue with React 19
         await dispatch(deleteLoanType(loanType.id)).unwrap()
         
         await Swal.fire({
@@ -74,7 +72,6 @@ export default function LoanTypesPage() {
     try {
       if (selectedLoanType) {
         // Actualizar
-        // @ts-expect-error - Redux Toolkit types issue with React 19
         await dispatch(updateLoanType({ id: selectedLoanType.id, ...data })).unwrap()
         
         await Swal.fire({
@@ -85,7 +82,6 @@ export default function LoanTypesPage() {
         })
       } else {
         // Crear
-        // @ts-expect-error - Redux Toolkit types issue with React 19
         await dispatch(createLoanType(data)).unwrap()
         
         await Swal.fire({
