@@ -35,7 +35,7 @@ const FormEditUser = () => {
           ]}
         />
       <FormUsers
-        initialData={selectedUser || undefined}
+        initialData={selectedUser ? { ...selectedUser, id: String(selectedUser.id) } : undefined}
         onSuccess={handleSuccess}
         onError={handleError}
       />
