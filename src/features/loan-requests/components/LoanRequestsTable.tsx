@@ -25,7 +25,7 @@ export default function LoanRequestsTable() {
       console.log(
         "🔄 Notificación recibida, refrescando tabla de préstamos..."
       );
-      dispatch(fetchLoanRequests());
+      dispatch(fetchLoanRequests({}));
     };
 
     // Escuchar todos los eventos de préstamos

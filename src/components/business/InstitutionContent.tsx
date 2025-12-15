@@ -11,14 +11,12 @@ interface InstitutionContentProps {
   institutionName: string;
   userType: "pensionado" | "activo";
   onUserTypeChange: (type: "pensionado" | "activo") => void;
-  isPolice?: boolean; // Para ajustar tasas para policía
 }
 
 export const InstitutionContent: React.FC<InstitutionContentProps> = ({
   institutionName,
   userType,
   onUserTypeChange,
-  isPolice = false,
 }) => {
   const miniCards = [
     {
@@ -72,11 +70,6 @@ export const InstitutionContent: React.FC<InstitutionContentProps> = ({
 
   const currentDocuments =
     userType === "pensionado" ? documentsPensionado : documentsActivo;
-
-  // Tasas específicas para policía (simulación)
-  const rates = isPolice
-    ? { desde: "1.84%", hasta: "1.89%", desdeEA: "24.45%", hastaEA: "25.17%" }
-    : { desde: "1.86%", hasta: "1.91%", desdeEA: "24.75%", hastaEA: "25.49%" };
 
   return (
     <>
