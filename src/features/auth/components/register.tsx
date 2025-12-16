@@ -263,8 +263,9 @@ export default function RegisterForm() {
 
       setErrors({});
 
-      try {
-        await dispatch(register({ ...formData, email: formData.email.toLowerCase() })).unwrap();
+        try {
+          // Email en minúsculas
+          await dispatch(register({ ...formData, email: formData.email.toLowerCase() })).unwrap();
       } catch (error: unknown) {
         const errorMessage =
           error instanceof Error

@@ -102,9 +102,9 @@ export default function LoginForm() {
     setIsLoading(true);
     setErrors({});
 
-    try {
-      // Ejecutar la operación de login
-      const result = await dispatch(login(formData)).unwrap();
+      try {
+        // Ejecutar la operación de login (email en minúsculas)
+        const result = await dispatch(login({ ...formData, email: formData.email.toLowerCase() })).unwrap();
       
       // Guardar token y usuario en localStorage
       saveAuthData(result);
