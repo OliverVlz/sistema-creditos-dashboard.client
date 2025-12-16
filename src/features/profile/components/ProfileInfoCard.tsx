@@ -40,11 +40,9 @@ export default function ProfileInfoCard({ profile }: ProfileInfoCardProps) {
   };
 
   const handleSave = async () => {
-    // @ts-expect-error - Redux Toolkit types issue with React 19
     const result = await dispatch(updateMyProfile(formData));
     if (updateMyProfile.fulfilled.match(result)) {
       // Recargar el perfil completo después de actualizar
-      // @ts-expect-error - Redux Toolkit types issue with React 19
       await dispatch(fetchMyProfile());
     }
     closeModal();

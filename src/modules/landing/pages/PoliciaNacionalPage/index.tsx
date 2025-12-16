@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react';
-import { PoliciaHero } from './sections/PoliciaHero';
-import { InstitutionContent } from '../../../../components/business/InstitutionContent';
+import { useState, useEffect } from "react";
+import { PoliciaHero } from "./sections/PoliciaHero";
+import { InstitutionContent } from "../../../../components/business/InstitutionContent";
 
 export default function PoliciaNacionalPage() {
-  const [userType, setUserType] = useState<'pensionado' | 'activo'>('pensionado');
+  const [userType, setUserType] = useState<"pensionado" | "activo">(
+    "pensionado"
+  );
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -17,7 +19,6 @@ export default function PoliciaNacionalPage() {
         institutionName="la Policía Nacional"
         userType={userType}
         onUserTypeChange={setUserType}
-        isPolice={true}
       />
     </div>
   );

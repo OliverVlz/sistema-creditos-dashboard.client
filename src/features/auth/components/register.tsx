@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import Button from "../../../components/ui/Button";
 import EditText from "../../../components/ui/EditText";
 import Dropdown, { DropdownOption } from "../../../components/ui/Dropdown";
-import DatePicker from "../../../components/form/date-picker";
 import logoColor from "../../../assets_landing/images/ui/logo-color.png";
 import { EyeIcon, EyeCloseIcon } from "../../../icons";
 import { RegisterFormData, FormErrors } from "../models/registerModel";
@@ -62,7 +61,6 @@ export default function RegisterForm() {
 
   // Cargar organizaciones al montar el componente
   useEffect(() => {
-    // @ts-expect-error - Redux Toolkit types issue with React 19
     dispatch(fetchOrganizations({ page: 1, limit: 100 }));
   }, [dispatch]);
 
@@ -215,18 +213,7 @@ export default function RegisterForm() {
     },
     [handleInputChange]
   );
-
-  /* const handleDateChange = useCallback(
-    (selectedDates: Date[]) => {
-      if (selectedDates && selectedDates.length > 0) {
-        const date = selectedDates[0];
-        const formattedDate = date.toISOString().split("T")[0];
-        handleInputChange("birthDate", formattedDate);
-      }
-    },
-    [handleInputChange]
-  ); */
-
+  
   const handleBlur = useCallback(
     (field: keyof RegisterFormData) => {
       setTouched((prev) => ({ ...prev, [field]: true }));
@@ -277,7 +264,6 @@ export default function RegisterForm() {
       setErrors({});
 
       try {
-        // @ts-expect-error - Redux Toolkit types issue with React 19
         await dispatch(register({ ...formData, email: formData.email.toLowerCase() })).unwrap();
       } catch (error: unknown) {
         const errorMessage =
@@ -517,7 +503,9 @@ export default function RegisterForm() {
                   <input
                     type="date"
                     value={formData.birthDate}
-                    onChange={(e) => handleInputChange("birthDate", e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("birthDate", e.target.value)
+                    }
                     onBlur={() => handleBlur("birthDate")}
                     max={new Date().toISOString().split("T")[0]}
                     className={`h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 bg-white text-gray-800 border-gray-300 focus:border-brand-300 focus:ring-brand-500/20 dark:border-gray-700 dark:focus:border-brand-800 ${

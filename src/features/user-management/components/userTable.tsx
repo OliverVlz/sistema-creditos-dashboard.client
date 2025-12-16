@@ -13,8 +13,7 @@ export default function UserTable() {
   const { users, loading } = useAppSelector((state) => state.users)  
   
   useEffect(() => {
-    // @ts-expect-error - Redux Toolkit types issue with React 19
-    dispatch(fetchUsers())
+    dispatch(fetchUsers({}))
   }, [dispatch])
   
 

@@ -220,7 +220,6 @@ const FormUsers: React.FC<FormUsersProps> = ({
         : dataToSubmit;
 
       if (isEditMode) {
-        // @ts-expect-error - Redux Toolkit types issue with React 19
         const editUserByIdResult = await dispatch(editUserById({userId: initialData?.id || '', user: finalData}));
         
         if (editUserById.fulfilled.match(editUserByIdResult)) {
@@ -244,14 +243,12 @@ const FormUsers: React.FC<FormUsersProps> = ({
       } else {
         // Crear usuario usando Redux
         // finalData ya incluye password si no está en modo edición
-        // @ts-expect-error - Redux Toolkit types issue with React 19
         const createUserResult = await dispatch(createUser(dataToSubmit));
         
         if (createUser.fulfilled.match(createUserResult)) {
           console.log('Usuario creado exitosamente:', createUserResult.payload);
           
           // Refrescar la lista de usuarios después de crear uno nuevo
-          // @ts-expect-error - Redux Toolkit types issue with React 19
           await dispatch(fetchUsers({}));
           
           // Mostrar mensaje de éxito

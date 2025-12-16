@@ -103,9 +103,8 @@ export default function LoginForm() {
     setErrors({});
 
     try {
-      // Ejecutar la operación de login (email en minúsculas)
-      // @ts-expect-error - Redux Toolkit types issue with React 19
-      const result = await dispatch(login({ ...formData, email: formData.email.toLowerCase() })).unwrap();
+      // Ejecutar la operación de login
+      const result = await dispatch(login(formData)).unwrap();
       
       // Guardar token y usuario en localStorage
       saveAuthData(result);
