@@ -63,7 +63,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
               onClick={() => onPageChange(page)}
               className={`w-8 h-8 rounded-lg touch-manipulation ${
                 currentPage === page
-                  ? 'bg-blue-500 dark:bg-blue-600 text-white'
+                  ? 'bg-orange-500 dark:bg-orange-600 text-white'
                   : 'hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
               }`}
             />
@@ -81,7 +81,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
                   onClick={() => onPageChange(Number(page))}
                   className={`w-8 h-8 rounded-lg touch-manipulation ${
                     currentPage === page
-                      ? 'bg-blue-500 dark:bg-blue-600 text-white'
+                      ? 'bg-orange-500 dark:bg-orange-600 text-white'
                       : 'hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
                   }`}
                 />

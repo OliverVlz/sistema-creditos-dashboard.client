@@ -209,7 +209,8 @@ const FormUsers: React.FC<FormUsersProps> = ({
     setErrors({});
 
     try {
-      const dataToSubmit: UserFormData = { ...formData };
+      // Convertir email a minúsculas antes de enviar
+      const dataToSubmit: UserFormData = { ...formData, email: formData.email.toLowerCase() };
       const finalData = isEditMode && !dataToSubmit.password.trim()
         ? (() => {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars

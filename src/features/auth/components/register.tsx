@@ -216,7 +216,7 @@ export default function RegisterForm() {
     [handleInputChange]
   );
 
-  const handleDateChange = useCallback(
+  /* const handleDateChange = useCallback(
     (selectedDates: Date[]) => {
       if (selectedDates && selectedDates.length > 0) {
         const date = selectedDates[0];
@@ -225,7 +225,7 @@ export default function RegisterForm() {
       }
     },
     [handleInputChange]
-  );
+  ); */
 
   const handleBlur = useCallback(
     (field: keyof RegisterFormData) => {
@@ -278,7 +278,7 @@ export default function RegisterForm() {
 
       try {
         // @ts-expect-error - Redux Toolkit types issue with React 19
-        await dispatch(register(formData)).unwrap();
+        await dispatch(register({ ...formData, email: formData.email.toLowerCase() })).unwrap();
       } catch (error: unknown) {
         const errorMessage =
           error instanceof Error
