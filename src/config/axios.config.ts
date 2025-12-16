@@ -11,7 +11,7 @@ const getBaseUrl = () => {
     typeof window !== "undefined" &&
     window.location.hostname !== "localhost"
   ) {
-    return "https://prestamos-backend-xpe7lm-c0f02b-72-61-79-221.traefik.me";
+    return "https://72.61.79.221.nip.io";
   }
   return "http://localhost:3000";
 };
