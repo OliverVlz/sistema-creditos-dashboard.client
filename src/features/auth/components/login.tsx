@@ -232,12 +232,12 @@ export default function LoginForm() {
                     />
                     <span className={`text-gray-600 ${isLoading ? 'opacity-50' : ''}`}>Recordarme</span>
               </label>
-                  <a
-                    href="#"
+                  <Link
+                    to="/recuperar-contrasena"
                     className={`text-[#FF8546] hover:underline transition-colors font-medium ${isLoading ? 'pointer-events-none opacity-50' : ''}`}
                   >
-                ¿Olvidaste tu contraseña?
-              </a>
+                    ¿Olvidaste tu contraseña?
+                  </Link>
             </div>
 
             <Button

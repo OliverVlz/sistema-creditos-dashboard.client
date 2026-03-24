@@ -40,6 +40,8 @@ import { Provider } from "react-redux";
 import CustomerManagementComponent from "./features/customer-management/pages/customer-management";
 import FormCreateClient from "./features/customer-management/pages/form-create-client";
 import Login from "./features/auth/pages/login";
+import ForgotPasswordPage from "./features/auth/pages/forgot-password";
+import ResetPasswordPage from "./features/auth/pages/reset-password";
 import FormEditUser from "./features/user-management/pages/form-edit-user";
 import FormEditClient from "./features/customer-management/pages/form-edit-client";
 import Home from "./features/home/pages/home";
@@ -66,6 +68,8 @@ export default function App() {
           <Route path="/registro" element={<RegisterPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/login2" element={<Login />} />
+          <Route path="/recuperar-contrasena" element={<ForgotPasswordPage />} />
+          <Route path="/restablecer-contrasena" element={<ResetPasswordPage />} />
         </Route>
 
         <Route element={<ProtectedAppLayout />}>
