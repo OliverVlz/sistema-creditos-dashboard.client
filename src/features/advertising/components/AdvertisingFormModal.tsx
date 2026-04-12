@@ -121,7 +121,7 @@ export default function AdvertisingFormModal({
   }
 
   return (
-    <div className="fixed inset-0 z-[999999] overflow-y-auto">
+    <div className="fixed inset-0 z-99999 overflow-y-auto">
       <div className="fixed inset-0 bg-black/50" onClick={onClose} />
       <div className="flex min-h-full items-center justify-center p-4">
         <div className="relative w-full max-w-xl max-h-[85vh] overflow-visible rounded-xl bg-white dark:bg-gray-800 shadow-xl">
