@@ -88,7 +88,6 @@ export const advertisingColumns: Column<Advertisement>[] = [
 
 interface AdvertisingActionsArgs {
   onEdit: (item: Advertisement) => void
-  onHistory: (item: Advertisement) => void
   onToggleStatus: (item: Advertisement) => void
   onMoveUp: (item: Advertisement) => void
   onMoveDown: (item: Advertisement) => void
@@ -96,7 +95,6 @@ interface AdvertisingActionsArgs {
 
 export const getAdvertisingActions = ({
   onEdit,
-  onHistory,
   onToggleStatus,
   onMoveUp,
   onMoveDown,
@@ -106,12 +104,6 @@ export const getAdvertisingActions = ({
     label: 'Editar',
     color: 'blue',
     onClick: onEdit,
-  },
-  {
-    icon: 'pi pi-history',
-    label: 'Histórico',
-    color: 'purple',
-    onClick: onHistory,
   },
   {
     icon: 'pi pi-chevron-up',

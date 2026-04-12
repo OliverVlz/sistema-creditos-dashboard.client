@@ -13,23 +13,6 @@ export interface Advertisement {
   updatedAt: string;
 }
 
-export interface AdvertisementHistoryItem {
-  id: string;
-  advertisementId?: string;
-  action: string;
-  title: string;
-  imageUrl: string;
-  imageKey: string;
-  targetUrl?: string;
-  isRedirectEnabled: boolean;
-  isActive: boolean;
-  sortOrder: number;
-  startsAt?: string;
-  endsAt?: string;
-  changedBy?: string;
-  createdAt: string;
-}
-
 export interface AdvertisingFilters {
   terms?: string;
   isActive?: boolean;

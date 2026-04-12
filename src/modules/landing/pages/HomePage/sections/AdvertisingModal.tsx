@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { publicApiClient } from '../../../../../config/public-api.client'
 import { Swiper, SwiperSlide } from 'swiper/react'
-import { Autoplay, Pagination } from 'swiper/modules'
+import { Autoplay, Navigation, Pagination } from 'swiper/modules'
 
 interface PublicAdvertisement {
   id: string
@@ -53,7 +53,7 @@ export default function AdvertisingModal() {
 
   return (
     <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/60 p-4">
-      <div className="relative w-full max-w-4xl rounded-2xl bg-white p-3 shadow-2xl">
+      <div className="relative w-full max-w-6xl rounded-2xl bg-white p-3 shadow-2xl">
         <button
           type="button"
           className="absolute right-3 top-3 z-10 rounded-full bg-black/70 px-2 py-1 text-white"
@@ -71,10 +71,10 @@ export default function AdvertisingModal() {
             <img
               src={items[0].imageUrl}
               alt=""
-              className="h-[420px] w-full object-cover"
+              className="max-h-[78vh] min-h-[420px] w-full rounded-xl bg-black object-contain"
             />
             {items[0].isRedirectEnabled && items[0].targetUrl ? (
-              <span className="pointer-events-none absolute bottom-4 left-1/2 flex -translate-x-1/2 items-center justify-center opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+              <span className="pointer-events-none absolute bottom-6 left-1/2 flex -translate-x-1/2 items-center justify-center opacity-0 transition-opacity duration-200 group-hover:opacity-100">
                 <span className="rounded-full bg-black/45 p-2.5">
                   <LinkIcon />
                 </span>
@@ -83,11 +83,12 @@ export default function AdvertisingModal() {
           </button>
         ) : (
           <Swiper
-            modules={[Autoplay, Pagination]}
+            modules={[Autoplay, Pagination, Navigation]}
             autoplay={{ delay: 3500, disableOnInteraction: false }}
             pagination={{ clickable: true }}
+            navigation
             loop
-            className="rounded-xl"
+            className="rounded-xl [&_.swiper-button-next]:h-10 [&_.swiper-button-next]:w-10 [&_.swiper-button-next]:rounded-full [&_.swiper-button-next]:bg-black/35 [&_.swiper-button-next]:text-white [&_.swiper-button-next]:backdrop-blur-sm [&_.swiper-button-next]:transition-colors hover:[&_.swiper-button-next]:bg-black/55 [&_.swiper-button-next:after]:text-base [&_.swiper-button-prev]:h-10 [&_.swiper-button-prev]:w-10 [&_.swiper-button-prev]:rounded-full [&_.swiper-button-prev]:bg-black/35 [&_.swiper-button-prev]:text-white [&_.swiper-button-prev]:backdrop-blur-sm [&_.swiper-button-prev]:transition-colors hover:[&_.swiper-button-prev]:bg-black/55 [&_.swiper-button-prev:after]:text-base"
           >
             {items.map((item) => (
               <SwiperSlide key={item.id}>
@@ -99,10 +100,10 @@ export default function AdvertisingModal() {
                   <img
                     src={item.imageUrl}
                     alt=""
-                    className="h-[420px] w-full object-cover"
+                    className="max-h-[78vh] min-h-[420px] w-full rounded-xl bg-black object-contain"
                   />
                   {item.isRedirectEnabled && item.targetUrl ? (
-                    <span className="pointer-events-none absolute bottom-4 left-1/2 flex -translate-x-1/2 items-center justify-center opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                    <span className="pointer-events-none absolute bottom-6 left-1/2 flex -translate-x-1/2 items-center justify-center opacity-0 transition-opacity duration-200 group-hover:opacity-100">
                       <span className="rounded-full bg-black/45 p-2.5">
                         <LinkIcon />
                       </span>

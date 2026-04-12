@@ -3,7 +3,6 @@ import Swal from 'sweetalert2'
 import PageBreadcrumb from '../../../components/common/PageBreadCrumb'
 import { useAppDispatch, useAppSelector } from '../../../store'
 import AdvertisingFormModal from '../components/AdvertisingFormModal'
-import AdvertisingHistoryModal from '../components/AdvertisingHistoryModal'
 import AdvertisingTable from '../components/AdvertisingTable'
 import {
   Advertisement,
@@ -11,21 +10,18 @@ import {
   UpdateAdvertisingPayload,
 } from '../models/advertisingModel'
 import { createAdvertisement } from '../slices/operations/createAdvertisement.operation'
-import { fetchAdvertisementHistory } from '../slices/operations/fetchAdvertisementHistory.operation'
 import { fetchAdvertisements } from '../slices/operations/fetchAdvertisements.operation'
-import { recycleAdvertisement } from '../slices/operations/recycleAdvertisement.operation'
 import { reorderAdvertisements } from '../slices/operations/reorderAdvertisements.operation'
 import { setAdvertisementStatus } from '../slices/operations/setAdvertisementStatus.operation'
 import { updateAdvertisement } from '../slices/operations/updateAdvertisement.operation'
 
 export default function AdvertisingManagementPage() {
   const dispatch = useAppDispatch()
-  const { advertisements, history, loading, saving } = useAppSelector(
+  const { advertisements, loading, saving } = useAppSelector(
     (state) => state.advertising
   )
 
   const [isFormOpen, setIsFormOpen] = useState(false)
-  const [isHistoryOpen, setIsHistoryOpen] = useState(false)
   const [selectedItem, setSelectedItem] = useState<Advertisement | null>(null)
   const [search, setSearch] = useState('')
 
@@ -89,22 +85,6 @@ export default function AdvertisingManagementPage() {
     await dispatch(
       setAdvertisementStatus({ id: item.id, isActive: !item.isActive })
     ).unwrap()
-  }
-
-  const handleHistory = async (item: Advertisement) => {
-    setSelectedItem(item)
-    setIsHistoryOpen(true)
-    await dispatch(fetchAdvertisementHistory(item.id))
-  }
-
-  const handleRecycle = async (historyId: string) => {
-    if (!selectedItem) {
-      return
-    }
-    await dispatch(
-      recycleAdvertisement({ id: selectedItem.id, historyId })
-    ).unwrap()
-    await dispatch(fetchAdvertisementHistory(selectedItem.id))
   }
 
   const updateOrderByIndex = async (index: number, direction: 'up' | 'down') => {
@@ -176,7 +156,6 @@ export default function AdvertisingManagementPage() {
         data={filteredData}
         loading={loading}
         onEdit={openEditModal}
-        onHistory={handleHistory}
         onToggleStatus={handleToggleStatus}
         onMoveUp={handleMoveUp}
         onMoveDown={handleMoveDown}
@@ -188,14 +167,6 @@ export default function AdvertisingManagementPage() {
         onSubmit={handleSubmit}
         initialData={selectedItem}
         saving={saving}
-      />
-
-      <AdvertisingHistoryModal
-        isOpen={isHistoryOpen}
-        onClose={() => setIsHistoryOpen(false)}
-        history={history}
-        loading={loading}
-        onRecycle={handleRecycle}
       />
     </div>
   )

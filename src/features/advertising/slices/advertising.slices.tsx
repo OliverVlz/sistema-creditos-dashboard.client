@@ -1,16 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { Advertisement, AdvertisementHistoryItem } from '../models/advertisingModel'
+import { Advertisement } from '../models/advertisingModel'
 import { createAsyncFetchAdvertisementsReducer } from './operations/fetchAdvertisements.operation'
 import { createAsyncCreateAdvertisementReducer } from './operations/createAdvertisement.operation'
 import { createAsyncUpdateAdvertisementReducer } from './operations/updateAdvertisement.operation'
 import { createAsyncSetAdvertisementStatusReducer } from './operations/setAdvertisementStatus.operation'
-import { createAsyncFetchAdvertisementHistoryReducer } from './operations/fetchAdvertisementHistory.operation'
-import { createAsyncRecycleAdvertisementReducer } from './operations/recycleAdvertisement.operation'
 import { createAsyncReorderAdvertisementsReducer } from './operations/reorderAdvertisements.operation'
 
 export interface AdvertisingState {
   advertisements: Advertisement[]
-  history: AdvertisementHistoryItem[]
   selectedAdvertisement: Advertisement | null
   loading: boolean
   error: string | null
@@ -28,7 +25,6 @@ export interface AdvertisingState {
 
 const initialState: AdvertisingState = {
   advertisements: [],
-  history: [],
   selectedAdvertisement: null,
   loading: false,
   error: null,
@@ -54,25 +50,16 @@ const advertisingSlice = createSlice({
     clearSelectedAdvertisement: (state) => {
       state.selectedAdvertisement = null
     },
-    clearAdvertisingHistory: (state) => {
-      state.history = []
-    },
   },
   extraReducers: (builder) => {
     createAsyncFetchAdvertisementsReducer({ builder })
     createAsyncCreateAdvertisementReducer({ builder })
     createAsyncUpdateAdvertisementReducer({ builder })
     createAsyncSetAdvertisementStatusReducer({ builder })
-    createAsyncFetchAdvertisementHistoryReducer({ builder })
-    createAsyncRecycleAdvertisementReducer({ builder })
     createAsyncReorderAdvertisementsReducer({ builder })
   },
 })
 
-export const {
-  setSelectedAdvertisement,
-  clearSelectedAdvertisement,
-  clearAdvertisingHistory,
-} = advertisingSlice.actions
+export const { setSelectedAdvertisement, clearSelectedAdvertisement } = advertisingSlice.actions
 
 export default advertisingSlice.reducer

@@ -6,7 +6,6 @@ interface AdvertisingTableProps {
   data: Advertisement[]
   loading: boolean
   onEdit: (item: Advertisement) => void
-  onHistory: (item: Advertisement) => void
   onToggleStatus: (item: Advertisement) => void
   onMoveUp: (item: Advertisement) => void
   onMoveDown: (item: Advertisement) => void
@@ -16,7 +15,6 @@ export default function AdvertisingTable({
   data,
   loading,
   onEdit,
-  onHistory,
   onToggleStatus,
   onMoveUp,
   onMoveDown,
@@ -27,7 +25,6 @@ export default function AdvertisingTable({
       columns={advertisingColumns}
       actions={getAdvertisingActions({
         onEdit,
-        onHistory,
         onToggleStatus,
         onMoveUp,
         onMoveDown,
