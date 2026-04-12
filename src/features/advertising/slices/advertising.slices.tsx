@@ -5,6 +5,7 @@ import { createAsyncCreateAdvertisementReducer } from './operations/createAdvert
 import { createAsyncUpdateAdvertisementReducer } from './operations/updateAdvertisement.operation'
 import { createAsyncSetAdvertisementStatusReducer } from './operations/setAdvertisementStatus.operation'
 import { createAsyncReorderAdvertisementsReducer } from './operations/reorderAdvertisements.operation'
+import { createAsyncDeleteAdvertisementReducer } from './operations/deleteAdvertisement.operation'
 
 export interface AdvertisingState {
   advertisements: Advertisement[]
@@ -57,6 +58,7 @@ const advertisingSlice = createSlice({
     createAsyncUpdateAdvertisementReducer({ builder })
     createAsyncSetAdvertisementStatusReducer({ builder })
     createAsyncReorderAdvertisementsReducer({ builder })
+    createAsyncDeleteAdvertisementReducer({ builder })
   },
 })
 

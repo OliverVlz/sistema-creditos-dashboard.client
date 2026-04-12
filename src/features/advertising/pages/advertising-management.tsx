@@ -10,6 +10,7 @@ import {
   UpdateAdvertisingPayload,
 } from '../models/advertisingModel'
 import { createAdvertisement } from '../slices/operations/createAdvertisement.operation'
+import { deleteAdvertisement } from '../slices/operations/deleteAdvertisement.operation'
 import { fetchAdvertisements } from '../slices/operations/fetchAdvertisements.operation'
 import { reorderAdvertisements } from '../slices/operations/reorderAdvertisements.operation'
 import { setAdvertisementStatus } from '../slices/operations/setAdvertisementStatus.operation'
@@ -87,6 +88,40 @@ export default function AdvertisingManagementPage() {
     ).unwrap()
   }
 
+  const handleDelete = async (item: Advertisement) => {
+    const result = await Swal.fire({
+      title: 'Eliminar publicidad',
+      text: 'Esta acción no se puede deshacer',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#ef4444',
+      cancelButtonColor: '#6b7280',
+    })
+
+    if (!result.isConfirmed) {
+      return
+    }
+
+    try {
+      await dispatch(deleteAdvertisement(item.id)).unwrap()
+      await Swal.fire({
+        title: 'Eliminada',
+        text: 'La publicidad se eliminó correctamente',
+        icon: 'success',
+        confirmButtonColor: '#FF8546',
+      })
+    } catch (error) {
+      await Swal.fire({
+        title: 'Error',
+        text: 'No se pudo eliminar la publicidad',
+        icon: 'error',
+        confirmButtonColor: '#ef4444',
+      })
+    }
+  }
+
   const updateOrderByIndex = async (index: number, direction: 'up' | 'down') => {
     const list = [...advertisements].sort((a, b) => a.sortOrder - b.sortOrder)
     const targetIndex = direction === 'up' ? index - 1 : index + 1
@@ -156,6 +191,7 @@ export default function AdvertisingManagementPage() {
         data={filteredData}
         loading={loading}
         onEdit={openEditModal}
+        onDelete={handleDelete}
         onToggleStatus={handleToggleStatus}
         onMoveUp={handleMoveUp}
         onMoveDown={handleMoveDown}

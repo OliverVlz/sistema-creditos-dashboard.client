@@ -14,14 +14,41 @@ interface PublicAdvertisement {
 export default function AdvertisingModal() {
   const [items, setItems] = useState<PublicAdvertisement[]>([])
   const [open, setOpen] = useState(true)
+  const [activeIndex, setActiveIndex] = useState(0)
+  const [imageRatios, setImageRatios] = useState<Record<string, number>>({})
 
   useEffect(() => {
     const load = async () => {
       const response = await publicApiClient.get('/advertisements/public/landing')
       setItems(response.data || [])
+      setActiveIndex(0)
     }
     load()
   }, [])
+
+  useEffect(() => {
+    if (!items.length) {
+      return
+    }
+
+    items.forEach((item) => {
+      if (imageRatios[item.id]) {
+        return
+      }
+
+      const image = new window.Image()
+      image.onload = () => {
+        if (!image.width || !image.height) {
+          return
+        }
+        setImageRatios((prev) => ({
+          ...prev,
+          [item.id]: image.width / image.height,
+        }))
+      }
+      image.src = item.imageUrl
+    })
+  }, [items, imageRatios])
 
   const handleClick = (item: PublicAdvertisement) => {
     if (!item.isRedirectEnabled || !item.targetUrl) {
@@ -51,9 +78,16 @@ export default function AdvertisingModal() {
     return null
   }
 
+  const activeItem = items[activeIndex] || items[0]
+  const activeRatio = imageRatios[activeItem.id] || 16 / 9
+  const frameStyle = {
+    width: `min(92vw, calc(78vh * ${activeRatio}))`,
+    height: `min(78vh, calc(92vw / ${activeRatio}))`,
+  }
+
   return (
     <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/60 p-4">
-      <div className="relative w-full max-w-6xl rounded-2xl bg-white p-3 shadow-2xl">
+      <div className="relative w-fit max-w-[95vw] rounded-2xl bg-white p-3 shadow-2xl">
         <button
           type="button"
           className="absolute right-3 top-3 z-10 rounded-full bg-black/70 px-2 py-1 text-white"
@@ -66,15 +100,16 @@ export default function AdvertisingModal() {
           <button
             type="button"
             onClick={() => handleClick(items[0])}
-            className="group relative w-full overflow-hidden rounded-xl"
+            className="group relative overflow-hidden rounded-xl"
+            style={frameStyle}
           >
             <img
               src={items[0].imageUrl}
               alt=""
-              className="max-h-[78vh] min-h-[420px] w-full rounded-xl bg-black object-contain"
+              className="h-full w-full rounded-xl bg-black object-contain"
             />
             {items[0].isRedirectEnabled && items[0].targetUrl ? (
-              <span className="pointer-events-none absolute bottom-6 left-1/2 flex -translate-x-1/2 items-center justify-center opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+              <span className="pointer-events-none absolute bottom-8 left-1/2 flex -translate-x-1/2 items-center justify-center opacity-0 transition-opacity duration-200 group-hover:opacity-100">
                 <span className="rounded-full bg-black/45 p-2.5">
                   <LinkIcon />
                 </span>
@@ -88,22 +123,24 @@ export default function AdvertisingModal() {
             pagination={{ clickable: true }}
             navigation
             loop
-            className="rounded-xl [&_.swiper-button-next]:h-10 [&_.swiper-button-next]:w-10 [&_.swiper-button-next]:rounded-full [&_.swiper-button-next]:bg-black/35 [&_.swiper-button-next]:text-white [&_.swiper-button-next]:backdrop-blur-sm [&_.swiper-button-next]:transition-colors hover:[&_.swiper-button-next]:bg-black/55 [&_.swiper-button-next:after]:text-base [&_.swiper-button-prev]:h-10 [&_.swiper-button-prev]:w-10 [&_.swiper-button-prev]:rounded-full [&_.swiper-button-prev]:bg-black/35 [&_.swiper-button-prev]:text-white [&_.swiper-button-prev]:backdrop-blur-sm [&_.swiper-button-prev]:transition-colors hover:[&_.swiper-button-prev]:bg-black/55 [&_.swiper-button-prev:after]:text-base"
+            onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
+            className="rounded-xl [&_.swiper-pagination-bullet-active]:!bg-brand-500 [&_.swiper-button-next]:h-10 [&_.swiper-button-next]:w-10 [&_.swiper-button-next]:rounded-full [&_.swiper-button-next]:bg-brand-500/70 [&_.swiper-button-next]:text-white [&_.swiper-button-next]:backdrop-blur-sm [&_.swiper-button-next]:transition-colors hover:[&_.swiper-button-next]:bg-brand-600/90 [&_.swiper-button-next:after]:text-base [&_.swiper-button-prev]:h-10 [&_.swiper-button-prev]:w-10 [&_.swiper-button-prev]:rounded-full [&_.swiper-button-prev]:bg-brand-500/70 [&_.swiper-button-prev]:text-white [&_.swiper-button-prev]:backdrop-blur-sm [&_.swiper-button-prev]:transition-colors hover:[&_.swiper-button-prev]:bg-brand-600/90 [&_.swiper-button-prev:after]:text-base"
+            style={frameStyle}
           >
             {items.map((item) => (
               <SwiperSlide key={item.id}>
                 <button
                   type="button"
                   onClick={() => handleClick(item)}
-                  className="group relative w-full overflow-hidden rounded-xl"
+                  className="group relative h-full w-full overflow-hidden rounded-xl"
                 >
                   <img
                     src={item.imageUrl}
                     alt=""
-                    className="max-h-[78vh] min-h-[420px] w-full rounded-xl bg-black object-contain"
+                    className="h-full w-full rounded-xl bg-black object-contain"
                   />
                   {item.isRedirectEnabled && item.targetUrl ? (
-                    <span className="pointer-events-none absolute bottom-6 left-1/2 flex -translate-x-1/2 items-center justify-center opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                    <span className="pointer-events-none absolute bottom-8 left-1/2 flex -translate-x-1/2 items-center justify-center opacity-0 transition-opacity duration-200 group-hover:opacity-100">
                       <span className="rounded-full bg-black/45 p-2.5">
                         <LinkIcon />
                       </span>
