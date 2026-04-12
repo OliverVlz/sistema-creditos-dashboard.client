@@ -77,6 +77,12 @@ export const sidebarMenuItems: NavItem[] = [
     allowedRoles: [UserRole.ADMIN], // Solo ADMIN
   },
   {
+    icon: <TaskIcon />,
+    name: 'Gestión de Publicidad',
+    path: '/dashboard/gestion-publicidad',
+    allowedRoles: [UserRole.ADMIN, UserRole.ASESOR],
+  },
+  {
     icon: <UserCircleIcon />,
     name: 'Mi Perfil',
     path: '/dashboard/mi-perfil',

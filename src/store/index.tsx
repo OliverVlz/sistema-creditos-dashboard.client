@@ -8,6 +8,7 @@ import creditManagementReducer from "../features/credit-management/slices/credit
 import profileReducer from "../features/profile/slices/profile.slices";
 import loanRequestsReducer from "../features/loan-requests/slices/loanRequests.slices";
 import loanTypesReducer from "../features/loan-types/slices/loanTypes.slices";
+import advertisingReducer from "../features/advertising/slices/advertising.slices";
 
 export const store = configureStore({
   reducer: {
@@ -19,6 +20,7 @@ export const store = configureStore({
     profile: profileReducer,
     loanRequests: loanRequestsReducer,
     loanTypes: loanTypesReducer,
+    advertising: advertisingReducer,
   },
 });
 

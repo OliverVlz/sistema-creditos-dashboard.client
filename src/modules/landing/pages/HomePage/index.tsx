@@ -5,6 +5,7 @@ import { ClientsSection } from './sections/ClientsSection';
 import CreditProcess from './sections/CreditProcess';
 import Faq from './sections/Faq';
 import ContactSection from './sections/ContactSection';
+import AdvertisingModal from './sections/AdvertisingModal';
 
 export default function HomePage() {
   useEffect(() => {
@@ -19,6 +20,7 @@ export default function HomePage() {
 
   return (
     <>
+      <AdvertisingModal />
       <Hero />
       <CreditSimulation />
       <ClientsSection />

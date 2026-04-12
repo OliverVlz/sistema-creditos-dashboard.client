@@ -53,6 +53,7 @@ import ChangePasswordPage from "./features/auth/pages/change-password";
 import LoanRequestsPage from "./features/loan-requests/pages/loan-requests";
 import LoanRequestDetailPage from "./features/loan-requests/pages/loan-request-detail";
 import LoanTypesPage from "./features/loan-types/pages/loan-types";
+import AdvertisingManagementPage from "./features/advertising/pages/advertising-management";
 
 export default function App() {
   return (
@@ -115,6 +116,14 @@ export default function App() {
             element={
               <RoleProtectedRoute allowedRoles={[UserRole.ADMIN]}>
                 <LoanTypesPage />
+              </RoleProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard/gestion-publicidad"
+            element={
+              <RoleProtectedRoute allowedRoles={[UserRole.ADMIN, UserRole.ASESOR]}>
+                <AdvertisingManagementPage />
               </RoleProtectedRoute>
             }
           />

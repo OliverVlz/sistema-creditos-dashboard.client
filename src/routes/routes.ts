@@ -44,6 +44,7 @@ export const LOAN_REQUEST_DETAIL_ROUTE = '/gestion-solicitudes/detalle';
 
 // Rutas de tipos de préstamo (solo ADMIN)
 export const LOAN_TYPES_ROUTE = '/tipos-prestamo';
+export const ADVERTISING_MANAGEMENT_ROUTE = '/dashboard/gestion-publicidad';
 
 // Rutas de cliente (solo CLIENTE)
 export const MY_REQUESTS_ROUTE = '/mis-solicitudes';
@@ -73,6 +74,7 @@ export const ROUTE_ROLES = {
   [CREATE_USER_ROUTE]: [UserRole.ADMIN],
   [EDIT_USER_ROUTE]: [UserRole.ADMIN],
   [LOAN_TYPES_ROUTE]: [UserRole.ADMIN],
+  [ADVERTISING_MANAGEMENT_ROUTE]: [UserRole.ADMIN, UserRole.ASESOR],
   
   // Rutas para ADMIN y ASESOR
   [CUSTOMER_MANAGEMENT_ROUTE]: [UserRole.ADMIN, UserRole.ASESOR],
