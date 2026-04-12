@@ -124,8 +124,11 @@ export default function AdvertisingModal() {
             navigation
             loop
             onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
-            className="rounded-xl [&_.swiper-pagination-bullet-active]:!bg-brand-500 [&_.swiper-button-next]:h-10 [&_.swiper-button-next]:w-10 [&_.swiper-button-next]:rounded-full [&_.swiper-button-next]:bg-brand-500/70 [&_.swiper-button-next]:text-white [&_.swiper-button-next]:backdrop-blur-sm [&_.swiper-button-next]:transition-colors hover:[&_.swiper-button-next]:bg-brand-600/90 [&_.swiper-button-next:after]:text-base [&_.swiper-button-prev]:h-10 [&_.swiper-button-prev]:w-10 [&_.swiper-button-prev]:rounded-full [&_.swiper-button-prev]:bg-brand-500/70 [&_.swiper-button-prev]:text-white [&_.swiper-button-prev]:backdrop-blur-sm [&_.swiper-button-prev]:transition-colors hover:[&_.swiper-button-prev]:bg-brand-600/90 [&_.swiper-button-prev:after]:text-base"
-            style={frameStyle}
+            className="rounded-xl [&_.swiper-pagination-bullet-active]:!bg-brand-500 [&_.swiper-button-next:after]:text-3xl [&_.swiper-button-prev:after]:text-3xl"
+            style={{
+              ...frameStyle,
+              ['--swiper-navigation-color' as string]: '#f07f44',
+            }}
           >
             {items.map((item) => (
               <SwiperSlide key={item.id}>
