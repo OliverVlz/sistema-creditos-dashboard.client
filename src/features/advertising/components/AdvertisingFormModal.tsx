@@ -9,6 +9,9 @@ interface AdvertisingFormModalProps {
   saving?: boolean
 }
 
+const MAX_ADVERTISEMENT_IMAGE_SIZE_BYTES = 2 * 1024 * 1024
+const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
+
 const CheckMark = () => (
   <svg
     viewBox="0 0 12 10"
@@ -82,10 +85,31 @@ export default function AdvertisingFormModal({
   }
 
   const handleImageChange = (file?: File) => {
-    handleChange('image', file)
     if (!file) {
+      handleChange('image', undefined)
       return
     }
+
+    if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+      setErrors((prev) => ({
+        ...prev,
+        image: 'Formato inválido. Usa JPG, PNG o WEBP',
+      }))
+      handleChange('image', undefined)
+      return
+    }
+
+    if (file.size > MAX_ADVERTISEMENT_IMAGE_SIZE_BYTES) {
+      setErrors((prev) => ({
+        ...prev,
+        image: 'La imagen no puede superar 2MB',
+      }))
+      handleChange('image', undefined)
+      return
+    }
+
+    handleChange('image', file)
+    setErrors((prev) => ({ ...prev, image: '' }))
     const url = URL.createObjectURL(file)
     setImagePreview(url)
   }
@@ -177,7 +201,7 @@ export default function AdvertisingFormModal({
                   Arrastra una imagen aquí
                 </span>
                 <span className="mt-1 text-center text-xs text-gray-500 dark:text-gray-400">
-                  o haz clic para elegir archivo · JPG, PNG o WEBP
+                  o haz clic para elegir archivo · JPG, PNG o WEBP (max. 2MB)
                 </span>
               </label>
               {errors.image && <p className="mt-1 text-xs text-red-500">{errors.image}</p>}

@@ -68,13 +68,13 @@ export default function AdvertisingManagementPage() {
         await dispatch(createAdvertisement(payload)).unwrap()
       }
 
+      closeFormModal()
       await Swal.fire({
         title: 'Guardado',
         text: 'La publicidad se guardó correctamente',
         icon: 'success',
         confirmButtonColor: '#FF8546',
       })
-      closeFormModal()
     } catch (error) {
       await Swal.fire({
         title: 'Error',
