@@ -1,13 +1,12 @@
 import { useEffect } from 'react'
 import PageBreadcrumb from '@/components/common/PageBreadCrumb'
 import { fetchClientById } from '../slices/operations/fetchClientById.operations';
-import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import FormClient from '../components/formClient';
-import { useAppSelector, RootState } from '@/store';
+import { useAppDispatch, useAppSelector, RootState } from '@/store';
 
 const FormEditClient = () => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const { id } = useParams();
     const { selectedClient } = useAppSelector((state: RootState) => state.clients);
     useEffect(() => {

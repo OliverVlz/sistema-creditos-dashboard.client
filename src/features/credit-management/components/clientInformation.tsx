@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 import { fetchClientInformation } from '../slices/operations/fetchClientInformation.operation';
 import { nextStep, previousStep } from '../slices/creditManagement';
-import { RootState, useAppSelector } from '@/store'; 
+import { RootState, useAppDispatch, useAppSelector } from '@/store'; 
 
 // --- ICONOS ---
 /* const EditIcon = () => (
@@ -27,7 +26,7 @@ const ArrowLeftIcon = () => (
 );
 
 export const ClientInformationComponent: React.FC = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   
   const { clientInformation, loading, error } = useAppSelector((state: RootState) => state.creditManagement);
 

@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
-import { useAppSelector, RootState } from '../../../store/index';
+import { useAppDispatch, useAppSelector, RootState } from '../../../store/index';
 import Form from '../../../components/form/Form';
 import Label from '../../../components/form/Label';
 import Input from '../../../components/form/input/InputField';
@@ -9,7 +9,6 @@ import { FormClientProps, ClientFormData, FormErrors } from '../models/formClien
 import swal from 'sweetalert2';
 import { useNavigate, useParams } from 'react-router-dom';
 import DatePicker from '@/components/form/date-picker';
-import { useDispatch } from 'react-redux';
 import { fetchOrganizations } from '../slices/operations/fetchOrganizations.operation';
 import { createClient } from '../slices/operations/createClient.operations';
 import { editClientById } from '../slices/operations/editClientById.operations';
@@ -24,7 +23,7 @@ const FormClient: React.FC<FormClientProps> = ({
   const navigate = useNavigate();
   const { id } = useParams();
   const isEditMode = !!initialData;
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(fetchOrganizations({ page: 1, limit: 100 }));
