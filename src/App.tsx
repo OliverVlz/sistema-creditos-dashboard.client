@@ -32,6 +32,8 @@ import EjercitoNacionalPage from "./modules/landing/pages/EjercitoNacionalPage";
 import ArmadaNacionalPage from "./modules/landing/pages/ArmadaNacionalPage";
 import FuerzaAeroespacialPage from "./modules/landing/pages/FuerzaAeroespacialPage";
 import PoliciaNacionalPage from "./modules/landing/pages/PoliciaNacionalPage";
+import TerminosCondicionesPage from "./modules/landing/pages/TerminosCondicionesPage";
+import PoliticaPrivacidadPage from "./modules/landing/pages/PoliticaPrivacidadPage";
 import UserManagementComponent from "./features/user-management/pages/user-management.component";
 import CreditManagementComponent from "./features/credit-management/pages/credit-managment";   
 import FormCreateUser from "./features/user-management/pages/form-create-user";
@@ -39,6 +41,7 @@ import { store } from "./store";
 import { Provider } from "react-redux";
 import CustomerManagementComponent from "./features/customer-management/pages/customer-management";
 import FormCreateClient from "./features/customer-management/pages/form-create-client";
+import BulkImportClientsLoansPage from "./features/customer-management/pages/bulk-import-clients-loans";
 import Login from "./features/auth/pages/login";
 import ForgotPasswordPage from "./features/auth/pages/forgot-password";
 import ResetPasswordPage from "./features/auth/pages/reset-password";
@@ -65,6 +68,8 @@ export default function App() {
           <Route path="/armada-nacional" element={<ArmadaNacionalPage />} />
           <Route path="/fuerza-aeroespacial" element={<FuerzaAeroespacialPage />} />
           <Route path="/policia-nacional" element={<PoliciaNacionalPage />} />
+          <Route path="/terminos-y-condiciones" element={<TerminosCondicionesPage />} />
+          <Route path="/politica-de-privacidad" element={<PoliticaPrivacidadPage />} />
           <Route path="/registro" element={<RegisterPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/login2" element={<Login />} />
@@ -156,6 +161,14 @@ export default function App() {
             element={
               <RoleProtectedRoute allowedRoles={[UserRole.ADMIN, UserRole.ASESOR]}>
                 <FormCreateClient />
+              </RoleProtectedRoute>
+            }
+          />
+          <Route
+            path="/gestion-de-clientes/carga-masiva"
+            element={
+              <RoleProtectedRoute allowedRoles={[UserRole.ADMIN, UserRole.ASESOR]}>
+                <BulkImportClientsLoansPage />
               </RoleProtectedRoute>
             }
           />

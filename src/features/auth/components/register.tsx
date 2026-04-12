@@ -9,6 +9,10 @@ import { RegisterFormData, FormErrors } from "../models/registerModel";
 import { register } from "../slices/operations/registerOperations";
 import { useAppDispatch, useAppSelector, RootState } from "../../../store";
 import { fetchOrganizations } from "../../customer-management/slices/operations/fetchOrganizations.operation";
+import {
+  PRIVACY_POLICY_ROUTE,
+  TERMS_AND_CONDITIONS_ROUTE,
+} from "../../../routes/routes";
 
 export default function RegisterForm() {
   const navigate = useNavigate();
@@ -716,7 +720,7 @@ export default function RegisterForm() {
                     >
                       Acepto los{" "}
                       <Link
-                        to="/terminos-y-condiciones"
+                        to={TERMS_AND_CONDITIONS_ROUTE}
                         className="text-[#FF8546] font-semibold hover:text-[#E64A2E] transition-colors"
                         onClick={(e) => e.stopPropagation()}
                       >
@@ -746,7 +750,7 @@ export default function RegisterForm() {
                       Autorizo el tratamiento de mis datos personales conforme a
                       la{" "}
                       <Link
-                        to="/politica-de-privacidad"
+                        to={PRIVACY_POLICY_ROUTE}
                         className="text-[#FF8546] font-semibold hover:text-[#E64A2E] transition-colors"
                         onClick={(e) => e.stopPropagation()}
                       >

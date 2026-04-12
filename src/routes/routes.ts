@@ -8,6 +8,9 @@ export const ABOUT_ROUTE = '/sobre-nosotros';
 export const SERVICES_ROUTE = '/servicios';
 export const CREDIT_POLICIES_ROUTE = '/politicas-credito';
 
+export const TERMS_AND_CONDITIONS_ROUTE = '/terminos-y-condiciones';
+export const PRIVACY_POLICY_ROUTE = '/politica-de-privacidad';
+
 // Rutas de instituciones
 export const EJERCITO_NACIONAL_ROUTE = '/ejercito-nacional';
 export const ARMADA_NACIONAL_ROUTE = '/armada-nacional';
@@ -29,6 +32,8 @@ export const EDIT_USER_ROUTE = '/gestion-de-usuarios/editar-usuario';
 export const CUSTOMER_MANAGEMENT_ROUTE = '/gestion-de-clientes';
 export const CREATE_CLIENT_ROUTE = '/gestion-de-clientes/crear-cliente';
 export const EDIT_CLIENT_ROUTE = '/gestion-de-clientes/editar-cliente';
+export const BULK_IMPORT_CLIENTS_LOANS_ROUTE =
+  '/gestion-de-clientes/carga-masiva';
 
 // Rutas de gestión de créditos (ADMIN y ASESOR)
 export const CREDIT_MANAGEMENT_ROUTE = '/dashboard/gestion-de-creditos';
@@ -73,6 +78,7 @@ export const ROUTE_ROLES = {
   [CUSTOMER_MANAGEMENT_ROUTE]: [UserRole.ADMIN, UserRole.ASESOR],
   [CREATE_CLIENT_ROUTE]: [UserRole.ADMIN, UserRole.ASESOR],
   [EDIT_CLIENT_ROUTE]: [UserRole.ADMIN, UserRole.ASESOR],
+  [BULK_IMPORT_CLIENTS_LOANS_ROUTE]: [UserRole.ADMIN, UserRole.ASESOR],
   [CREDIT_MANAGEMENT_ROUTE]: [UserRole.ADMIN, UserRole.ASESOR],
   [LOAN_REQUEST_DETAIL_ROUTE]: [UserRole.ADMIN, UserRole.ASESOR],
   
