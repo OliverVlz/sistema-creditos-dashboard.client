@@ -46,6 +46,12 @@ export const sidebarMenuItems: NavItem[] = [
     path: '/gestion-de-clientes',
     allowedRoles: [UserRole.ADMIN, UserRole.ASESOR], // ADMIN y ASESOR
   },
+  {
+    icon: <TaskIcon />,
+    name: 'Carga Masiva',
+    path: '/gestion-de-clientes/carga-masiva',
+    allowedRoles: [UserRole.ADMIN, UserRole.ASESOR],
+  },
 /*   {
     icon: <DollarLineIcon />,
     name: 'Gestión de Créditos',
