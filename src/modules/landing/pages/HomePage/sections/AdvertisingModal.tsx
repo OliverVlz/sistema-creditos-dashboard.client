@@ -2,8 +2,6 @@ import { useEffect, useState } from 'react'
 import { publicApiClient } from '../../../../../config/public-api.client'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Autoplay, Pagination } from 'swiper/modules'
-import 'swiper/css'
-import 'swiper/css/pagination'
 
 interface PublicAdvertisement {
   id: string
@@ -32,6 +30,23 @@ export default function AdvertisingModal() {
     window.open(item.targetUrl, '_blank', 'noopener,noreferrer')
   }
 
+  const LinkIcon = () => (
+    <svg
+      className="h-6 w-6 text-gray-300"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+      aria-hidden
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+      />
+    </svg>
+  )
+
   if (!open || !items.length) {
     return null
   }
@@ -51,13 +66,20 @@ export default function AdvertisingModal() {
           <button
             type="button"
             onClick={() => handleClick(items[0])}
-            className="w-full overflow-hidden rounded-xl"
+            className="group relative w-full overflow-hidden rounded-xl"
           >
             <img
               src={items[0].imageUrl}
-              alt={items[0].title}
+              alt=""
               className="h-[420px] w-full object-cover"
             />
+            {items[0].isRedirectEnabled && items[0].targetUrl ? (
+              <span className="pointer-events-none absolute bottom-4 left-1/2 flex -translate-x-1/2 items-center justify-center opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                <span className="rounded-full bg-black/45 p-2.5">
+                  <LinkIcon />
+                </span>
+              </span>
+            ) : null}
           </button>
         ) : (
           <Swiper
@@ -72,13 +94,20 @@ export default function AdvertisingModal() {
                 <button
                   type="button"
                   onClick={() => handleClick(item)}
-                  className="w-full overflow-hidden rounded-xl"
+                  className="group relative w-full overflow-hidden rounded-xl"
                 >
                   <img
                     src={item.imageUrl}
-                    alt={item.title}
+                    alt=""
                     className="h-[420px] w-full object-cover"
                   />
+                  {item.isRedirectEnabled && item.targetUrl ? (
+                    <span className="pointer-events-none absolute bottom-4 left-1/2 flex -translate-x-1/2 items-center justify-center opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                      <span className="rounded-full bg-black/45 p-2.5">
+                        <LinkIcon />
+                      </span>
+                    </span>
+                  ) : null}
                 </button>
               </SwiperSlide>
             ))}

@@ -43,7 +43,22 @@ export const advertisingColumns: Column<Advertisement>[] = [
     field: 'targetUrl',
     header: 'Redirección',
     sortable: false,
-    render: (row) => (row.isRedirectEnabled ? row.targetUrl || '-' : 'Deshabilitada'),
+    render: (row) =>
+      row.isRedirectEnabled && row.targetUrl ? (
+        <a
+          href={row.targetUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="inline-flex items-center gap-2 text-global-12 hover:underline"
+        >
+          <svg className="w-6 h-6 text-global-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+          </svg>
+          <span className="max-w-[220px] truncate">{row.targetUrl}</span>
+        </a>
+      ) : (
+        'Deshabilitada'
+      ),
   },
   {
     field: 'sortOrder',
