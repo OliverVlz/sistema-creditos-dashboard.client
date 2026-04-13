@@ -156,14 +156,14 @@ export default function AdvertisingManagementPage() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-            Gestión de Publicidad
+            Gestión de publicidad
           </h1>
           <PageBreadcrumb
             showTitle={false}
             items={[
               { label: 'Home', path: '/dashboard/home' },
               { label: 'Configuración' },
-              { label: 'Gestión de Publicidad' },
+              { label: 'Gestión de publicidad' },
             ]}
           />
         </div>

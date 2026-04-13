@@ -16,11 +16,22 @@ const PageBreadcrumb: React.FC<BreadcrumbProps> = ({
   items,
   showTitle = true 
 }) => {
+  const normalizeBreadcrumbItem = (item: BreadcrumbItem): BreadcrumbItem => {
+    const normalizedLabel = item.label === "Home" ? "Inicio" : item.label;
+    const normalizedPath =
+      item.path === "/dashboard/home" ? "/dashboard/inicio" : item.path;
+    return {
+      ...item,
+      label: normalizedLabel,
+      path: normalizedPath,
+    };
+  };
+
   // Si se proporcionan items personalizados, usar esos; si no, usar pageTitle para compatibilidad
-  const breadcrumbItems: BreadcrumbItem[] = items || [
-    { label: "Home", path: "/dashboard/home" },
+  const breadcrumbItems: BreadcrumbItem[] = (items || [
+    { label: "Inicio", path: "/dashboard/inicio" },
     { label: pageTitle || "Página actual", path: undefined }
-  ];
+  ]).map(normalizeBreadcrumbItem);
 
   return (
     <div className="flex flex-wrap items-center justify-between gap-3 mb-6">

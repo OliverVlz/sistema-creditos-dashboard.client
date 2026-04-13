@@ -26,6 +26,16 @@ export const usersSlice = createSlice({
         setUsers: (state, action) => {
             state.users = action.payload
         },
+        removeUserById: (state, action) => {
+            state.users = state.users.filter((user) => user.id !== action.payload)
+        },
+        updateUserStatusById: (state, action) => {
+            state.users = state.users.map((user) =>
+                user.id === action.payload.userId
+                    ? { ...user, isActive: action.payload.isActive }
+                    : user
+            )
+        },
         clearSelectedUser: (state) => {
             state.selectedUser = null
         }
@@ -37,5 +47,5 @@ export const usersSlice = createSlice({
     }
 })
 
-export const { setUsers, clearSelectedUser } = usersSlice.actions
+export const { setUsers, removeUserById, updateUserStatusById, clearSelectedUser } = usersSlice.actions
 export default usersSlice.reducer

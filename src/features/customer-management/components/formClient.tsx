@@ -359,7 +359,7 @@ const FormClient: React.FC<FormClientProps> = ({
     <div className="w-full max-w-4xl mx-auto">
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 sm:p-6 lg:p-8">
         <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-4 sm:mb-6">
-          {isEditMode ? 'Editar Cliente' : 'Crear Nuevo Cliente'}
+          {isEditMode ? 'Editar cliente' : 'Crear nuevo cliente'}
         </h2>
 
         {errors.general && (

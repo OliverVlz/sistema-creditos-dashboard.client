@@ -54,6 +54,7 @@ import LoanRequestsPage from "./features/loan-requests/pages/loan-requests";
 import LoanRequestDetailPage from "./features/loan-requests/pages/loan-request-detail";
 import LoanTypesPage from "./features/loan-types/pages/loan-types";
 import AdvertisingManagementPage from "./features/advertising/pages/advertising-management";
+import LoanCalculatorDashboardPage from "./features/loan-calculator/pages/loan-calculator-dashboard";
 
 export default function App() {
   return (
@@ -80,11 +81,19 @@ export default function App() {
 
         <Route element={<ProtectedAppLayout />}>
           {/* Rutas accesibles para todos los roles autenticados */}
-          <Route path="/dashboard/home" element={<Home />} />
-          <Route path="/dashboard/mi-perfil" element={<ProfilePage />} />
+          <Route path="/dashboard/inicio" element={<Home />} />
+          <Route path="/dashboard/home" element={<Navigate to="/dashboard/inicio" replace />} />
+          <Route
+            path="/dashboard/mi-perfil"
+            element={
+              <RoleProtectedRoute allowedRoles={[UserRole.CLIENTE]}>
+                <ProfilePage />
+              </RoleProtectedRoute>
+            }
+          />
           <Route path="/dashboard/cambiar-contrasena" element={<ChangePasswordPage />} />
 
-          {/* Rutas solo para ADMIN - Gestión de Usuarios */}
+          {/* Rutas solo para ADMIN - Gestión de usuarios */}
           <Route
             path="/dashboard/gestion-de-usuarios"
             element={
@@ -110,7 +119,7 @@ export default function App() {
             }
           />
 
-          {/* Rutas solo para ADMIN - Tipos de Préstamo */}
+          {/* Rutas solo para ADMIN - Tipos de préstamo */}
           <Route
             path="/tipos-prestamo"
             element={
@@ -128,7 +137,7 @@ export default function App() {
             }
           />
 
-          {/* Rutas para ADMIN y ASESOR - Gestión de Créditos */}
+          {/* Rutas para ADMIN y ASESOR - Gestión de créditos */}
           <Route
             path="/dashboard/gestion-de-creditos"
             element={
@@ -138,7 +147,7 @@ export default function App() {
             }
           />
 
-          {/* Rutas para ADMIN y ASESOR - Gestión de Solicitudes */}
+          {/* Rutas para ADMIN y ASESOR - Gestión de solicitudes */}
           <Route
             path="/gestion-solicitudes"
             element={
@@ -156,7 +165,7 @@ export default function App() {
             }
           />
 
-          {/* Rutas para ADMIN y ASESOR - Gestión de Clientes */}
+          {/* Rutas para ADMIN y ASESOR - Gestión de clientes */}
           <Route
             path="/gestion-de-clientes"
             element={
@@ -184,13 +193,13 @@ export default function App() {
           <Route
             path="/gestion-de-clientes/editar-cliente/:id"
             element={
-              <RoleProtectedRoute allowedRoles={[UserRole.ADMIN, UserRole.ASESOR]}>
+              <RoleProtectedRoute allowedRoles={[UserRole.ADMIN]}>
                 <FormEditClient />
               </RoleProtectedRoute>
             }
           />
 
-          {/* Rutas solo para CLIENTE - Mis Solicitudes */}
+          {/* Rutas solo para CLIENTE - Mis solicitudes */}
           <Route
             path="/mis-solicitudes"
             element={
@@ -204,7 +213,14 @@ export default function App() {
           {/* <Route path="/dashboard" element={<RebuiltDashboard />} /> */}
           <Route path="/dashboard/clients" element={<ClientsPage />} />
           <Route path="/dashboard/loan-application" element={<Blank />} />
-          <Route path="/dashboard/simulation" element={<Blank />} />
+          <Route
+            path="/dashboard/simulation"
+            element={
+              <RoleProtectedRoute allowedRoles={[UserRole.ADMIN, UserRole.ASESOR]}>
+                <LoanCalculatorDashboardPage />
+              </RoleProtectedRoute>
+            }
+          />
           <Route path="/dashboard/my-loans" element={<Blank />} />
           <Route path="/dashboard/loans" element={<Blank />} />
           <Route path="/dashboard/approvals" element={<Blank />} />

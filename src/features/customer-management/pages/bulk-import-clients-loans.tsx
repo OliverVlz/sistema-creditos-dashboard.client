@@ -107,42 +107,56 @@ export default function BulkImportClientsLoansPage() {
   };
 
   return (
-    <div className="p-3 sm:p-4 lg:p-6">
-      <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-2 sm:mb-3">
-        Carga Masiva de Clientes y Solicitudes
-      </h1>
-
+    <div className="space-y-4 sm:space-y-5 lg:space-y-6">
+      <div>
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-2 sm:mb-3">
+          Carga masiva de clientes y solicitudes
+        </h1>
+      </div>
       <PageBreadcrumb
         showTitle={false}
         items={[
           { label: "Home", path: "/dashboard/home" },
-          { label: "Gestión de Clientes", path: "/gestion-de-clientes" },
-          { label: "Carga Masiva" },
+          { label: "Gestión de clientes", path: "/gestion-de-clientes" },
+          { label: "Carga masiva" },
         ]}
       />
 
       <form
         onSubmit={handleSubmit}
-        className="mt-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4 sm:p-5"
+        className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4 sm:p-5 space-y-4"
       >
-        <div className="grid grid-cols-1 gap-4 items-end">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Archivo Excel (.xlsx)
-            </label>
-            <input
-              type="file"
-              accept=".xlsx"
-              onChange={(event) => {
-                const selectedFile = event.target.files?.[0] || null;
-                setFile(selectedFile);
-              }}
-              className="block w-full text-sm text-gray-900 dark:text-gray-200 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-brand-600 file:text-white hover:file:bg-brand-700"
-            />
+        <div className="rounded-lg border border-dashed border-gray-300 dark:border-gray-700 p-5 sm:p-6 bg-gray-50/70 dark:bg-gray-800/40">
+          <div className="flex items-start sm:items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-brand-100 dark:bg-brand-900/30 flex items-center justify-center">
+              <i className="pi pi-upload text-brand-600 dark:text-brand-400" />
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                Subir archivo de carga masiva
+              </p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                Formato permitido: .xlsx
+              </p>
+            </div>
+          </div>
+
+          <input
+            type="file"
+            accept=".xlsx"
+            onChange={(event) => {
+              const selectedFile = event.target.files?.[0] || null;
+              setFile(selectedFile);
+            }}
+            className="mt-4 block w-full text-sm text-gray-900 dark:text-gray-200 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-brand-600 file:text-white hover:file:bg-brand-700"
+          />
+
+          <div className="mt-3 rounded-md border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 py-2 text-xs text-gray-600 dark:text-gray-300">
+            {file ? file.name : "No has seleccionado archivo todavía"}
           </div>
         </div>
 
-        <div className="mt-4 flex flex-wrap gap-3">
+        <div className="flex flex-wrap gap-3">
           <button
             type="button"
             onClick={handleDownloadTemplate}
@@ -173,6 +187,11 @@ export default function BulkImportClientsLoansPage() {
           <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">
             Resultado de importación
           </h2>
+          <div className="mb-4 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-900 px-3 py-2 text-sm text-blue-800 dark:text-blue-200">
+            {result.errorRows > 0
+              ? "La importación terminó con filas por corregir. Revisa el detalle para ajustar el archivo."
+              : "La importación finalizó correctamente sin errores."}
+          </div>
 
           <div className="grid grid-cols-2 md:grid-cols-5 gap-3 text-sm">
             <StatCard label="Filas" value={result.totalRows} />
@@ -217,7 +236,7 @@ export default function BulkImportClientsLoansPage() {
                             : "inline-flex rounded-full bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300 px-2 py-1 text-xs font-semibold"
                         }
                       >
-                        {row.status}
+                        {row.status === "SUCCESS" ? "OK" : "ERROR"}
                       </span>
                     </td>
                     <td className="px-3 py-2 text-gray-700 dark:text-gray-300">{row.email}</td>

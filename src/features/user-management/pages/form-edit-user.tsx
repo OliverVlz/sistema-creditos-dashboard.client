@@ -37,7 +37,7 @@ const FormEditUser = () => {
         items={[
           { label: "Home", path: "/dashboard/home" },
           {
-            label: "Gestión de Usuarios",
+            label: "Gestión de usuarios",
             path: "/dashboard/gestion-de-usuarios",
           },
           { label: "Editar Usuario" },

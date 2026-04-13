@@ -19,7 +19,7 @@ export const ProfilePage = () => {
           showTitle={false}
           items={[
             { label: "Home", path: "/dashboard/home" },  
-            { label: "Mi Perfil" }
+            { label: "Mi perfil" }
           ]}
         />
         <div className="flex items-center justify-center min-h-[400px]">
@@ -99,14 +99,14 @@ export const ProfilePage = () => {
         showTitle={false}
         items={[
           { label: "Home", path: "/dashboard/home" },  
-          { label: "Mi Perfil" }
+          { label: "Mi perfil" }
         ]}
       />
       
       {/* Header */}
       <div className="mb-6">
         <h2 className="text-2xl font-bold text-gray-800 dark:text-white/90">
-          Mi Perfil
+          Mi perfil
         </h2>
         <p className="text-sm text-gray-500 dark:text-gray-400">
           Visualiza y edita tu información personal

@@ -75,8 +75,7 @@ export default function SearchLoanRequests() {
   const statusOptions: DropdownOption[] = [
     { value: 'pendiente', label: 'Pendiente' },
     { value: 'aprobado', label: 'Aprobado' },
-    { value: 'rechazado', label: 'Rechazado' },
-    { value: 'en_revision', label: 'En Revisión' }
+    { value: 'rechazado', label: 'Rechazado' }
   ];
 
   const handleStatusChange = (value: string | number | null | undefined) => {

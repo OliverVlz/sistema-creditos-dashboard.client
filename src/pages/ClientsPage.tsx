@@ -5,8 +5,8 @@ import PageMeta from "../components/common/PageMeta";
 export default function ClientsPage() {
   return (
     <>
-      <PageMeta description="Gestión de Clientes" title="Gestión de Clientes" />  
-      <PageBreadcrumb pageTitle="Gestión de Clientes" />
+      <PageMeta description="Gestión de clientes" title="Gestión de clientes" />  
+      <PageBreadcrumb pageTitle="Gestión de clientes" />
       <div className="space-y-6">
         <ClientTable />
       </div>

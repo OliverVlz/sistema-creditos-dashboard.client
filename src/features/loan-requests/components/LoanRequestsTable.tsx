@@ -8,14 +8,52 @@ import { useAppSelector, useAppDispatch } from "../../../store/index";
 import { useNavigate } from "react-router-dom";
 import { useNotifications } from "../../../context/NotificationsContext";
 import { fetchLoanRequests } from "../slices/operations/fetchLoanRequests.operation";
+import { useAuth } from "../../../hooks/useAuth";
+import Swal from "sweetalert2";
+import { deleteLoanRequest } from "../slices/operations/deleteLoanRequest.operation";
+import { removeLoanRequestById } from "../slices/loanRequests.slices";
 
 export default function LoanRequestsTable() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { user } = useAuth();
   const { loanRequests, loading } = useAppSelector(
     (state) => state.loanRequests
   );
   const { socket } = useNotifications();
+  const isAdmin = user?.role === "ADMIN";
+
+  const handleDeleteLoan = async (loanId: string) => {
+    const result = await Swal.fire({
+      title: "¿Eliminar solicitud?",
+      text: "Esta acción eliminará la solicitud seleccionada.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+      confirmButtonColor: "#ef4444",
+    });
+
+    if (!result.isConfirmed) {
+      return;
+    }
+
+    try {
+      await dispatch(deleteLoanRequest(loanId)).unwrap();
+      dispatch(removeLoanRequestById(loanId));
+      await Swal.fire({
+        title: "Solicitud eliminada",
+        icon: "success",
+        confirmButtonColor: "#FF8546",
+      });
+    } catch {
+      await Swal.fire({
+        title: "No se pudo eliminar",
+        icon: "error",
+        confirmButtonColor: "#ef4444",
+      });
+    }
+  };
 
   // Escuchar notificaciones de WebSocket para refrescar la tabla
   useEffect(() => {
@@ -48,7 +86,7 @@ export default function LoanRequestsTable() {
     <DataTable
       data={loanRequests}
       columns={loanRequestColumns}
-      actions={getLoanRequestActions(navigate)}
+      actions={getLoanRequestActions(navigate, (loan) => handleDeleteLoan(loan.id), isAdmin)}
       itemsPerPage={10}
       defaultSortField="loanNumber"
       defaultSortOrder="desc"

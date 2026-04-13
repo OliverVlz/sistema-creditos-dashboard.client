@@ -17,7 +17,7 @@ export default function FormCreateClient() {
         showTitle={false}
         items={[
           { label: "Home", path: "/dashboard/home" },
-          { label: "Gestión de Clientes", path: "/gestion-de-clientes" },
+          { label: "Gestión de clientes", path: "/gestion-de-clientes" },
           { label: "Crear Cliente" }
         ]}
       />

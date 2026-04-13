@@ -4,7 +4,6 @@ import {
   UserCircleIcon,
   TaskIcon,
   DollarLineIcon,
-  ListIcon,
   BoxCubeIcon,
 } from '../icons';
 import { UserRole } from '../types/roles';
@@ -31,63 +30,71 @@ export const sidebarMenuItems: NavItem[] = [
   {
     icon: <GridIcon />,
     name: 'Inicio',
-    path: '/dashboard/home',
-    // Todos los roles pueden ver el inicio
-  },
-  {
-    icon: <UserCircleIcon />,
-    name: 'Gestión de Usuarios',
-    path: '/dashboard/gestion-de-usuarios',
-    allowedRoles: [UserRole.ADMIN], // Solo ADMIN
+    path: '/dashboard/inicio',
   },
   {
     icon: <TaskIcon />,
-    name: 'Gestión de Clientes',
-    path: '/gestion-de-clientes',
-    allowedRoles: [UserRole.ADMIN, UserRole.ASESOR], // ADMIN y ASESOR
-  },
-  {
-    icon: <TaskIcon />,
-    name: 'Carga Masiva',
-    path: '/gestion-de-clientes/carga-masiva',
-    allowedRoles: [UserRole.ADMIN, UserRole.ASESOR],
-  },
-/*   {
-    icon: <DollarLineIcon />,
-    name: 'Gestión de Créditos',
-    path: '/dashboard/gestion-de-creditos',
-    allowedRoles: [UserRole.ADMIN, UserRole.ASESOR], // ADMIN y ASESOR
-  }, */
-  {
-    icon: <ListIcon />, 
-    name: 'Gestión de Solicitudes',
-    path: '/gestion-solicitudes',
-    allowedRoles: [UserRole.ADMIN, UserRole.ASESOR, UserRole.CLIENTE], // ADMIN y ASESOR
+    name: 'Gestión',
+    subItems: [
+      {
+        name: 'Gestión de solicitudes',
+        path: '/gestion-solicitudes',
+        allowedRoles: [UserRole.ADMIN, UserRole.ASESOR, UserRole.CLIENTE],
+      },
+      {
+        name: 'Gestión de clientes',
+        path: '/gestion-de-clientes',
+        allowedRoles: [UserRole.ADMIN, UserRole.ASESOR],
+      },
+      {
+        name: 'Gestión de usuarios',
+        path: '/dashboard/gestion-de-usuarios',
+        allowedRoles: [UserRole.ADMIN],
+      },
+    ],
   },
   {
     icon: <DollarLineIcon />,
-    name: 'Solicitar crédito',
-    path: '/dashboard/gestion-de-creditos',
-    allowedRoles: [UserRole.CLIENTE], // Solo CLIENTE
+    name: 'Créditos',
+    subItems: [
+      {
+        name: 'Calculadora',
+        path: '/dashboard/simulation',
+        allowedRoles: [UserRole.ADMIN, UserRole.ASESOR],
+      },
+      {
+        name: 'Solicitar crédito',
+        path: '/dashboard/gestion-de-creditos',
+        allowedRoles: [UserRole.CLIENTE],
+      },
+    ],
   },
   {
     icon: <BoxCubeIcon />,
-    name: 'Tipos de Préstamo',
-    path: '/tipos-prestamo',
-    allowedRoles: [UserRole.ADMIN], // Solo ADMIN
-  },
-  {
-    icon: <TaskIcon />,
-    name: 'Gestión de Publicidad',
-    path: '/dashboard/gestion-publicidad',
-    allowedRoles: [UserRole.ADMIN, UserRole.ASESOR],
+    name: 'Configuración',
+    subItems: [
+      {
+        name: 'Tipos de préstamo',
+        path: '/tipos-prestamo',
+        allowedRoles: [UserRole.ADMIN],
+      },
+      {
+        name: 'Gestión de publicidad',
+        path: '/dashboard/gestion-publicidad',
+        allowedRoles: [UserRole.ADMIN, UserRole.ASESOR],
+      },
+      {
+        name: 'Carga masiva',
+        path: '/gestion-de-clientes/carga-masiva',
+        allowedRoles: [UserRole.ADMIN, UserRole.ASESOR],
+      },
+    ],
   },
   {
     icon: <UserCircleIcon />,
-    name: 'Mi Perfil',
+    name: 'Mi perfil',
     path: '/dashboard/mi-perfil',
     allowedRoles: [UserRole.CLIENTE],
-    // Todos los roles pueden ver su perfil
   },
 ];
 

@@ -10,7 +10,7 @@ import { ClientFormData } from '../../models/formClientModel'
 
 export const editClientById = createAsyncThunk(
     'clients/editClientById',
-    async ({clientId, client}: {clientId: string, client: ClientFormData}) => {
+    async ({clientId, client}: {clientId: string, client: Partial<ClientFormData>}) => {
         const response = await mainCustomAxios.patch(`/clients/${clientId}`, client)
         return response.data
     }

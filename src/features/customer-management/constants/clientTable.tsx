@@ -79,19 +79,42 @@ export const clientColumns: Column<Client>[] = [
     }
   ]
   
-  export const getClientActions = (navigate: NavigateFunction): Action<Client>[] => [
-    /* {
-      icon: 'pi pi-eye',
-      label: 'Ver Detalles',
-      color: 'blue',
-      onClick: (client) => console.log('Ver cliente:', client.documentNumber)
-    }, */
-    {
-      /* icon: 'pi pi-pencil', */
-      icon: 'pi pi-eye',
-      label: 'Editar',
-      color: 'green',
-      onClick: (client) => navigate(`/gestion-de-clientes/editar-cliente/${client.id}`),
-      /* show: (client) => client.status !== 'Rechazado' */
-    },
-  ]
+  export const getClientActions = (
+    navigate: NavigateFunction,
+    onToggleStatus: (client: Client) => void,
+    onDelete: (client: Client) => void,
+    isAdmin: boolean
+  ): Action<Client>[] => {
+    const actions: Action<Client>[] = []
+
+    if (isAdmin) {
+      actions.push({
+        icon: 'pi pi-pencil',
+        label: 'Editar',
+        color: 'green',
+        onClick: (client) => navigate(`/gestion-de-clientes/editar-cliente/${client.id}`),
+      })
+      actions.push({
+        icon: 'pi pi-times-circle',
+        label: 'Desactivar',
+        color: 'red',
+        onClick: onToggleStatus,
+        show: (client) => client.isActive,
+      })
+      actions.push({
+        icon: 'pi pi-check-circle',
+        label: 'Activar',
+        color: 'blue',
+        onClick: onToggleStatus,
+        show: (client) => !client.isActive,
+      })
+      actions.push({
+        icon: 'pi pi-trash',
+        label: 'Eliminar',
+        color: 'red',
+        onClick: onDelete,
+      })
+    }
+
+    return actions
+  }

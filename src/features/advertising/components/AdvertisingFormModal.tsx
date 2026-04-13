@@ -151,7 +151,7 @@ export default function AdvertisingFormModal({
         <div className="relative w-full max-w-xl max-h-[85vh] overflow-visible rounded-xl bg-white dark:bg-gray-800 shadow-xl">
           <div className="flex items-center justify-between overflow-hidden rounded-t-xl border-b border-gray-200 dark:border-gray-700 p-5">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-              {initialData ? 'Editar Publicidad' : 'Nueva Publicidad'}
+              {initialData ? 'Editar publicidad' : 'Nueva publicidad'}
             </h3>
             <button
               onClick={onClose}

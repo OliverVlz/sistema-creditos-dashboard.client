@@ -10,6 +10,8 @@ import { useAuth } from "./auth/auth-context.provider";
 import Swal from "sweetalert2";
 import { mainCustomAxios } from "../config/axios.config";
 
+const MAX_NOTIFICATIONS = 30;
+
 interface LoanNotificationData {
   loanId: string;
   loanNumber: string;
@@ -64,8 +66,13 @@ export const NotificationsProvider = ({
 
   const fetchNotifications = async () => {
     try {
-      const response = await mainCustomAxios.get("/notifications");
-      setNotifications(response.data.notifications);
+      const response = await mainCustomAxios.get("/notifications", {
+        params: {
+          page: 1,
+          limit: MAX_NOTIFICATIONS,
+        },
+      });
+      setNotifications(response.data.notifications || []);
       setUnreadCount(response.data.unreadCount);
     } catch (error) {
       console.error("Error fetching notifications:", error);
@@ -178,7 +185,7 @@ export const NotificationsProvider = ({
       createdAt: notification.createdAt || new Date().toISOString(),
     };
 
-    setNotifications((prev) => [notificationWithId, ...prev]);
+    setNotifications((prev) => [notificationWithId, ...prev].slice(0, MAX_NOTIFICATIONS));
     setUnreadCount((prev) => prev + 1);
 
     // Play notification sound (optional)

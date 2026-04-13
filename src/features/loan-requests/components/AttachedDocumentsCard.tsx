@@ -288,7 +288,7 @@ export default function AttachedDocumentsCard({
       <div className="flex items-center justify-between gap-2 mb-4 pb-3 border-b border-gray-200 dark:border-gray-700">
         <div className="flex items-center gap-2">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-            Documentos Adjuntos
+            Documentos adjuntos
           </h2>
           <span className="bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-xs font-bold px-2 py-0.5 rounded-full">
             {documents.length}

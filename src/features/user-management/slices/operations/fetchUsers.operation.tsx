@@ -9,7 +9,7 @@ import { User } from '../../models/usersTableConfig'
 
 export const fetchUsers = createAsyncThunk(
     'users/fetchUsers',
-    async ({ page = 1, limit = 100, searchTerm = '', role = '' }: { page?: number, limit?: number, searchTerm?: string, role?: string } = {}) => {
+    async ({ page = 1, limit = 100, searchTerm = '', role = '', status = '' }: { page?: number, limit?: number, searchTerm?: string, role?: string, status?: string } = {}) => {
         const params: Record<string, string | number> = {
             page,
             limit
@@ -17,6 +17,7 @@ export const fetchUsers = createAsyncThunk(
         
         if (searchTerm) params.terms = searchTerm
         if (role) params.role = role
+        if (status) params.isActive = status
         
         const response = await mainCustomAxios.get('users/all', { params })
         console.log('response.data', response.data.data)

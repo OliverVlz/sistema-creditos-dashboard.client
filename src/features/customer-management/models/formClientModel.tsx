@@ -10,6 +10,7 @@ export interface ClientFormData {
     employmentStatus: string;
     employmentStatusOther: string;
     organizationId: string;
+    isActive?: boolean;
   }
   
   export interface FormErrors {

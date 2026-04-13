@@ -49,10 +49,10 @@ const getStatusLabel = (status: string) => {
     case 'rechazado':
       return 'Rechazado'
     case 'en_revision':
-      return 'En Revisión'
+      return 'En revisión'
     case 'pendiente':
     default:
-      return 'Pendiente de Revisión'
+      return 'Pendiente de revisión'
   }
 }
 
@@ -65,7 +65,7 @@ const DataField = ({ label, value, highlight = false, isStatus = false, statusCl
   statusClass?: string
 }) => (
   <div className="min-w-0">
-    <label className="block text-[10px] sm:text-[11px] font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-0.5 sm:mb-1">
+    <label className="block text-[10px] sm:text-[11px] font-medium text-gray-500 dark:text-gray-400 mb-0.5 sm:mb-1">
       {label}
     </label>
     {isStatus ? (
@@ -92,13 +92,13 @@ export default function ApplicationDataCard({ loanRequest }: ApplicationDataCard
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 sm:p-5 h-full">
       <h2 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4 pb-2 sm:pb-3 border-b border-gray-200 dark:border-gray-700">
-        Datos de la Solicitud
+        Datos de la solicitud
       </h2>
 
       {/* Información Personal - Grid de 2 columnas */}
       <div className="mb-4 sm:mb-5">
-        <h3 className="text-[11px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2 sm:mb-3">
-          Información Personal
+        <h3 className="text-[11px] font-semibold text-gray-400 dark:text-gray-500 mb-2 sm:mb-3">
+          Información personal
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-3 sm:gap-x-4 gap-y-2 sm:gap-y-3">
           <DataField label="Nombre" value={clientName} />
@@ -110,26 +110,26 @@ export default function ApplicationDataCard({ loanRequest }: ApplicationDataCard
 
       {/* Detalles de la Solicitud - Grid de 2 columnas */}
       <div className="pt-3 sm:pt-4 border-t border-gray-200 dark:border-gray-700">
-        <h3 className="text-[11px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2 sm:mb-3">
-          Detalles de la Solicitud
+        <h3 className="text-[11px] font-semibold text-gray-400 dark:text-gray-500 mb-2 sm:mb-3">
+          Detalles de la solicitud
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-3 sm:gap-x-4 gap-y-2 sm:gap-y-3">
-          <DataField label="ID Solicitud" value={loanRequest.loanNumber} highlight />
+          <DataField label="ID de solicitud" value={loanRequest.loanNumber} highlight />
           <DataField 
             label="Estado" 
             value={getStatusLabel(loanRequest.status)} 
             isStatus 
             statusClass={getStatusColor(loanRequest.status)} 
           />
-          <DataField label="Monto Solicitado" value={formatMoney(loanRequest.amountRequested)} />
+          <DataField label="Monto solicitado" value={formatMoney(loanRequest.amountRequested)} />
           <DataField label="Plazo" value={`${loanRequest.termMonths} meses`} />
           <DataField 
-            label="Tasa de Interés" 
+            label="Tasa de interés" 
             value={`${loanRequest.annualRate ?? loanRequest.appliedInterestRate ?? '---'}%`} 
           />
-          <DataField label="CREDITO" value={loanRequest.loanType?.name || '---'} />
+          <DataField label="Crédito" value={loanRequest.loanType?.name || '---'} />
           <div className="col-span-2">
-            <DataField label="Fecha de Solicitud" value={formatDate(loanRequest.createdAt)} />
+            <DataField label="Fecha de solicitud" value={formatDate(loanRequest.createdAt)} />
           </div>
         </div>
       </div>

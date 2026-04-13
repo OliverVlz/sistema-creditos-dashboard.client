@@ -26,7 +26,7 @@ const FormCreateUser: React.FC<FormCreateUserProps> = ({ initialData }) => {
           showTitle={false}
           items={[
             { label: "Home", path: "/dashboard/home" },
-            { label: "Gestión de Usuarios", path: "/dashboard/gestion-de-usuarios" },
+            { label: "Gestión de usuarios", path: "/dashboard/gestion-de-usuarios" },
             {label: "Crear Usuario"}
           ]}
         />

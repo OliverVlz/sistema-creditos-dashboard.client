@@ -27,6 +27,16 @@ export const clientsSlice = createSlice({
         setClients: (state, action) => {
             state.clients = action.payload
         },
+        removeClientById: (state, action) => {
+            state.clients = state.clients.filter((client) => client.id !== action.payload)
+        },
+        updateClientStatusById: (state, action) => {
+            state.clients = state.clients.map((client) =>
+                client.id === action.payload.clientId
+                    ? { ...client, isActive: action.payload.isActive }
+                    : client
+            )
+        },
         clearClients: (state) => {
             state.clients = []
             state.error = null
@@ -40,5 +50,5 @@ export const clientsSlice = createSlice({
     }
 })
 
-export const { setClients, clearClients } = clientsSlice.actions
+export const { setClients, removeClientById, updateClientStatusById, clearClients } = clientsSlice.actions
 export default clientsSlice.reducer

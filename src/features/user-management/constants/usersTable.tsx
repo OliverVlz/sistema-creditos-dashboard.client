@@ -73,17 +73,37 @@ export const userColumns: Column<User>[] = [
     }
   ]
   
-  export const getUserActions = (navigate: NavigateFunction): Action<User>[] => [
-    {
-      /* icon: 'pi pi-pencil', */
-      icon: 'pi pi-eye',
+export const getUserActions = (
+  navigate: NavigateFunction,
+  onToggleStatus: (user: User) => void,
+  isAdmin: boolean
+): Action<User>[] => {
+  const actions: Action<User>[] = []
+
+  if (isAdmin) {
+    actions.push({
+      icon: 'pi pi-pencil',
       label: 'Editar',
       color: 'green',
       onClick: (user) => {
-        console.log('Navegando a editar usuario:', user.id);
         navigate(`/gestion-de-usuarios/editar-usuario/${user.id}`);
       },
-      /* show: (client) => client.status !== 'Rechazado' */
-    },
+    })
+    actions.push({
+      icon: 'pi pi-times-circle',
+      label: 'Desactivar',
+      color: 'red',
+      onClick: onToggleStatus,
+      show: (user) => user.isActive,
+    })
+    actions.push({
+      icon: 'pi pi-check-circle',
+      label: 'Activar',
+      color: 'blue',
+      onClick: onToggleStatus,
+      show: (user) => !user.isActive,
+    })
+  }
 
-  ]
+  return actions
+}

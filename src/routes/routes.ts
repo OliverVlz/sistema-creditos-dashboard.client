@@ -19,8 +19,8 @@ export const POLICIA_NACIONAL_ROUTE = '/policia-nacional';
 
 // Rutas privadas
 export const DASHBOARD_ROUTE = '/dashboard';
-export const HOME_ROUTE = '/home';
-export const SIMULATION_ROUTE = '/simulation';
+export const HOME_ROUTE = '/dashboard/inicio';
+export const SIMULATION_ROUTE = '/dashboard/simulation';
 export const CLIENTS_ROUTE = '/clients';
 
 // Rutas de gestión de usuarios (solo ADMIN)
@@ -82,6 +82,7 @@ export const ROUTE_ROLES = {
   [EDIT_CLIENT_ROUTE]: [UserRole.ADMIN, UserRole.ASESOR],
   [BULK_IMPORT_CLIENTS_LOANS_ROUTE]: [UserRole.ADMIN, UserRole.ASESOR],
   [CREDIT_MANAGEMENT_ROUTE]: [UserRole.ADMIN, UserRole.ASESOR],
+  [SIMULATION_ROUTE]: [UserRole.ADMIN, UserRole.ASESOR],
   [LOAN_REQUEST_DETAIL_ROUTE]: [UserRole.ADMIN, UserRole.ASESOR],
   
   // Rutas solo para CLIENTE

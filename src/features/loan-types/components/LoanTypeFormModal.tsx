@@ -124,7 +124,7 @@ export default function LoanTypeFormModal({
           {/* Header */}
           <div className="flex items-center justify-between p-4 sm:p-5 border-b border-gray-200 dark:border-gray-700">
             <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">
-              {initialData ? 'Editar Tipo de Préstamo' : 'Nuevo Tipo de Préstamo'}
+              {initialData ? 'Editar tipo de préstamo' : 'Nuevo tipo de préstamo'}
             </h3>
             <button
               onClick={onClose}

@@ -195,9 +195,9 @@ const LoanRequestDetailPage = () => {
         <PageBreadcrumb
           showTitle={false}
           items={[
-            { label: "Home", path: "/dashboard/home" },
-            { label: "Gestión de Solicitudes", path: "/gestion-solicitudes" },
-            { label: "Detalle de Solicitud" },
+            { label: "Inicio", path: "/dashboard/inicio" },
+            { label: "Gestión de solicitudes", path: "/gestion-solicitudes" },
+            { label: "Detalle de solicitud" },
           ]}
         />
         <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-6">
@@ -216,7 +216,7 @@ const LoanRequestDetailPage = () => {
             onClick={() => navigate("/gestion-solicitudes")}
             className="mt-4 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
           >
-            Volver a Solicitudes
+            Volver a solicitudes
           </button>
         </div>
       </div>
@@ -229,9 +229,9 @@ const LoanRequestDetailPage = () => {
         <PageBreadcrumb
           showTitle={false}
           items={[
-            { label: "Home", path: "/dashboard/home" },
-            { label: "Gestión de Solicitudes", path: "/gestion-solicitudes" },
-            { label: "Detalle de Solicitud" },
+            { label: "Inicio", path: "/dashboard/inicio" },
+            { label: "Gestión de solicitudes", path: "/gestion-solicitudes" },
+            { label: "Detalle de solicitud" },
           ]}
         />
         <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl p-6">
@@ -242,7 +242,7 @@ const LoanRequestDetailPage = () => {
             onClick={() => navigate("/gestion-solicitudes")}
             className="mt-4 px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded-lg transition-colors"
           >
-            Volver a Solicitudes
+            Volver a solicitudes
           </button>
         </div>
       </div>
@@ -255,15 +255,15 @@ const LoanRequestDetailPage = () => {
       <div className="flex flex-col gap-3 sm:gap-4 mb-4 sm:mb-6">
         <div className="flex-1">
           <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            Detalle de Solicitud Crédito: #{selectedLoanRequest.loanNumber}
+            Detalle de solicitud de crédito: #{selectedLoanRequest.loanNumber}
           </h1>
           <PageBreadcrumb
             showTitle={false}
             items={[
-              { label: "Home", path: "/dashboard/home" },
-              { label: "Gestión de Solicitudes", path: "/gestion-solicitudes" },
+              { label: "Inicio", path: "/dashboard/inicio" },
+              { label: "Gestión de solicitudes", path: "/gestion-solicitudes" },
               {
-                label: `Detalle: ${selectedLoanRequest.loanNumber} (Cliente: ${clientName})`,
+                label: `Detalle de solicitud: ${selectedLoanRequest.loanNumber} (cliente: ${clientName})`,
               },
             ]}
           />
@@ -289,7 +289,7 @@ const LoanRequestDetailPage = () => {
                   isEditingDocuments ? "pi-times" : "pi-pencil"
                 }`}
               ></i>
-              {isEditingDocuments ? "Cancelar Edición" : "Editar Documentos"}
+              {isEditingDocuments ? "Cancelar edición" : "Editar documentos"}
             </button>
           )}
           <button
@@ -342,7 +342,7 @@ const LoanRequestDetailPage = () => {
             </div>
             <div className="flex-1 w-full">
               <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                Corregir y Reenviar Solicitud
+                Corregir y reenviar solicitud
               </h3>
 
               {!isEditingDocuments ? (
@@ -357,7 +357,7 @@ const LoanRequestDetailPage = () => {
                     className="px-5 py-2.5 bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded-lg transition-colors flex items-center gap-2"
                   >
                     <i className="pi pi-pencil"></i>
-                    Comenzar a Editar Documentos
+                    Comenzar a editar documentos
                   </button>
                 </div>
               ) : (
@@ -394,7 +394,7 @@ const LoanRequestDetailPage = () => {
                       ) : (
                         <i className="pi pi-send"></i>
                       )}
-                      Enviar Corrección
+                      Enviar corrección
                     </button>
                     <button
                       onClick={() => {

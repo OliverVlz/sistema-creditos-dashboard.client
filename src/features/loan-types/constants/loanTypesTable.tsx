@@ -97,20 +97,13 @@ export const loanTypeColumns: Column<LoanTypeTableItem>[] = [
 ]
 
 export const getLoanTypeActions = (
-  onEdit: (loanType: LoanTypeTableItem) => void,
-  onDelete: (loanType: LoanTypeTableItem) => void
+  onEdit: (loanType: LoanTypeTableItem) => void
 ): Action<LoanTypeTableItem>[] => [
   {
     icon: 'pi pi-pencil',
     label: 'Editar',
     color: 'blue',
     onClick: onEdit
-  },
-  {
-    icon: 'pi pi-trash',
-    label: 'Eliminar',
-    color: 'red',
-    onClick: onDelete
   }
 ]
 

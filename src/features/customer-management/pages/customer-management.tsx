@@ -7,13 +7,13 @@ const CustomerManagementComponent = () => {
       {/* Header con Título y Breadcrumb */}
       <div className="mb-4 sm:mb-6">
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2 sm:mb-3">
-          Gestión de Clientes
+          Gestión de clientes
         </h1>
         <PageBreadcrumb 
           showTitle={false}
           items={[
             { label: "Home", path: "/dashboard/home" },
-            { label: "Gestión de Clientes" }
+            { label: "Gestión de clientes" }
           ]}
         />
       </div>

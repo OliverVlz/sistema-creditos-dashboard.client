@@ -147,18 +147,6 @@ const NotificationBell = () => {
               </ul>
             )}
           </div>
-
-          {notifications.length > 0 && (
-            <div className="border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/50 rounded-b-lg">
-              <Link
-                to="/notifications"
-                className="block w-full py-2 text-center text-xs font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
-                onClick={() => setIsOpen(false)}
-              >
-                Ver todo
-              </Link>
-            </div>
-          )}
         </div>
       )}
     </div>

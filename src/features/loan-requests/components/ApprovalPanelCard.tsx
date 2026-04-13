@@ -125,7 +125,7 @@ export default function ApprovalPanelCard({
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 sm:p-5 h-full flex flex-col">
       <h2 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4 pb-2 sm:pb-3 border-b border-gray-200 dark:border-gray-700">
-        Panel de Aprobación
+        Panel de aprobación
       </h2>
 
       <div className="flex-1 flex flex-col space-y-3 sm:space-y-4">
@@ -169,7 +169,7 @@ export default function ApprovalPanelCard({
             ) : (
               <i className="pi pi-check text-xs"></i>
             )}
-            {isAlreadyProcessed && loanRequest.status === 'aprobado' ? 'Ya Aprobada' : 'Aprobar'}
+            {isAlreadyProcessed && loanRequest.status === 'aprobado' ? 'Ya aprobada' : 'Aprobar'}
           </button>
           <button
             onClick={handleReject}
@@ -181,7 +181,7 @@ export default function ApprovalPanelCard({
             ) : (
               <i className="pi pi-times text-xs"></i>
             )}
-            {isAlreadyProcessed && loanRequest.status === 'rechazado' ? 'Ya Rechazada' : 'Rechazar'}
+            {isAlreadyProcessed && loanRequest.status === 'rechazado' ? 'Ya rechazada' : 'Rechazar'}
           </button>
         </div>
 
@@ -191,7 +191,7 @@ export default function ApprovalPanelCard({
             Comentarios
           </label>
           <p className="text-[11px] text-gray-400 dark:text-gray-500 mb-2">
-            (Justificación de la decisión)
+            (justificación de la decisión)
           </p>
           <textarea
             value={comments}
@@ -229,7 +229,7 @@ export default function ApprovalPanelCard({
             ) : (
               <i className="pi pi-upload text-xs"></i>
             )}
-            Actualizar Solo Documentos
+            Actualizar solo documentos
           </button>
         )}
       </div>

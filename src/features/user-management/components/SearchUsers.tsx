@@ -26,12 +26,17 @@ export default function SearchUsers({ onFiltersChange }: SearchUsersProps) {
     { label: 'Todos', value: null },
     { label: 'Administrador', value: 'ADMIN' },
     { label: 'Asesor', value: 'ASESOR' },
-    { label: 'Cliente', value: 'CLIENTE' },
   ]
 
   useEffect(() => {
-    dispatch(fetchUsers({ page: 1, limit: 100, searchTerm: filters.searchTerm, role: filters.role ?? undefined }))
-  }, [filters.searchTerm, filters.role, dispatch])
+    dispatch(fetchUsers({
+      page: 1,
+      limit: 100,
+      searchTerm: filters.searchTerm,
+      role: filters.role ?? undefined,
+      status: filters.status ?? undefined,
+    }))
+  }, [filters.searchTerm, filters.role, filters.status, dispatch])
 
   const handleStatusChange = (value: string | number | null | undefined) => {
     updateFilters({ status: value as string | null | undefined })

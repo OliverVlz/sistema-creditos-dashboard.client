@@ -40,12 +40,6 @@ const StatusBadge = ({ status }: { status: string }) => {
           text: 'text-red-700 dark:text-red-400',
           label: 'Rechazado'
         };
-      case 'en_revision':
-        return { 
-          bg: 'bg-blue-100 dark:bg-blue-900/30', 
-          text: 'text-blue-700 dark:text-blue-400',
-          label: 'En Revisión'
-        };
       case 'pendiente':
       default:
         return { 
@@ -68,7 +62,7 @@ const StatusBadge = ({ status }: { status: string }) => {
 export const loanRequestColumns: Column<LoanRequestTableItem>[] = [
   {
     field: 'loanNumber',
-    header: 'Nº Préstamo',
+    header: 'Nº préstamo',
     sortable: true,
     width: '140px',
     render: (row) => (
@@ -148,14 +142,31 @@ export const loanRequestColumns: Column<LoanRequestTableItem>[] = [
   }
 ]
 
-export const getLoanRequestActions = (navigate: NavigateFunction): Action<LoanRequestTableItem>[] => [
-  {
-    icon: 'pi pi-eye',
-    label: 'Ver Detalles',
-    color: 'blue',
-    onClick: (loan) => {
-      navigate(`/gestion-solicitudes/detalle/${loan.id}`)
+export const getLoanRequestActions = (
+  navigate: NavigateFunction,
+  onDelete: (loan: LoanRequestTableItem) => void,
+  isAdmin: boolean
+): Action<LoanRequestTableItem>[] => {
+  const actions: Action<LoanRequestTableItem>[] = [
+    {
+      icon: 'pi pi-eye',
+      label: 'Ver Detalles',
+      color: 'blue',
+      onClick: (loan) => {
+        navigate(`/gestion-solicitudes/detalle/${loan.id}`)
+      }
     }
+  ]
+
+  if (isAdmin) {
+    actions.push({
+      icon: 'pi pi-trash',
+      label: 'Eliminar',
+      color: 'red',
+      onClick: onDelete
+    })
   }
-]
+
+  return actions
+}
 

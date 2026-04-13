@@ -22,16 +22,13 @@ export const LoanCalculator: React.FC = () => {
   const location = useLocation();
   const { isAuthenticated } = useAuth();
 
-  // Obtener estado del cálculo del préstamo desde Redux
   const { loanCalculation, calculatingLoan, loanCalculationError } =
     useAppSelector((state: RootState) => state.creditManagement);
 
-  // Obtener tipos de préstamo desde Redux
   const { loanTypes, loading: loadingLoanTypes } = useAppSelector(
     (state: RootState) => state.loanTypes
   );
 
-  // Obtener el tipo de préstamo "Libranza"
   const loanTypeConfig = useMemo(() => {
     const libranza = loanTypes.find((lt) => lt.name === LOAN_TYPE_NAME);
     if (libranza) {
@@ -43,7 +40,6 @@ export const LoanCalculator: React.FC = () => {
         interestRate: libranza.interestRate,
       };
     }
-    // Valores por defecto mientras carga
     return {
       minAmount: 500000,
       maxAmount: 20000000,
@@ -53,7 +49,6 @@ export const LoanCalculator: React.FC = () => {
     };
   }, [loanTypes]);
 
-  // Generar opciones de plazo dinámicamente
   const loanTermOptions = useMemo(() => {
     const options = [];
     for (let i = loanTypeConfig.minTerm; i <= loanTypeConfig.maxTerm; i++) {
@@ -65,7 +60,6 @@ export const LoanCalculator: React.FC = () => {
     return options;
   }, [loanTypeConfig.minTerm, loanTypeConfig.maxTerm]);
 
-  // State
   const [loanAmount, setLoanAmount] = useState<string>("");
   const [loanTerm, setLoanTerm] = useState<string>("");
   const [showResult, setShowResult] = useState(false);
@@ -75,7 +69,6 @@ export const LoanCalculator: React.FC = () => {
     dispatch(fetchLoanTypes({}));
   }, [dispatch]);
 
-  // Inicializar valores cuando se carga el tipo de préstamo
   useEffect(() => {
     if (loanTypes.length > 0 && !loanAmount) {
       const initialAmount = formatCurrencyInput(
@@ -93,25 +86,15 @@ export const LoanCalculator: React.FC = () => {
         })
       );
     }
-    // Limpiar cálculo previo al montar
     dispatch(clearLoanCalculation());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loanTypes]); // Solo se ejecuta cuando se cargan los tipos
+  }, [dispatch, loanAmount, loanTypeConfig.minAmount, loanTypeConfig.minTerm, loanTypes]);
 
-  // --- HELPERS ---
   const formatCurrencyInput = (value: string) => {
-    // Remover todo excepto números
     const numberOnly = value.replace(/[^0-9]/g, "");
-
-    // Si no hay números, retornar solo el signo de peso
     if (numberOnly === "") {
       return "$";
     }
-
-    // Formatear con puntos como separadores de miles
     const formatted = numberOnly.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-
-    // Agregar el signo de peso al inicio
     return `$${formatted}`;
   };
 
@@ -128,10 +111,8 @@ export const LoanCalculator: React.FC = () => {
     const formattedValue = formatCurrencyInput(val);
     setLoanAmount(formattedValue);
     setShowResult(false);
-    // Limpiar cálculo previo cuando cambia el monto
     dispatch(clearLoanCalculation());
 
-    // Validar monto
     const amountNumber = parseInt(formattedValue.replace(/[^0-9]/g, "")) || 0;
     if (amountNumber > 0) {
       if (amountNumber < loanTypeConfig.minAmount) {
@@ -160,9 +141,7 @@ export const LoanCalculator: React.FC = () => {
   const handleTermChange = (val: string) => {
     setLoanTerm(val);
     setShowResult(false);
-    // Limpiar cálculo previo cuando cambia el plazo
     dispatch(clearLoanCalculation());
-    // Actualizar Redux cuando cambia el plazo
     const amountNumber = parseInt(loanAmount.replace(/[^0-9]/g, "")) || 0;
     if (amountNumber > 0) {
       dispatch(
@@ -174,7 +153,6 @@ export const LoanCalculator: React.FC = () => {
     }
   };
 
-  // Validar si se puede calcular
   const canCalculate = useMemo(() => {
     const amountNumber = parseInt(loanAmount.replace(/[^0-9]/g, "")) || 0;
     const termNumber = parseInt(loanTerm) || 0;
@@ -187,7 +165,6 @@ export const LoanCalculator: React.FC = () => {
     );
   }, [loanAmount, loanTerm, loanTypeConfig, amountError]);
 
-  // Función para calcular el préstamo
   const handleCalculateLoan = async () => {
     const amountNumber = parseInt(loanAmount.replace(/[^0-9]/g, "")) || 0;
     const monthsNumber = parseInt(loanTerm) || 0;
@@ -210,7 +187,6 @@ export const LoanCalculator: React.FC = () => {
     }
   };
 
-  // Loading state
   if (loadingLoanTypes) {
     return (
       <div className="bg-global-11 rounded-xl p-6 md:p-10 shadow-lg border border-global-3/50">
@@ -226,7 +202,6 @@ export const LoanCalculator: React.FC = () => {
 
   return (
     <div className="bg-global-11 rounded-xl p-6 md:p-10 shadow-lg border border-global-3/50">
-      {/* --- INPUTS SECTION --- */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         <div className="flex flex-col flex-1">
           <label className="block text-base font-semibold text-global-9 mb-3 ml-1">
@@ -268,7 +243,6 @@ export const LoanCalculator: React.FC = () => {
         </div>
       </div>
 
-      {/* --- CALCULATE BUTTON --- */}
       {!showResult && (
         <div className="mb-6 animate-fade-in">
           <Button
@@ -284,7 +258,6 @@ export const LoanCalculator: React.FC = () => {
         </div>
       )}
 
-      {/* --- ERROR MESSAGE --- */}
       {loanCalculationError && (
         <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
           <p className="text-sm text-red-800">
@@ -293,7 +266,6 @@ export const LoanCalculator: React.FC = () => {
         </div>
       )}
 
-      {/* --- RESULTS SECTION --- */}
       {showResult && loanCalculation && (
         <div className="animate-fade-in-up">
           <div className="w-full h-px bg-global-3 mb-6"></div>
@@ -303,7 +275,6 @@ export const LoanCalculator: React.FC = () => {
             Detalles de tu crédito
           </h3>
 
-          {/* Monthly Payment Card */}
           <div className="bg-blue-50/50 rounded-xl p-4 mb-6 border border-blue-100 flex justify-between items-center">
             <div>
               <p className="text-sm text-blue-800 font-medium">
@@ -315,7 +286,6 @@ export const LoanCalculator: React.FC = () => {
             </div>
           </div>
 
-          {/* Breakdown Table */}
           <div className="space-y-3 mb-8">
             <div className="flex justify-between items-center py-2 border-b border-gray-100">
               <span className="text-sm text-global-7 font-medium">
@@ -353,7 +323,6 @@ export const LoanCalculator: React.FC = () => {
               </span>
             </div>
 
-            {/* Total Payable Row */}
             <div className="flex justify-between items-center pt-4 mt-2">
               <span className="text-base font-bold text-global-9">
                 Total a pagar aproximado
@@ -384,10 +353,6 @@ export const LoanCalculator: React.FC = () => {
               Continuar con la solicitud
             </Button>
           </div>
-          {/* <p className="mt-4 text-xs text-center text-global-6 leading-relaxed">
-            * Los valores presentados son una simulación y pueden variar según
-            el análisis de crédito definitivo.
-          </p> */}
         </div>
       )}
     </div>

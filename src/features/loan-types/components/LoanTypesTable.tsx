@@ -5,17 +5,16 @@ import { LoanTypeTableItem } from '../models/loanTypesModel'
 
 interface LoanTypesTableProps {
   onEdit: (loanType: LoanTypeTableItem) => void
-  onDelete: (loanType: LoanTypeTableItem) => void
 }
 
-export default function LoanTypesTable({ onEdit, onDelete }: LoanTypesTableProps) {
+export default function LoanTypesTable({ onEdit }: LoanTypesTableProps) {
   const { loanTypes, loading } = useAppSelector((state) => state.loanTypes)  
 
   return (
     <DataTable 
       data={loanTypes} 
       columns={loanTypeColumns}
-      actions={getLoanTypeActions(onEdit, onDelete)}
+      actions={getLoanTypeActions(onEdit)}
       itemsPerPage={10}
       defaultSortField="name"
       defaultSortOrder="asc"

@@ -33,11 +33,11 @@ const EditText: React.FC<EditTextProps> = ({
     }
   };
 
-  const baseClasses = 'w-full border border-[#7b7c7e] rounded font-plus-jakarta text-[13px] sm:text-[14px] md:text-[15px] font-normal leading-[16px] sm:leading-[18px] md:leading-[19px] text-global-10 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent';
+  const baseClasses = 'w-full border border-gray-300 dark:border-gray-600 rounded-lg font-plus-jakarta text-[13px] sm:text-[14px] md:text-[15px] font-normal leading-[16px] sm:leading-[18px] md:leading-[19px] text-global-10 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500';
   
   const inputClasses = `
     ${baseClasses}
-    ${disabled ? 'bg-gray-100 cursor-not-allowed' : 'bg-white'}
+    ${disabled ? 'bg-gray-100 dark:bg-gray-700 cursor-not-allowed opacity-50' : 'bg-white dark:bg-gray-800'}
     ${className}
   `.trim().replace(/\s+/g, ' ');
 

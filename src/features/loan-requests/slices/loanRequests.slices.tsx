@@ -38,6 +38,12 @@ export const loanRequestsSlice = createSlice({
         setLoanRequests: (state, action) => {
             state.loanRequests = action.payload
         },
+        removeLoanRequestById: (state, action) => {
+            state.loanRequests = state.loanRequests.filter((loan) => loan.id !== action.payload)
+            if (state.pagination && state.pagination.total > 0) {
+                state.pagination.total -= 1
+            }
+        },
         clearLoanRequests: (state) => {
             state.loanRequests = []
             state.error = null
@@ -51,6 +57,6 @@ export const loanRequestsSlice = createSlice({
     }
 })
 
-export const { setLoanRequests, clearLoanRequests } = loanRequestsSlice.actions
+export const { setLoanRequests, removeLoanRequestById, clearLoanRequests } = loanRequestsSlice.actions
 export default loanRequestsSlice.reducer
 

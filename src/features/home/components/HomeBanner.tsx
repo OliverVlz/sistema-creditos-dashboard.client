@@ -1,16 +1,13 @@
 import bannerImage from '../utils/Home.jpg';
 
-/**
- * Banner de inicio
- * Solo muestra la imagen, sin textos ni overlays por encima
- */
 export default function HomeBanner() {
   return (
-    <img
-      src={bannerImage}
-      alt="Banner Presta Ya"
-      className="w-full h-auto max-h-[250px] xs:max-h-[300px] sm:max-h-[400px] md:max-h-[500px] lg:max-h-[calc(100vh-180px)] object-cover rounded-lg sm:rounded-xl lg:rounded-2xl shadow-lg sm:shadow-xl"
-    />
+    <div className="relative h-full min-h-[220px] w-full overflow-hidden rounded-lg shadow-lg sm:rounded-xl sm:shadow-xl lg:rounded-2xl">
+      <img
+        src={bannerImage}
+        alt="Inversiones Murillo Martínez"
+        className="absolute inset-0 h-full w-full object-cover"
+      />
+    </div>
   );
 }
-
