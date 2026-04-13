@@ -3,8 +3,7 @@ import { useNotifications } from "../../context/NotificationsContext";
 import { Link } from "react-router-dom";
 
 const NotificationBell = () => {
-  const { notifications, unreadCount, markAsRead, isConnected } =
-    useNotifications();
+  const { notifications, unreadCount, markAsRead } = useNotifications();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
