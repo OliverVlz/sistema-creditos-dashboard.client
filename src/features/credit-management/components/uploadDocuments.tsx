@@ -5,6 +5,7 @@ import { RootState, useAppSelector } from '@/store';
 import { SingleDocumentUploadProps } from '../models/DocumentUploadModel';
 import { addDocument, nextStep, previousStep, removeDocument } from '../slices/creditManagement';
 import { UploadedDocument } from '../models/creditRequestModel';
+import { getUploadedFile, removeUploadedFile, setUploadedFile } from '../utils/uploadedFilesRegistry';
 
 // --- ICONOS ---
 const PdfIcon = () => (
@@ -133,12 +134,24 @@ export const UploadDocumentsComponent: React.FC = () => {
     const constanciaDoc = uploadedDocuments.find(doc => doc.type === 'constancia');
 
     // Solo actualizar si no hay archivos locales ya cargados
-    if (!cedulaFile && cedulaDoc?.file) setCedulaFile(cedulaDoc.file);
-    if (!extraFile1) {
-      if (nominaDoc?.file) setExtraFile1(nominaDoc.file);
-      if (mesadaDoc?.file) setExtraFile1(mesadaDoc.file);
+    if (!cedulaFile && cedulaDoc) {
+      const file = getUploadedFile(cedulaDoc.id)
+      if (file) setCedulaFile(file)
     }
-    if (!extraFile2 && constanciaDoc?.file) setExtraFile2(constanciaDoc.file);
+    if (!extraFile1) {
+      if (nominaDoc) {
+        const file = getUploadedFile(nominaDoc.id)
+        if (file) setExtraFile1(file)
+      }
+      if (mesadaDoc) {
+        const file = getUploadedFile(mesadaDoc.id)
+        if (file) setExtraFile1(file)
+      }
+    }
+    if (!extraFile2 && constanciaDoc) {
+      const file = getUploadedFile(constanciaDoc.id)
+      if (file) setExtraFile2(file)
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Solo al montar
 
@@ -147,10 +160,10 @@ export const UploadDocumentsComponent: React.FC = () => {
     const document: UploadedDocument = {
       id: `${type}-${Date.now()}`,
       name: file.name,
-      file: file,
       type: type,
-      uploadedAt: new Date(),
+      uploadedAt: new Date().toISOString(),
     };
+    setUploadedFile(document.id, file);
     dispatch(addDocument(document));
   };
 
@@ -158,6 +171,7 @@ export const UploadDocumentsComponent: React.FC = () => {
   const removeDocumentFromRedux = (type: UploadedDocument['type']) => {
     const docToRemove = uploadedDocuments.find(doc => doc.type === type);
     if (docToRemove) {
+      removeUploadedFile(docToRemove.id);
       dispatch(removeDocument(docToRemove.id));
     }
   };

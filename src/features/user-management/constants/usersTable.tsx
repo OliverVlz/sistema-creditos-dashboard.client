@@ -76,6 +76,8 @@ export const userColumns: Column<User>[] = [
 export const getUserActions = (
   navigate: NavigateFunction,
   onToggleStatus: (user: User) => void,
+  onSendPasswordRecovery: (user: User) => void,
+  canManageUsers: boolean,
   isAdmin: boolean
 ): Action<User>[] => {
   const actions: Action<User>[] = []
@@ -89,6 +91,19 @@ export const getUserActions = (
         navigate(`/gestion-de-usuarios/editar-usuario/${user.id}`);
       },
     })
+  }
+
+  if (canManageUsers) {
+    actions.push({
+      icon: 'pi pi-envelope',
+      label: 'Enviar recuperación',
+      color: 'blue',
+      onClick: onSendPasswordRecovery,
+      show: (targetUser) => Boolean(targetUser.email),
+    })
+  }
+
+  if (isAdmin) {
     actions.push({
       icon: 'pi pi-times-circle',
       label: 'Desactivar',

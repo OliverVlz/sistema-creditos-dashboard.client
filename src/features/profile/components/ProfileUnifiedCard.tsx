@@ -142,6 +142,7 @@ export default function ProfileUnifiedCard({ profile }: ProfileUnifiedCardProps)
   };
 
   const organizationName = profile.clientInfo?.organization?.name || 'Sin organización';
+  const isClientProfile = Boolean(profile.clientInfo);
 
   return (
     <>
@@ -163,15 +164,21 @@ export default function ProfileUnifiedCard({ profile }: ProfileUnifiedCardProps)
                 <h4 className="mb-1 text-lg font-semibold text-gray-800 capitalize dark:text-white/90">
                   {profile.firstName} {profile.lastName}
                 </h4>
-                <div className="flex flex-wrap items-center gap-2">
+                {isClientProfile ? (
+                  <div className="flex flex-wrap items-center gap-2">
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      {getEmploymentStatusLabel(profile.clientInfo?.employmentStatus || '')}
+                    </p>
+                    <span className="text-gray-400">•</span>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      {organizationName}
+                    </p>
+                  </div>
+                ) : (
                   <p className="text-sm text-gray-500 dark:text-gray-400">
-                    {getEmploymentStatusLabel(profile.clientInfo?.employmentStatus || '')}
+                    Perfil administrativo
                   </p>
-                  <span className="text-gray-400">•</span>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
-                    {organizationName}
-                  </p>
-                </div>
+                )}
               </div>
             </div>
             
@@ -266,50 +273,51 @@ export default function ProfileUnifiedCard({ profile }: ProfileUnifiedCardProps)
               </p>
             </div>
 
-            <div>
-              <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-                Fecha de Nacimiento
-              </p>
-              <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                {formatDate(profile.clientInfo?.birthDate || '')}
-              </p>
-            </div>
+            {isClientProfile ? (
+              <>
+                <div>
+                  <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
+                    Fecha de Nacimiento
+                  </p>
+                  <p className="text-sm font-medium text-gray-800 dark:text-white/90">
+                    {formatDate(profile.clientInfo?.birthDate || '')}
+                  </p>
+                </div>
 
-            <div>
-              <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-                Estado Laboral
-              </p>
-              <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                {getEmploymentStatusLabel(profile.clientInfo?.employmentStatus || '')}
-              </p>
-            </div>
+                <div>
+                  <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
+                    Estado Laboral
+                  </p>
+                  <p className="text-sm font-medium text-gray-800 dark:text-white/90">
+                    {getEmploymentStatusLabel(profile.clientInfo?.employmentStatus || '')}
+                  </p>
+                </div>
 
-            <div>
-              <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-                Organización
-              </p>
-              <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                {profile.clientInfo?.organization?.name || 'No asignada'}
-              </p>
-            </div>
+                <div>
+                  <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
+                    Organización
+                  </p>
+                  <p className="text-sm font-medium text-gray-800 dark:text-white/90">
+                    {profile.clientInfo?.organization?.name || 'No asignada'}
+                  </p>
+                </div>
+              </>
+            ) : null}
           </div>
         </div>
 
-        {/* Dirección */}
-        <div>
-          {/* <h4 className="text-base font-semibold text-gray-800 dark:text-white/90 mb-4">
-            Dirección
-          </h4> */}
-
+        {isClientProfile ? (
           <div>
-            <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-              Dirección de Residencia
-            </p>
-            <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-              {profile.clientInfo?.address || 'No especificada'}
-            </p>
+            <div>
+              <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
+                Dirección de Residencia
+              </p>
+              <p className="text-sm font-medium text-gray-800 dark:text-white/90">
+                {profile.clientInfo?.address || 'No especificada'}
+              </p>
+            </div>
           </div>
-        </div>
+        ) : null}
       </div>
 
       {/* Modal único para editar toda la información */}
@@ -320,7 +328,9 @@ export default function ProfileUnifiedCard({ profile }: ProfileUnifiedCardProps)
               Editar perfil
             </h4>
             <p className="mb-6 text-sm text-gray-500 dark:text-gray-400 lg:mb-7">
-              Actualiza tus datos personales y dirección.
+              {isClientProfile
+                ? 'Actualiza tus datos personales y dirección.'
+                : 'Actualiza tus datos personales.'}
             </p>
           </div>
           <form className="flex flex-col" onSubmit={(e) => e.preventDefault()}>
@@ -356,37 +366,40 @@ export default function ProfileUnifiedCard({ profile }: ProfileUnifiedCardProps)
                   />
                 </div>
 
-                <div className="col-span-2 lg:col-span-1">
-                  <Label>Fecha de Nacimiento</Label>
-                  <Input
-                    type="date"
-                    name="birthDate"
-                    value={formData.birthDate || ''}
-                    onChange={handleChange}
-                  />
-                </div>
+                {isClientProfile ? (
+                  <>
+                    <div className="col-span-2 lg:col-span-1">
+                      <Label>Fecha de Nacimiento</Label>
+                      <Input
+                        type="date"
+                        name="birthDate"
+                        value={formData.birthDate || ''}
+                        onChange={handleChange}
+                      />
+                    </div>
 
-                <div className="col-span-2 lg:col-span-1">
-                  <Label>Estado Laboral</Label>
-                  <Dropdown
-                    placeholder="Seleccionar estado laboral"
-                    options={employmentStatusOptions}
-                    value={formData.employmentStatus || undefined}
-                    onChange={handleSelectChange('employmentStatus')}
-                    disabled={updateLoading}
-                  />
-                </div>
+                    <div className="col-span-2 lg:col-span-1">
+                      <Label>Estado Laboral</Label>
+                      <Dropdown
+                        placeholder="Seleccionar estado laboral"
+                        options={employmentStatusOptions}
+                        value={formData.employmentStatus || undefined}
+                        onChange={handleSelectChange('employmentStatus')}
+                        disabled={updateLoading}
+                      />
+                    </div>
 
-
-                <div className="col-span-2">
-                  <Label>Dirección</Label>
-                  <Input
-                    type="text"
-                    name="address"
-                    value={formData.address || ''}
-                    onChange={handleChange}
-                  />
-                </div>
+                    <div className="col-span-2">
+                      <Label>Dirección</Label>
+                      <Input
+                        type="text"
+                        name="address"
+                        value={formData.address || ''}
+                        onChange={handleChange}
+                      />
+                    </div>
+                  </>
+                ) : null}
               </div>
             </div>
             <div className="flex items-center gap-3 px-2 mt-6 lg:justify-end">

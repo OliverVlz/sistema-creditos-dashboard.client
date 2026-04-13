@@ -8,8 +8,7 @@ export interface CreditRequest {
 export interface UploadedDocument {
   id: string;
   name: string;
-  file: File;
   type: 'cedula' | 'nomina' | 'mesada' | 'constancia';
-  uploadedAt: Date;
+  uploadedAt: string;
 }
 

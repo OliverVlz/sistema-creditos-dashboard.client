@@ -34,20 +34,27 @@ export const sidebarMenuItems: NavItem[] = [
   },
   {
     icon: <TaskIcon />,
-    name: 'Gestión',
+    name: 'Gestión de solicitudes',
+    path: '/gestion-solicitudes',
+    allowedRoles: [UserRole.ADMIN, UserRole.ASESOR, UserRole.CLIENTE],
+  },
+  {
+    icon: <DollarLineIcon />,
+    name: 'Calculadora',
+    path: '/dashboard/simulation',
+    allowedRoles: [UserRole.ADMIN, UserRole.ASESOR],
+  },
+  {
+    icon: <UserCircleIcon />,
+    name: 'Usuarios',
     subItems: [
-      {
-        name: 'Gestión de solicitudes',
-        path: '/gestion-solicitudes',
-        allowedRoles: [UserRole.ADMIN, UserRole.ASESOR, UserRole.CLIENTE],
-      },
       {
         name: 'Gestión de clientes',
         path: '/gestion-de-clientes',
         allowedRoles: [UserRole.ADMIN, UserRole.ASESOR],
       },
       {
-        name: 'Gestión de usuarios',
+        name: 'Gestión de administrativos',
         path: '/dashboard/gestion-de-usuarios',
         allowedRoles: [UserRole.ADMIN],
       },
@@ -57,11 +64,6 @@ export const sidebarMenuItems: NavItem[] = [
     icon: <DollarLineIcon />,
     name: 'Créditos',
     subItems: [
-      {
-        name: 'Calculadora',
-        path: '/dashboard/simulation',
-        allowedRoles: [UserRole.ADMIN, UserRole.ASESOR],
-      },
       {
         name: 'Solicitar crédito',
         path: '/dashboard/gestion-de-creditos',
@@ -88,13 +90,12 @@ export const sidebarMenuItems: NavItem[] = [
         path: '/gestion-de-clientes/carga-masiva',
         allowedRoles: [UserRole.ADMIN, UserRole.ASESOR],
       },
+      {
+        name: 'Mi perfil',
+        path: '/dashboard/mi-perfil',
+        allowedRoles: [UserRole.ADMIN, UserRole.ASESOR, UserRole.CLIENTE],
+      },
     ],
-  },
-  {
-    icon: <UserCircleIcon />,
-    name: 'Mi perfil',
-    path: '/dashboard/mi-perfil',
-    allowedRoles: [UserRole.CLIENTE],
   },
 ];
 
@@ -150,6 +151,27 @@ export const filterMenuItemsByRole = (
  * Se usa dentro del AppSidebar
  */
 export const getFilteredMenuItems = (userRole: UserRole | null): NavItem[] => {
-  return filterMenuItemsByRole(sidebarMenuItems, userRole);
+  const items = filterMenuItemsByRole(sidebarMenuItems, userRole);
+
+  if (userRole !== UserRole.CLIENTE) {
+    return items;
+  }
+
+  return items.flatMap((item) => {
+    if (item.path) {
+      return [item];
+    }
+
+    if (item.subItems) {
+      return item.subItems.map((subItem) => ({
+        name: subItem.name,
+        path: subItem.path,
+        icon: item.icon,
+        allowedRoles: subItem.allowedRoles,
+      }));
+    }
+
+    return [];
+  });
 };
 

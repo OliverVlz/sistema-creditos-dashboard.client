@@ -12,6 +12,7 @@ import { useAuth } from "../../../hooks/useAuth";
 import Swal from "sweetalert2";
 import { deleteLoanRequest } from "../slices/operations/deleteLoanRequest.operation";
 import { removeLoanRequestById } from "../slices/loanRequests.slices";
+import { sendPreapprovalReminder } from "../slices/operations/sendPreapprovalReminder.operation";
 
 export default function LoanRequestsTable() {
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ export default function LoanRequestsTable() {
   );
   const { socket } = useNotifications();
   const isAdmin = user?.role === "ADMIN";
+  const canManage = user?.role === "ADMIN" || user?.role === "ASESOR";
 
   const handleDeleteLoan = async (loanId: string) => {
     const result = await Swal.fire({
@@ -55,6 +57,37 @@ export default function LoanRequestsTable() {
     }
   };
 
+  const handleSendReminder = async (loanId: string) => {
+    const result = await Swal.fire({
+      title: "¿Enviar recordatorio?",
+      text: "Se enviará un correo de recordatorio al cliente preaprobado.",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Sí, enviar",
+      cancelButtonText: "Cancelar",
+      confirmButtonColor: "#f59e0b",
+    });
+
+    if (!result.isConfirmed) {
+      return;
+    }
+
+    try {
+      await dispatch(sendPreapprovalReminder(loanId)).unwrap();
+      await Swal.fire({
+        title: "Recordatorio enviado",
+        icon: "success",
+        confirmButtonColor: "#FF8546",
+      });
+    } catch {
+      await Swal.fire({
+        title: "No se pudo enviar el recordatorio",
+        icon: "error",
+        confirmButtonColor: "#ef4444",
+      });
+    }
+  };
+
   // Escuchar notificaciones de WebSocket para refrescar la tabla
   useEffect(() => {
     if (!socket) return;
@@ -69,6 +102,7 @@ export default function LoanRequestsTable() {
     // Escuchar todos los eventos de préstamos
     socket.on("loan:created", handleLoanNotification);
     socket.on("loan:approved", handleLoanNotification);
+    socket.on("loan:preapproved", handleLoanNotification);
     socket.on("loan:rejected", handleLoanNotification);
     socket.on("loan:updated", handleLoanNotification);
     socket.on("loan:modified_by_client", handleLoanNotification);
@@ -76,6 +110,7 @@ export default function LoanRequestsTable() {
     return () => {
       socket.off("loan:created", handleLoanNotification);
       socket.off("loan:approved", handleLoanNotification);
+      socket.off("loan:preapproved", handleLoanNotification);
       socket.off("loan:rejected", handleLoanNotification);
       socket.off("loan:updated", handleLoanNotification);
       socket.off("loan:modified_by_client", handleLoanNotification);
@@ -86,7 +121,13 @@ export default function LoanRequestsTable() {
     <DataTable
       data={loanRequests}
       columns={loanRequestColumns}
-      actions={getLoanRequestActions(navigate, (loan) => handleDeleteLoan(loan.id), isAdmin)}
+      actions={getLoanRequestActions(
+        navigate,
+        (loan) => handleDeleteLoan(loan.id),
+        (loan) => handleSendReminder(loan.id),
+        canManage,
+        isAdmin
+      )}
       itemsPerPage={10}
       defaultSortField="loanNumber"
       defaultSortOrder="desc"

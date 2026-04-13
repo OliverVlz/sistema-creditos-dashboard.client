@@ -1,7 +1,10 @@
 import { LoanRequestDetail } from '../models/loanRequestsModel'
+import { appConfig } from '../../../config/app.config'
 
 interface StatusMessageBannerProps {
   loanRequest: LoanRequestDetail
+  hidePreapprovedBanner?: boolean
+  hideRejectedBanner?: boolean
 }
 
 // Iconos SVG
@@ -42,13 +45,21 @@ const DollarIcon = () => (
   </svg>
 )
 
+const MailIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+    <path d="M3 7l9 6 9-6"></path>
+  </svg>
+)
+
 const getStatusConfig = (status: string, rejectionReason: string | null) => {
+  const rejectionDetail = rejectionReason?.trim() || 'No se registró un motivo de rechazo.'
   switch (status) {
     case 'rechazado':
       return {
         icon: <XCircleIcon />,
         title: 'Solicitud Rechazada',
-        message: rejectionReason || 'Tu solicitud ha sido rechazada. Por favor, revisa los documentos y vuelve a intentarlo.',
+        message: `Motivo de rechazo: ${rejectionDetail}`,
         bgColor: 'bg-red-50 dark:bg-red-900/20',
         borderColor: 'border-red-200 dark:border-red-800',
         iconColor: 'text-red-600 dark:text-red-400',
@@ -69,6 +80,19 @@ const getStatusConfig = (status: string, rejectionReason: string | null) => {
         messageColor: 'text-green-700 dark:text-green-400',
         showAction: false,
         actionText: '',
+      }
+    case 'preaprobado':
+      return {
+        icon: <MailIcon />,
+        title: 'Solicitud preaprobada',
+        message: 'Tu solicitud fue preaprobada. Revisa el correo y completa los pasos finales para aprobarla.',
+        bgColor: 'bg-blue-50 dark:bg-blue-900/20',
+        borderColor: 'border-blue-200 dark:border-blue-800',
+        iconColor: 'text-blue-600 dark:text-blue-400',
+        titleColor: 'text-blue-800 dark:text-blue-300',
+        messageColor: 'text-blue-700 dark:text-blue-400',
+        showAction: true,
+        actionText: 'Debes enviar el formato firmado físicamente para completar el proceso.',
       }
     case 'pendiente':
       return {
@@ -112,12 +136,21 @@ const getStatusConfig = (status: string, rejectionReason: string | null) => {
   }
 }
 
-export default function StatusMessageBanner({ loanRequest }: StatusMessageBannerProps) {
+export default function StatusMessageBanner({
+  loanRequest,
+  hidePreapprovedBanner = false,
+  hideRejectedBanner = false,
+}: StatusMessageBannerProps) {
   const config = getStatusConfig(loanRequest.status, loanRequest.rejectionReason)
+  const showPreapprovalFile =
+    loanRequest.status === 'preaprobado' &&
+    !hidePreapprovedBanner &&
+    Boolean(appConfig.loanContractTemplateUrl)
 
   // Solo mostrar el banner si hay un mensaje de rechazo o si el status es aprobado/desembolsado
   const shouldShowBanner = 
-    loanRequest.status === 'rechazado' || 
+    (loanRequest.status === 'rechazado' && !hideRejectedBanner) || 
+    (loanRequest.status === 'preaprobado' && !hidePreapprovedBanner) || 
     loanRequest.status === 'aprobado' || 
     loanRequest.status === 'desembolsado'
 
@@ -135,22 +168,67 @@ export default function StatusMessageBanner({ loanRequest }: StatusMessageBanner
 
         {/* Contenido */}
         <div className="flex-1 min-w-0">
-          <h3 className={`text-lg font-semibold ${config.titleColor} mb-1`}>
-            {config.title}
-          </h3>
-          <p className={`text-sm ${config.messageColor} leading-relaxed`}>
-            {config.message}
-          </p>
-          {config.showAction && config.actionText && (
-            <p className={`text-xs ${config.messageColor} mt-2 font-medium opacity-80`}>
-              <i className="pi pi-info-circle mr-1"></i>
-              {config.actionText}
-            </p>
+          {showPreapprovalFile ? (
+            <div className="flex flex-col gap-3 md:flex-row md:items-stretch md:justify-between">
+              <div className="min-w-0 flex-1">
+                <h3 className={`text-lg font-semibold ${config.titleColor} mb-1`}>
+                  {config.title}
+                </h3>
+                <p className={`text-sm ${config.messageColor} leading-relaxed`}>
+                  {config.message}
+                </p>
+                {config.showAction && config.actionText && (
+                  <p className={`text-xs ${config.messageColor} mt-2 font-medium opacity-80`}>
+                    <i className="pi pi-info-circle mr-1"></i>
+                    {config.actionText}
+                  </p>
+                )}
+              </div>
+              <div className="md:w-[360px] shrink-0">
+                <a
+                  href={appConfig.loanContractTemplateUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="h-full min-h-[112px] w-full block rounded-lg border border-blue-300 dark:border-blue-700 bg-white/70 dark:bg-blue-950/30 p-3 hover:bg-white dark:hover:bg-blue-900/40 transition-colors"
+                >
+                  <div className="flex items-start gap-3">
+                    <i className="pi pi-file-pdf text-red-600 text-xl mt-0.5"></i>
+                    <div className="min-w-0">
+                      <p className="text-sm font-semibold text-blue-800 dark:text-blue-200">
+                        Formato para firma
+                      </p>
+                      <p className="text-xs text-blue-700 dark:text-blue-300 mt-1">
+                        Descarga el PDF, fírmalo y envíalo en físico.
+                      </p>
+                      <span className="inline-flex items-center gap-1 text-xs font-semibold text-blue-700 dark:text-blue-200 mt-2">
+                        <i className="pi pi-download"></i>
+                        Descargar PDF
+                      </span>
+                    </div>
+                  </div>
+                </a>
+              </div>
+            </div>
+          ) : (
+            <>
+              <h3 className={`text-lg font-semibold ${config.titleColor} mb-1`}>
+                {config.title}
+              </h3>
+              <p className={`text-sm ${config.messageColor} leading-relaxed`}>
+                {config.message}
+              </p>
+              {config.showAction && config.actionText && (
+                <p className={`text-xs ${config.messageColor} mt-2 font-medium opacity-80`}>
+                  <i className="pi pi-info-circle mr-1"></i>
+                  {config.actionText}
+                </p>
+              )}
+            </>
           )}
         </div>
 
         {/* Fecha de gestión si existe */}
-        {loanRequest.managedAt && (
+        {loanRequest.managedAt && !showPreapprovalFile && (
           <div className="shrink-0 text-right">
             <p className={`text-xs ${config.messageColor} opacity-70`}>
               Gestionado el

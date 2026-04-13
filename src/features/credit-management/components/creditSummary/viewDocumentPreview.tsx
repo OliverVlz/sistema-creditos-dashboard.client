@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { UploadedDocument } from '../../models/creditRequestModel';
+import { getUploadedFile } from '../../utils/uploadedFilesRegistry';
 
 // --- ICONOS ---
 const CheckCircleIcon = () => (
@@ -33,15 +34,16 @@ const DocumentCardCompact = ({ doc }: { doc: UploadedDocument }) => {
 
   useEffect(() => {
     let url = '#';
-    if (doc.file instanceof File) {
-      url = URL.createObjectURL(doc.file);
+    const file = getUploadedFile(doc.id);
+    if (file instanceof File) {
+      url = URL.createObjectURL(file);
       setFileUrl(url);
     }
 
     return () => {
-      if (doc.file instanceof File) URL.revokeObjectURL(url);
+      if (url !== '#') URL.revokeObjectURL(url);
     };
-  }, [doc]);
+  }, [doc.id]);
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();

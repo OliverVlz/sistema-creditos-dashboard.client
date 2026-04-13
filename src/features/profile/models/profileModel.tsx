@@ -33,7 +33,7 @@ export interface ProfileData {
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
-  clientInfo: ClientInfo;
+  clientInfo?: ClientInfo;
 }
 
 export interface ProfileUpdateData {

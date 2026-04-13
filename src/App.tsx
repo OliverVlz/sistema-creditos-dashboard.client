@@ -86,7 +86,9 @@ export default function App() {
           <Route
             path="/dashboard/mi-perfil"
             element={
-              <RoleProtectedRoute allowedRoles={[UserRole.CLIENTE]}>
+              <RoleProtectedRoute
+                allowedRoles={[UserRole.ADMIN, UserRole.ASESOR, UserRole.CLIENTE]}
+              >
                 <ProfilePage />
               </RoleProtectedRoute>
             }

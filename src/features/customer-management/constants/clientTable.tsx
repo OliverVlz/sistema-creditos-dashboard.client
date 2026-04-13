@@ -83,17 +83,32 @@ export const clientColumns: Column<Client>[] = [
     navigate: NavigateFunction,
     onToggleStatus: (client: Client) => void,
     onDelete: (client: Client) => void,
+  onSendPasswordRecovery: (client: Client) => void,
+  canManageClients: boolean,
     isAdmin: boolean
   ): Action<Client>[] => {
-    const actions: Action<Client>[] = []
+  const actions: Action<Client>[] = []
 
-    if (isAdmin) {
+  if (isAdmin) {
+    actions.push({
+      icon: 'pi pi-pencil',
+      label: 'Editar',
+      color: 'green',
+      onClick: (client) => navigate(`/gestion-de-clientes/editar-cliente/${client.id}`),
+    })
+  }
+
+  if (canManageClients) {
       actions.push({
-        icon: 'pi pi-pencil',
-        label: 'Editar',
-        color: 'green',
-        onClick: (client) => navigate(`/gestion-de-clientes/editar-cliente/${client.id}`),
+      icon: 'pi pi-envelope',
+      label: 'Enviar recuperación',
+      color: 'blue',
+      onClick: onSendPasswordRecovery,
+      show: (client) => Boolean(client.email),
       })
+  }
+
+  if (isAdmin) {
       actions.push({
         icon: 'pi pi-times-circle',
         label: 'Desactivar',

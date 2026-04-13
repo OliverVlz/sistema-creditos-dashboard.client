@@ -5,11 +5,16 @@ import {
 } from '@reduxjs/toolkit'
 import { mainCustomAxios } from "../../../../config/axios.config"
 import { ProfileData, ProfileState } from '../../models/profileModel'
+import { getUser } from '../../../../core/services/auth.service'
 
 export const fetchMyProfile = createAsyncThunk(
   'profile/fetchMyProfile',
   async () => {
-    const response = await mainCustomAxios.get('/clients/me/profile')
+    const user = getUser()
+    const role = user?.role?.toUpperCase()
+    const endpoint =
+      role === 'CLIENTE' ? '/clients/me/profile' : '/users/me'
+    const response = await mainCustomAxios.get(endpoint)
     return response.data as ProfileData
   }
 )

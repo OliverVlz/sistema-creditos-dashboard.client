@@ -13,7 +13,7 @@ import { LoanRequestDetail } from '../../models/loanRequestsModel'
 // ============================================
 export interface ManageLoanPayload {
     loanId: string
-    status: 'pendiente' | 'aprobado' | 'rechazado' | 'desembolsado'
+    status: 'pendiente' | 'preaprobado' | 'aprobado' | 'rechazado' | 'desembolsado'
     rejectionReason?: string
     managerId?: string
     // Para documentos nuevos

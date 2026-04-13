@@ -5,11 +5,23 @@ import {
 } from '@reduxjs/toolkit'
 import { mainCustomAxios } from "../../../../config/axios.config"
 import { ProfileData, ProfileState, ProfileUpdateData } from '../../models/profileModel'
+import { getUser } from '../../../../core/services/auth.service'
 
 export const updateMyProfile = createAsyncThunk(
   'profile/updateMyProfile',
   async (data: ProfileUpdateData) => {
-    const response = await mainCustomAxios.patch('/clients/me/profile', data)
+    const user = getUser()
+    const role = user?.role?.toUpperCase()
+    const isClient = role === 'CLIENTE'
+    const endpoint = isClient ? '/clients/me/profile' : '/users/me/profile'
+    const payload = isClient
+      ? data
+      : {
+          firstName: data.firstName,
+          lastName: data.lastName,
+          phoneNumber: data.phoneNumber,
+        }
+    const response = await mainCustomAxios.patch(endpoint, payload)
     return response.data as ProfileData
   }
 )

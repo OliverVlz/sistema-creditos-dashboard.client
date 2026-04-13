@@ -10,7 +10,7 @@ export interface LoanRequest {
   monthlyPayment: string;
   totalInterest: string;
   totalPayable: string;
-  status: 'pendiente' | 'aprobado' | 'rechazado' | 'desembolsado';
+  status: 'pendiente' | 'preaprobado' | 'aprobado' | 'rechazado' | 'desembolsado';
   rejectionReason: string | null;
   manager: string | null;
   managedAt: string | null;
@@ -100,7 +100,7 @@ export interface LoanRequestDetail {
   monthlyPayment: string;
   totalInterest: string;
   totalPayable: string;
-  status: 'pendiente' | 'aprobado' | 'rechazado' | 'desembolsado';
+  status: 'pendiente' | 'preaprobado' | 'aprobado' | 'rechazado' | 'desembolsado';
   rejectionReason: string | null;
   manager: string | null;
   managedAt: string | null;

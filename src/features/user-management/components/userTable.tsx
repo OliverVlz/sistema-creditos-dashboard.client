@@ -11,6 +11,7 @@ import Swal from 'sweetalert2'
 import { editUserById } from '../slices/operations/editUserById.operation'
 import { updateUserStatusById } from '../slices/users.slices'
 import { User } from '../models/usersTableConfig'
+import { forgotPassword } from '../../auth/slices/operations/forgotPasswordOperations'
 
 export default function UserTable() {
   const dispatch = useAppDispatch()
@@ -18,6 +19,7 @@ export default function UserTable() {
   const { user } = useAuth()
   const { users, loading } = useAppSelector((state) => state.users)  
   const isAdmin = user?.role === 'ADMIN'
+  const canManageUsers = user?.role === 'ADMIN' || user?.role === 'ASESOR'
   
   useEffect(() => {
     dispatch(fetchUsers({}))
@@ -62,14 +64,62 @@ export default function UserTable() {
       })
     }
   }
-  
+
+  const handleSendPasswordRecovery = async (targetUser: User) => {
+    if (!targetUser.email) {
+      await Swal.fire({
+        title: 'Usuario sin correo',
+        text: 'El usuario no tiene un correo registrado para enviar recuperación.',
+        icon: 'warning',
+        confirmButtonColor: '#FF8546',
+      })
+      return
+    }
+
+    const result = await Swal.fire({
+      title: '¿Enviar recuperación de contraseña?',
+      text: `Se enviará un correo a ${targetUser.email}.`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, enviar',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#2563eb',
+    })
+
+    if (!result.isConfirmed) {
+      return
+    }
+
+    try {
+      await forgotPassword({ email: targetUser.email.trim().toLowerCase() })
+      await Swal.fire({
+        title: 'Correo enviado',
+        text: 'Se envió el correo de recuperación de contraseña.',
+        icon: 'success',
+        confirmButtonColor: '#FF8546',
+      })
+    } catch {
+      await Swal.fire({
+        title: 'No se pudo enviar',
+        text: 'No fue posible enviar el correo de recuperación.',
+        icon: 'error',
+        confirmButtonColor: '#ef4444',
+      })
+    }
+  }
 
   return (
     <div>
         <DataTable 
         data={users} 
         columns={userColumns}
-        actions={getUserActions(navigate, handleToggleUserStatus, isAdmin)}
+        actions={getUserActions(
+          navigate,
+          handleToggleUserStatus,
+          handleSendPasswordRecovery,
+          canManageUsers,
+          isAdmin,
+        )}
         itemsPerPage={10}
         defaultSortField="id"
         defaultSortOrder="asc"

@@ -110,6 +110,7 @@ export default function DataTable<T extends { id: number | string }>({
       green: 'text-gray-600 hover:text-green-600 hover:bg-green-50 dark:text-gray-400 dark:hover:text-green-400 dark:hover:bg-green-900/20',
       red: 'text-gray-600 hover:text-red-600 hover:bg-red-50 dark:text-gray-400 dark:hover:text-red-400 dark:hover:bg-red-900/20',
       purple: 'text-gray-600 hover:text-purple-600 hover:bg-purple-50 dark:text-gray-400 dark:hover:text-purple-400 dark:hover:bg-purple-900/20',
+      orange: 'text-gray-600 hover:text-orange-600 hover:bg-orange-50 dark:text-gray-400 dark:hover:text-orange-400 dark:hover:bg-orange-900/20',
       gray: 'text-gray-600 hover:text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-gray-300 dark:hover:bg-gray-700'
     }
     return colorMap[color as keyof typeof colorMap] || colorMap.gray
@@ -196,6 +197,10 @@ export default function DataTable<T extends { id: number | string }>({
                         {actions.map((action, actionIndex) => {
                           // Si hay condición para mostrar, evaluar
                           if (action.show && !action.show(row)) return null
+                          const isDisabled = action.disabled ? action.disabled(row) : false
+                          const tooltipText = isDisabled && action.disabledLabel
+                            ? action.disabledLabel(row)
+                            : action.label
 
                           return (
                             <Button
@@ -203,14 +208,19 @@ export default function DataTable<T extends { id: number | string }>({
                               icon={action.icon}
                               size="small"
                               text
-                              className={`${getActionColorClasses(action.color)} w-8 h-8 rounded-lg`}
-                              tooltip={action.label}
+                              className={`${getActionColorClasses(action.color)} w-8 h-8 rounded-lg ${
+                                isDisabled ? 'opacity-50 cursor-not-allowed' : ''
+                              }`}
+                              tooltip={tooltipText}
                               tooltipOptions={{
                                 position: 'top',
                                 showDelay: 300,
                                 className: 'text-xs whitespace-nowrap'
                               }}
-                              onClick={() => action.onClick(row)}
+                              onClick={() => {
+                                if (isDisabled) return
+                                action.onClick(row)
+                              }}
                             />
                           )
                         })}

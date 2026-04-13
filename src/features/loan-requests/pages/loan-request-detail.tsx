@@ -54,12 +54,14 @@ const LoanRequestDetailPage = () => {
     };
 
     // Escuchar todos los eventos de préstamos
+    socket.on("loan:preapproved", handleLoanNotification);
     socket.on("loan:approved", handleLoanNotification);
     socket.on("loan:rejected", handleLoanNotification);
     socket.on("loan:updated", handleLoanNotification);
     socket.on("loan:modified_by_client", handleLoanNotification);
 
     return () => {
+      socket.off("loan:preapproved", handleLoanNotification);
       socket.off("loan:approved", handleLoanNotification);
       socket.off("loan:rejected", handleLoanNotification);
       socket.off("loan:updated", handleLoanNotification);
@@ -303,7 +305,11 @@ const LoanRequestDetailPage = () => {
       </div>
 
       {/* Banner de Estado (Rechazo/Aprobación) */}
-      <StatusMessageBanner loanRequest={selectedLoanRequest} />
+      <StatusMessageBanner
+        loanRequest={selectedLoanRequest}
+        hidePreapprovedBanner={isManagerOrAdmin}
+        hideRejectedBanner={isManagerOrAdmin}
+      />
 
       {/* Layout principal: 3 columnas en desktop (siempre mostrar panel de aprobación para gestores) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-4 lg:gap-5">

@@ -8,6 +8,7 @@ import {
 } from "../slices/creditManagement";
 import { submitLoanRequest, SubmitLoanRequestResponse } from "../slices/operations/submitLoanRequest.operation";
 import Swal from "sweetalert2";
+import { clearUploadedFilesRegistry, getUploadedFile } from "../utils/uploadedFilesRegistry";
 
 // Loan Type Name (debe coincidir con el usado en LoanCalculator)
 const LOAN_TYPE_NAME = "Libranza";
@@ -131,11 +132,25 @@ export const CreditSummaryComponent: React.FC = () => {
       const documentTypeCodes: string[] = [];
 
       uploadedDocuments.forEach((doc) => {
-        files.push(doc.file);
+        const file = getUploadedFile(doc.id);
+        if (!file) {
+          return;
+        }
+        files.push(file);
         documentTypeCodes.push(
           DOCUMENT_TYPE_MAP[doc.type] || doc.type.toUpperCase()
         );
       });
+
+      if (files.length !== uploadedDocuments.length) {
+        Swal.fire({
+          title: "Error",
+          text: "Uno o más archivos no están disponibles. Vuelve al paso de documentos y cárgalos nuevamente.",
+          icon: "error",
+          confirmButtonColor: "#FF8546",
+        });
+        return;
+      }
 
       const response = await dispatch(
         submitLoanRequest({
@@ -170,6 +185,7 @@ export const CreditSummaryComponent: React.FC = () => {
 
       // Redirigir a la gestión de solicitudes y limpiar estado
       navigate("/gestion-solicitudes", { replace: true });
+      clearUploadedFilesRegistry();
       dispatch(resetCreditManagement());
     } catch (error: unknown) {
       console.error("Error al enviar la solicitud:", error);

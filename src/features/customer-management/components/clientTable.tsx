@@ -12,6 +12,7 @@ import { deleteClientById } from '../slices/operations/deleteClientById.operatio
 import { removeClientById, updateClientStatusById } from '../slices/client.slices'
 import { editClientById } from '../slices/operations/editClientById.operations'
 import { Client } from '../models/clientsTableModel'
+import { forgotPassword } from '../../auth/slices/operations/forgotPasswordOperations'
 
 export default function ClientTable() {
   const dispatch = useAppDispatch()
@@ -19,6 +20,7 @@ export default function ClientTable() {
   const { user } = useAuth()
   const { clients, loading } = useAppSelector((state) => state.clients)  
   const isAdmin = user?.role === 'ADMIN'
+  const canManageClients = user?.role === 'ADMIN' || user?.role === 'ASESOR'
   
 useEffect(() => {
     dispatch(fetchClients({}))
@@ -96,11 +98,61 @@ useEffect(() => {
     }
   }
 
+  const handleSendPasswordRecovery = async (targetClient: Client) => {
+    if (!targetClient.email) {
+      await Swal.fire({
+        title: 'Cliente sin correo',
+        text: 'El cliente no tiene un correo registrado para enviar recuperación.',
+        icon: 'warning',
+        confirmButtonColor: '#FF8546',
+      })
+      return
+    }
+
+    const result = await Swal.fire({
+      title: '¿Enviar recuperación de contraseña?',
+      text: `Se enviará un correo a ${targetClient.email}.`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, enviar',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#2563eb',
+    })
+
+    if (!result.isConfirmed) {
+      return
+    }
+
+    try {
+      await forgotPassword({ email: targetClient.email.trim().toLowerCase() })
+      await Swal.fire({
+        title: 'Correo enviado',
+        text: 'Se envió el correo de recuperación de contraseña.',
+        icon: 'success',
+        confirmButtonColor: '#FF8546',
+      })
+    } catch {
+      await Swal.fire({
+        title: 'No se pudo enviar',
+        text: 'No fue posible enviar el correo de recuperación.',
+        icon: 'error',
+        confirmButtonColor: '#ef4444',
+      })
+    }
+  }
+
   return (
   <DataTable 
   data={clients} 
   columns={clientColumns}
-  actions={getClientActions(navigate, handleToggleClientStatus, (row) => handleDeleteClient(String(row.id)), isAdmin)}
+  actions={getClientActions(
+    navigate,
+    handleToggleClientStatus,
+    (row) => handleDeleteClient(String(row.id)),
+    handleSendPasswordRecovery,
+    canManageClients,
+    isAdmin,
+  )}
   itemsPerPage={10}
   defaultSortField="createdAt"
   defaultSortOrder="desc"

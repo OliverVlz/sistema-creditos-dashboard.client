@@ -28,6 +28,12 @@ const formatDate = (dateString: string) => {
 const StatusBadge = ({ status }: { status: string }) => {
   const getStatusConfig = (status: string) => {
     switch (status?.toLowerCase()) {
+      case 'preaprobado':
+        return {
+          bg: 'bg-blue-100 dark:bg-blue-900/30',
+          text: 'text-blue-700 dark:text-blue-400',
+          label: 'Preaprobado'
+        };
       case 'aprobado':
         return { 
           bg: 'bg-green-100 dark:bg-green-900/30', 
@@ -145,6 +151,8 @@ export const loanRequestColumns: Column<LoanRequestTableItem>[] = [
 export const getLoanRequestActions = (
   navigate: NavigateFunction,
   onDelete: (loan: LoanRequestTableItem) => void,
+  onSendReminder: (loan: LoanRequestTableItem) => void,
+  canManage: boolean,
   isAdmin: boolean
 ): Action<LoanRequestTableItem>[] => {
   const actions: Action<LoanRequestTableItem>[] = [
@@ -157,6 +165,17 @@ export const getLoanRequestActions = (
       }
     }
   ]
+
+  if (canManage) {
+    actions.push({
+      icon: 'pi pi-envelope',
+      label: 'Enviar recordatorio',
+      color: 'orange',
+      disabled: (loan) => loan.status !== 'preaprobado',
+      disabledLabel: () => 'Disponible solo para solicitudes preaprobadas',
+      onClick: onSendReminder
+    })
+  }
 
   if (isAdmin) {
     actions.push({

@@ -18,8 +18,10 @@ export interface Action<T> {
   icon: string                            // Ícono (ej: 'pi pi-eye')
   label: string                           // Tooltip
   onClick: (row: T) => void              // Función al hacer clic
-  color?: 'blue' | 'green' | 'red' | 'purple' | 'gray'
+  color?: 'blue' | 'green' | 'red' | 'purple' | 'gray' | 'orange'
   show?: (row: T) => boolean             // Mostrar condicionalmente
+  disabled?: (row: T) => boolean         // Deshabilitar condicionalmente
+  disabledLabel?: (row: T) => string     // Tooltip cuando está deshabilitado
 }
 
 // Props del componente DataTable

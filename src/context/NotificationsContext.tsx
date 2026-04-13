@@ -144,6 +144,12 @@ export const NotificationsProvider = ({
       showSuccessNotification(notification.message);
     });
 
+    newSocket.on("loan:preapproved", (notification: Notification) => {
+      console.log("📬 Evento loan:preapproved recibido:", notification);
+      handleNotification(notification);
+      showInfoNotification(notification.message);
+    });
+
     newSocket.on("loan:rejected", (notification: Notification) => {
       console.log("📬 Evento loan:rejected recibido:", notification);
       handleNotification(notification);
