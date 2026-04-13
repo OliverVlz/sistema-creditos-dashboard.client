@@ -7,6 +7,7 @@ export interface UserFormData {
    */ documentNumber: string;
   phoneNumber: string;
   role: string;
+  isActive?: boolean;
 }
 
 export interface FormErrors {

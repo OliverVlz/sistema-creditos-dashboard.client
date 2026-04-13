@@ -21,6 +21,8 @@ import swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { editUserById } from "../slices/operations/editUserById.operation";
 
+type FormFieldKey = Exclude<keyof UserFormData, "isActive">;
+
 const FormUsers: React.FC<FormUsersProps> = ({
   initialData,
   onSuccess,
@@ -50,7 +52,7 @@ const FormUsers: React.FC<FormUsersProps> = ({
 
   // Usar el loading de Redux si está disponible, sino usar el estado local
   const isLoadingState = reduxLoading || isLoading;
-  const [touched, setTouched] = useState<Record<keyof UserFormData, boolean>>({
+  const [touched, setTouched] = useState<Record<FormFieldKey, boolean>>({
     firstName: false,
     lastName: false,
     email: false,
@@ -69,7 +71,7 @@ const FormUsers: React.FC<FormUsersProps> = ({
   ];
 
   // Validaciones con useMemo para optimización
-  const validations = useMemo(
+  const validations: Record<FormFieldKey, (value: string) => string> = useMemo(
     () => ({
       firstName: (value: string) => {
         if (!value.trim()) return "El nombre es requerido";
@@ -135,7 +137,7 @@ const FormUsers: React.FC<FormUsersProps> = ({
 
   // Validar campo individual
   const validateField = useCallback(
-    (field: keyof UserFormData, value: string) => {
+    (field: FormFieldKey, value: string) => {
       const error = validations[field](value);
       setErrors((prev) => ({ ...prev, [field]: error }));
       return !error;
@@ -149,7 +151,7 @@ const FormUsers: React.FC<FormUsersProps> = ({
     let isValid = true;
 
     Object.keys(validations).forEach((key) => {
-      const field = key as keyof UserFormData;
+      const field = key as FormFieldKey;
       const error = validations[field](formData[field]);
       if (error) {
         newErrors[field] = error;
@@ -163,7 +165,7 @@ const FormUsers: React.FC<FormUsersProps> = ({
 
   // Manejador optimizado con useCallback
   const handleInputChange = useCallback(
-    (field: keyof UserFormData, value: string) => {
+    (field: FormFieldKey, value: string) => {
       setFormData((prev) => ({
         ...prev,
         [field]: value,
@@ -179,7 +181,7 @@ const FormUsers: React.FC<FormUsersProps> = ({
 
   // Manejador de blur para validación en tiempo real
   const handleBlur = useCallback(
-    (field: keyof UserFormData) => {
+    (field: FormFieldKey) => {
       setTouched((prev) => ({ ...prev, [field]: true }));
       validateField(field, formData[field]);
     },
@@ -188,7 +190,7 @@ const FormUsers: React.FC<FormUsersProps> = ({
 
   const resetForm = useCallback(() => {
     // Marcar todos los campos como tocados para mostrar errores
-    const allTouched: Record<keyof UserFormData, boolean> = {
+    const allTouched: Record<FormFieldKey, boolean> = {
       firstName: true,
       lastName: true,
       email: true,

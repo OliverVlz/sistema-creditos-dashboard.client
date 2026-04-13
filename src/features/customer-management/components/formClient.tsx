@@ -13,6 +13,8 @@ import { fetchOrganizations } from '../slices/operations/fetchOrganizations.oper
 import { createClient } from '../slices/operations/createClient.operations';
 import { editClientById } from '../slices/operations/editClientById.operations';
 
+type FormFieldKey = Exclude<keyof ClientFormData, 'isActive'>;
+
 const FormClient: React.FC<FormClientProps> = ({ 
   initialData, 
   onSuccess,
@@ -69,7 +71,7 @@ const FormClient: React.FC<FormClientProps> = ({
   
   const isLoadingState = reduxLoading || isLoading;
   
-  const [touched, setTouched] = useState<Record<keyof ClientFormData, boolean>>({
+  const [touched, setTouched] = useState<Record<FormFieldKey, boolean>>({
     email: false,
     password: false,
     firstName: false,
@@ -95,7 +97,7 @@ const FormClient: React.FC<FormClientProps> = ({
   }));
 
   // Validaciones con useMemo para optimización
-  const validations = useMemo(() => ({
+  const validations: Record<FormFieldKey, (value: string) => string> = useMemo(() => ({
     firstName: (value: string) => {
       if (!value.trim()) return 'El nombre es requerido';
       if (value.length < 2) return 'El nombre debe tener al menos 2 caracteres';
@@ -183,7 +185,7 @@ const FormClient: React.FC<FormClientProps> = ({
     return hundredYearsAgo.toISOString().split('T')[0];
   }, []); */
 
-  const validateField = useCallback((field: keyof ClientFormData, value: string) => {
+  const validateField = useCallback((field: FormFieldKey, value: string) => {
     if (validations[field]) {
       const error = validations[field](value);
       setErrors(prev => ({ ...prev, [field]: error }));
@@ -197,7 +199,7 @@ const FormClient: React.FC<FormClientProps> = ({
     let isValid = true;
 
     Object.keys(validations).forEach(key => {
-      const field = key as keyof ClientFormData;
+      const field = key as FormFieldKey;
       if (validations[field]) {
         const error = validations[field](formData[field]);
         if (error) {
@@ -211,7 +213,7 @@ const FormClient: React.FC<FormClientProps> = ({
     return isValid;
   }, [formData, validations]);
 
-  const handleInputChange = useCallback((field: keyof ClientFormData, value: string) => {
+  const handleInputChange = useCallback((field: FormFieldKey, value: string) => {
     setFormData(prev => ({
       ...prev,
       [field]: value
@@ -222,13 +224,13 @@ const FormClient: React.FC<FormClientProps> = ({
     }
   }, [errors]);
 
-  const handleBlur = useCallback((field: keyof ClientFormData) => {
+  const handleBlur = useCallback((field: FormFieldKey) => {
     setTouched(prev => ({ ...prev, [field]: true }));
     validateField(field, formData[field]);
   }, [formData, validateField]);
 
   const resetForm = useCallback(() => {
-    const allTouched: Record<keyof ClientFormData, boolean> = {
+    const allTouched: Record<FormFieldKey, boolean> = {
       email: true,
       password: true,
       firstName: true,
@@ -577,7 +579,7 @@ const FormClient: React.FC<FormClientProps> = ({
           <button
               type="button"
               onClick={handleCancel}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg transition px-5 py-3.5 text-sm font-medium bg-white text-gray-700 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-white/[0.03] dark:hover:text-gray-300"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg transition px-5 py-3.5 text-sm font-medium bg-white text-gray-700 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-white/3 dark:hover:text-gray-300"
             >
               <CloseIcon className="size-5" />
               Cancelar
