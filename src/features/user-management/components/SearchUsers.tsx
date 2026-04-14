@@ -31,7 +31,7 @@ export default function SearchUsers({ onFiltersChange }: SearchUsersProps) {
   useEffect(() => {
     dispatch(fetchUsers({
       page: 1,
-      limit: 100,
+      limit: 10,
       searchTerm: filters.searchTerm,
       role: filters.role ?? undefined,
       status: filters.status ?? undefined,

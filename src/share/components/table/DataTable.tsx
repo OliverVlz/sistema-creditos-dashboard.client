@@ -12,6 +12,12 @@ export default function DataTable<T extends { id: number | string }>({
   actions = [],
   itemsPerPage = 10,
   showPagination = true,
+  serverSidePagination = false,
+  currentPage,
+  totalPages,
+  totalItems,
+  onPageChange,
+  onItemsPerPageChange,
   defaultSortField,
   defaultSortOrder = 'asc',
   className = '',
@@ -61,10 +67,23 @@ export default function DataTable<T extends { id: number | string }>({
   }, [safeData, state.sortField, state.sortOrder])
 
   // Paginación
-  const totalPages = Math.ceil(sortedData.length / state.itemsPerPage)
-  const startIndex = (state.currentPage - 1) * state.itemsPerPage
+  const localTotalPages = Math.ceil(sortedData.length / state.itemsPerPage)
+  const currentTablePage = serverSidePagination
+    ? (currentPage ?? 1)
+    : state.currentPage
+  const startIndex = serverSidePagination
+    ? (currentTablePage - 1) * state.itemsPerPage
+    : (state.currentPage - 1) * state.itemsPerPage
   const endIndex = startIndex + state.itemsPerPage
-  const currentData = sortedData.slice(startIndex, endIndex)
+  const currentData = serverSidePagination
+    ? sortedData
+    : sortedData.slice(startIndex, endIndex)
+  const resolvedTotalItems = serverSidePagination
+    ? (totalItems ?? sortedData.length)
+    : sortedData.length
+  const resolvedTotalPages = serverSidePagination
+    ? (totalPages ?? Math.max(1, Math.ceil(resolvedTotalItems / state.itemsPerPage)))
+    : localTotalPages
 
   // Manejar ordenamiento
   const handleSort = (field: keyof T) => {
@@ -78,6 +97,9 @@ export default function DataTable<T extends { id: number | string }>({
 
   // Manejar cambio de items por página
   const handleItemsPerPageChange = (newItemsPerPage: number) => {
+    if (serverSidePagination) {
+      onItemsPerPageChange?.(newItemsPerPage)
+    }
     setState(prev => ({
       ...prev,
       itemsPerPage: newItemsPerPage,
@@ -87,6 +109,10 @@ export default function DataTable<T extends { id: number | string }>({
 
   // Manejar cambio de página
   const handlePageChange = (page: number) => {
+    if (serverSidePagination) {
+      onPageChange?.(page)
+      return
+    }
     setState(prev => ({ ...prev, currentPage: page }))
   }
 
@@ -236,7 +262,7 @@ export default function DataTable<T extends { id: number | string }>({
       </div>
 
       {/* FOOTER CON PAGINACIÓN */}
-      {showPagination && sortedData.length > 0 && (
+      {showPagination && resolvedTotalItems > 0 && (
         <div className="bg-gray-50 dark:bg-gray-900 px-4 sm:px-8 py-3 sm:py-4 border-t border-gray-200 dark:border-gray-700 rounded-b-2xl overflow-visible">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0">
             {/* Items por página */}
@@ -252,13 +278,13 @@ export default function DataTable<T extends { id: number | string }>({
 
             {/* Información - oculta en móviles pequeños */}
             <div className="hidden sm:block text-xs sm:text-sm text-gray-700 dark:text-gray-300">
-              Mostrando {startIndex + 1} a {Math.min(endIndex, sortedData.length)} de {sortedData.length}
+              Mostrando {startIndex + 1} a {Math.min(endIndex, resolvedTotalItems)} de {resolvedTotalItems}
             </div>
 
             {/* Paginación */}
             <Pagination
-              currentPage={state.currentPage}
-              totalPages={totalPages}
+              currentPage={currentTablePage}
+              totalPages={resolvedTotalPages}
               onPageChange={handlePageChange}
             />
           </div>

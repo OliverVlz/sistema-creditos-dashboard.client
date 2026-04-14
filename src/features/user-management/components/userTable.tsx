@@ -17,13 +17,33 @@ export default function UserTable() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const { user } = useAuth()
-  const { users, loading } = useAppSelector((state) => state.users)  
+  const { users, loading, pagination, query } = useAppSelector((state) => state.users)  
   const isAdmin = user?.role === 'ADMIN'
   const canManageUsers = user?.role === 'ADMIN' || user?.role === 'ASESOR'
   
   useEffect(() => {
-    dispatch(fetchUsers({}))
+    dispatch(fetchUsers({ page: 1, limit: query.limit, searchTerm: query.searchTerm, role: query.role, status: query.status }))
   }, [dispatch])
+
+  const handlePageChange = (page: number) => {
+    dispatch(fetchUsers({
+      page,
+      limit: query.limit,
+      searchTerm: query.searchTerm,
+      role: query.role,
+      status: query.status,
+    }))
+  }
+
+  const handleItemsPerPageChange = (limit: number) => {
+    dispatch(fetchUsers({
+      page: 1,
+      limit,
+      searchTerm: query.searchTerm,
+      role: query.role,
+      status: query.status,
+    }))
+  }
 
   const handleToggleUserStatus = async (targetUser: User) => {
     const nextStatus = !targetUser.isActive
@@ -121,6 +141,12 @@ export default function UserTable() {
           isAdmin,
         )}
         itemsPerPage={10}
+        serverSidePagination
+        currentPage={pagination?.currentPage ?? query.page}
+        totalPages={pagination?.totalPages ?? 1}
+        totalItems={pagination?.total ?? users.length}
+        onPageChange={handlePageChange}
+        onItemsPerPageChange={handleItemsPerPageChange}
         defaultSortField="id"
         defaultSortOrder="asc"
         emptyMessage="No se encontraron usuarios"

@@ -10,6 +10,21 @@ export interface UsersState {
     selectedUser: User | null
     loading: boolean
     error: string | null
+    pagination: {
+        currentPage: number
+        totalPages: number
+        total: number
+        limit: number
+        hasNextPage: boolean
+        hasPreviousPage: boolean
+    } | null
+    query: {
+        page: number
+        limit: number
+        searchTerm: string
+        role: string
+        status: string
+    }
 }
 
 const initialState: UsersState = {
@@ -17,6 +32,14 @@ const initialState: UsersState = {
     selectedUser: null,
     loading: false,
     error: null,
+    pagination: null,
+    query: {
+        page: 1,
+        limit: 10,
+        searchTerm: '',
+        role: '',
+        status: '',
+    },
 }
 
 export const usersSlice = createSlice({

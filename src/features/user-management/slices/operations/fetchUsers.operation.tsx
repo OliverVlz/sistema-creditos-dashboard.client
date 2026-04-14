@@ -7,9 +7,23 @@ import { mainCustomAxios } from "../../../../config/axios.config"
 import { UsersState } from '../users.slices'
 import { User } from '../../models/usersTableConfig'
 
+type FetchUsersParams = {
+    page?: number
+    limit?: number
+    searchTerm?: string
+    role?: string
+    status?: string
+}
+
+type FetchUsersResponse = {
+    users: User[]
+    pagination: UsersState['pagination']
+    query: Required<FetchUsersParams>
+}
+
 export const fetchUsers = createAsyncThunk(
     'users/fetchUsers',
-    async ({ page = 1, limit = 100, searchTerm = '', role = '', status = '' }: { page?: number, limit?: number, searchTerm?: string, role?: string, status?: string } = {}) => {
+    async ({ page = 1, limit = 10, searchTerm = '', role = '', status = '' }: FetchUsersParams = {}): Promise<FetchUsersResponse> => {
         const params: Record<string, string | number> = {
             page,
             limit
@@ -20,8 +34,35 @@ export const fetchUsers = createAsyncThunk(
         if (status) params.isActive = status
         
         const response = await mainCustomAxios.get('users/all', { params })
-        console.log('response.data', response.data.data)
-        return response.data.data
+        const responseData = response.data?.data
+        const userList: User[] = Array.isArray(responseData)
+            ? responseData
+            : Array.isArray(responseData?.data)
+                ? responseData.data
+                : []
+
+        const pagination = response.data?.pagination
+            ?? responseData?.pagination
+            ?? {
+                currentPage: page,
+                totalPages: 1,
+                total: userList.length,
+                limit,
+                hasNextPage: false,
+                hasPreviousPage: false,
+            }
+
+        return {
+            users: userList,
+            pagination,
+            query: {
+                page,
+                limit,
+                searchTerm,
+                role,
+                status,
+            },
+        }
     }
 )
 
@@ -39,9 +80,11 @@ export const createAsyncFetchUsersReducer = ({
         })
         .addCase(
             fetchUsers.fulfilled,
-            (state: UsersState, action: PayloadAction<User[]>) => {
+            (state: UsersState, action: PayloadAction<FetchUsersResponse>) => {
                 state.loading = false
-                state.users = action.payload
+                state.users = action.payload.users
+                state.pagination = action.payload.pagination
+                state.query = action.payload.query
             }
         )
         .addCase(

@@ -33,6 +33,12 @@ export interface DataTableProps<T> {
   // Paginación
   itemsPerPage?: number
   showPagination?: boolean
+  serverSidePagination?: boolean
+  currentPage?: number
+  totalPages?: number
+  totalItems?: number
+  onPageChange?: (page: number) => void
+  onItemsPerPageChange?: (itemsPerPage: number) => void
   
   // Ordenamiento
   defaultSortField?: keyof T

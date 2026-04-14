@@ -8,11 +8,24 @@ import { ClientsState } from '../client.slices'
 import { Client } from '../../models/clientsTableModel'
 import { ClientApiResponse } from '../../models/clientsTableModel'
 
+type FetchClientsParams = {
+    page?: number
+    limit?: number
+    searchTerm?: string
+    status?: string
+    organizationId?: string
+}
+
+type FetchClientsResponse = {
+    clients: Client[]
+    pagination: ClientsState['pagination']
+    query: Required<FetchClientsParams>
+}
 
 
 export const fetchClients = createAsyncThunk(
     'clients/fetchClients',
-    async ({page = 1, limit = 100, searchTerm = '', status = '', organizationId = ''}: {page?: number, limit?: number, searchTerm?: string, status?: string, organizationId?: string} = {}) => {  
+    async ({page = 1, limit = 10, searchTerm = '', status = '', organizationId = ''}: FetchClientsParams = {}): Promise<FetchClientsResponse> => {  
         const params: Record<string, string | number> = {
             page,
             limit
@@ -23,13 +36,24 @@ export const fetchClients = createAsyncThunk(
         if (organizationId) params.organizationId = organizationId
         
         const response = await mainCustomAxios.get('/clients/all', { params })
-        console.log('response.data', response.data.data)
         const responseData = response.data?.data
         const clientList: ClientApiResponse[] = Array.isArray(responseData)
             ? responseData
             : Array.isArray(responseData?.data)
                 ? responseData.data
                 : []
+
+        const pagination = response.data?.pagination
+            ?? responseData?.pagination
+            ?? {
+                currentPage: page,
+                totalPages: 1,
+                total: clientList.length,
+                limit,
+                hasNextPage: false,
+                hasPreviousPage: false,
+            }
+
         const clients = clientList.map((client: ClientApiResponse): Client => ({
             id: client.userId, // IMPORTANTE: Usar userId para editar, NO clientId ni documentNumber
             isActive: client.isActive,
@@ -41,7 +65,17 @@ export const fetchClients = createAsyncThunk(
             employmentStatus: client.employmentStatus,
             createdAt: client.createdAt
         }))
-        return clients
+        return {
+            clients,
+            pagination,
+            query: {
+                page,
+                limit,
+                searchTerm,
+                status,
+                organizationId,
+            },
+        }
     }
 )
 
@@ -59,9 +93,11 @@ export const createAsyncFetchClientsReducer = ({
         })
         .addCase(
             fetchClients.fulfilled,
-            (state: ClientsState, action: PayloadAction<Client[]>) => {
+            (state: ClientsState, action: PayloadAction<FetchClientsResponse>) => {
                 state.loading = false
-                state.clients = action.payload
+                state.clients = action.payload.clients
+                state.pagination = action.payload.pagination
+                state.query = action.payload.query
             }
         )
         .addCase(

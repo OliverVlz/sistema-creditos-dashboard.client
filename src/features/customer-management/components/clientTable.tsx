@@ -18,13 +18,39 @@ export default function ClientTable() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const { user } = useAuth()
-  const { clients, loading } = useAppSelector((state) => state.clients)  
+  const { clients, loading, pagination, query } = useAppSelector((state) => state.clients)  
   const isAdmin = user?.role === 'ADMIN'
   const canManageClients = user?.role === 'ADMIN' || user?.role === 'ASESOR'
   
 useEffect(() => {
-    dispatch(fetchClients({}))
+    dispatch(fetchClients({
+      page: 1,
+      limit: query.limit,
+      searchTerm: query.searchTerm,
+      status: query.status,
+      organizationId: query.organizationId,
+    }))
   }, [dispatch])
+
+  const handlePageChange = (page: number) => {
+    dispatch(fetchClients({
+      page,
+      limit: query.limit,
+      searchTerm: query.searchTerm,
+      status: query.status,
+      organizationId: query.organizationId,
+    }))
+  }
+
+  const handleItemsPerPageChange = (limit: number) => {
+    dispatch(fetchClients({
+      page: 1,
+      limit,
+      searchTerm: query.searchTerm,
+      status: query.status,
+      organizationId: query.organizationId,
+    }))
+  }
 
   const handleToggleClientStatus = async (targetClient: Client) => {
     const nextStatus = !targetClient.isActive
@@ -154,6 +180,12 @@ useEffect(() => {
     isAdmin,
   )}
   itemsPerPage={10}
+  serverSidePagination
+  currentPage={pagination?.currentPage ?? query.page}
+  totalPages={pagination?.totalPages ?? 1}
+  totalItems={pagination?.total ?? clients.length}
+  onPageChange={handlePageChange}
+  onItemsPerPageChange={handleItemsPerPageChange}
   defaultSortField="createdAt"
   defaultSortOrder="desc"
   emptyMessage="No se encontraron clientes"

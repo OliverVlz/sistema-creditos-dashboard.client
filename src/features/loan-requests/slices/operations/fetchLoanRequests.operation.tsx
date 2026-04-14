@@ -10,6 +10,13 @@ import { LoanRequest, LoanRequestTableItem, LoanRequestFilters } from '../../mod
 interface FetchLoanRequestsResponse {
     loanRequests: LoanRequestTableItem[]
     pagination: LoanRequestsState['pagination']
+    query: {
+        page: number
+        limit: number
+        loanNumber: string
+        status: string
+        clientId: string
+    }
 }
 
 export const fetchLoanRequests = createAsyncThunk(
@@ -44,7 +51,14 @@ export const fetchLoanRequests = createAsyncThunk(
         
         return {
             loanRequests,
-            pagination: response.data.pagination
+            pagination: response.data.pagination,
+            query: {
+                page,
+                limit,
+                loanNumber,
+                status,
+                clientId,
+            },
         }
     }
 )
@@ -67,6 +81,7 @@ export const createAsyncFetchLoanRequestsReducer = ({
                 state.loading = false
                 state.loanRequests = action.payload.loanRequests
                 state.pagination = action.payload.pagination
+                state.query = action.payload.query
             }
         )
         .addCase(

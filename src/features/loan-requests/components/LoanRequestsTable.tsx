@@ -18,12 +18,32 @@ export default function LoanRequestsTable() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { user } = useAuth();
-  const { loanRequests, loading } = useAppSelector(
+  const { loanRequests, loading, pagination, query } = useAppSelector(
     (state) => state.loanRequests
   );
   const { socket } = useNotifications();
   const isAdmin = user?.role === "ADMIN";
   const canManage = user?.role === "ADMIN" || user?.role === "ASESOR";
+
+  const handlePageChange = (page: number) => {
+    dispatch(fetchLoanRequests({
+      page,
+      limit: query.limit,
+      loanNumber: query.loanNumber,
+      status: query.status,
+      clientId: query.clientId,
+    }));
+  };
+
+  const handleItemsPerPageChange = (limit: number) => {
+    dispatch(fetchLoanRequests({
+      page: 1,
+      limit,
+      loanNumber: query.loanNumber,
+      status: query.status,
+      clientId: query.clientId,
+    }));
+  };
 
   const handleDeleteLoan = async (loanId: string) => {
     const result = await Swal.fire({
@@ -129,6 +149,12 @@ export default function LoanRequestsTable() {
         isAdmin
       )}
       itemsPerPage={10}
+      serverSidePagination
+      currentPage={pagination?.currentPage ?? query.page}
+      totalPages={pagination?.totalPages ?? 1}
+      totalItems={pagination?.total ?? loanRequests.length}
+      onPageChange={handlePageChange}
+      onItemsPerPageChange={handleItemsPerPageChange}
       defaultSortField="loanNumber"
       defaultSortOrder="desc"
       emptyMessage="No se encontraron solicitudes de crédito"

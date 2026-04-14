@@ -19,6 +19,13 @@ export interface LoanRequestsState {
         hasNextPage: boolean
         hasPreviousPage: boolean
     } | null
+    query: {
+        page: number
+        limit: number
+        loanNumber: string
+        status: string
+        clientId: string
+    }
 }
 
 const initialState: LoanRequestsState = {
@@ -29,6 +36,13 @@ const initialState: LoanRequestsState = {
     updating: false,
     updateError: null,
     pagination: null,
+    query: {
+        page: 1,
+        limit: 10,
+        loanNumber: '',
+        status: '',
+        clientId: '',
+    },
 }
 
 export const loanRequestsSlice = createSlice({

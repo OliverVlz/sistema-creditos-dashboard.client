@@ -11,6 +11,21 @@ export interface ClientsState {
     loading: boolean
     error: string | null
     selectedClient: Partial<ClientFormData> | null
+    pagination: {
+        currentPage: number
+        totalPages: number
+        total: number
+        limit: number
+        hasNextPage: boolean
+        hasPreviousPage: boolean
+    } | null
+    query: {
+        page: number
+        limit: number
+        searchTerm: string
+        status: string
+        organizationId: string
+    }
 }
 
 const initialState: ClientsState = {
@@ -18,6 +33,14 @@ const initialState: ClientsState = {
     loading: false,
     error: null,
     selectedClient: null,
+    pagination: null,
+    query: {
+        page: 1,
+        limit: 10,
+        searchTerm: '',
+        status: '',
+        organizationId: '',
+    },
 }
 
 export const clientsSlice = createSlice({

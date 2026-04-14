@@ -31,7 +31,7 @@ export default function SearchClient({ onFiltersChange }: SearchClientProps) {
     dispatch(
       fetchClients({
         page: 1,
-        limit: 100,
+        limit: 10,
         searchTerm: filters.searchTerm,
         status: filters.employmentStatus ?? undefined,
         organizationId: filters.organizationId ?? undefined,
