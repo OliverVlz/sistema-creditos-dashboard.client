@@ -24,9 +24,12 @@ export const fetchLoanTypes = createAsyncThunk(
         if (isActive !== undefined) params.isActive = isActive
         
         const response = await mainCustomAxios.get('/loan-types', { params })
-        console.log('Loan types response:', response.data)
-        
-        const loanTypes: LoanTypeTableItem[] = response.data.data.map((loanType: LoanType): LoanTypeTableItem => ({
+        const rows = response.data?.data
+        if (!Array.isArray(rows)) {
+            throw new Error('Respuesta inválida del servidor al cargar tipos de préstamo')
+        }
+
+        const loanTypes: LoanTypeTableItem[] = rows.map((loanType: LoanType): LoanTypeTableItem => ({
             id: loanType.id,
             name: loanType.name,
             description: loanType.description,

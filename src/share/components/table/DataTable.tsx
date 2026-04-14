@@ -19,6 +19,7 @@ export default function DataTable<T extends { id: number | string }>({
   emptyIcon = 'pi pi-inbox',
   loading = false,
 }: DataTableProps<T>) {
+  const safeData = Array.isArray(data) ? data : []
 
   // Estado de la tabla
   const [state, setState] = useState<DataTableState<T>>({
@@ -39,9 +40,9 @@ export default function DataTable<T extends { id: number | string }>({
 
   // Ordenar datos
   const sortedData = useMemo(() => {
-    if (!state.sortField) return data
+    if (!state.sortField) return safeData
 
-    return [...data].sort((a, b) => {
+    return [...safeData].sort((a, b) => {
       const aValue = a[state.sortField!]
       const bValue = b[state.sortField!]
 
@@ -57,7 +58,7 @@ export default function DataTable<T extends { id: number | string }>({
 
       return 0
     })
-  }, [data, state.sortField, state.sortOrder])
+  }, [safeData, state.sortField, state.sortOrder])
 
   // Paginación
   const totalPages = Math.ceil(sortedData.length / state.itemsPerPage)

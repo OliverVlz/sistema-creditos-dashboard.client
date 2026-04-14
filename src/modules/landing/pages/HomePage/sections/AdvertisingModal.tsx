@@ -11,6 +11,20 @@ interface PublicAdvertisement {
   isRedirectEnabled: boolean
 }
 
+function normalizePublicAdvertisements(payload: unknown): PublicAdvertisement[] {
+  if (Array.isArray(payload)) {
+    return payload as PublicAdvertisement[]
+  }
+  if (
+    payload &&
+    typeof payload === 'object' &&
+    Array.isArray((payload as { data?: unknown }).data)
+  ) {
+    return (payload as { data: PublicAdvertisement[] }).data
+  }
+  return []
+}
+
 export default function AdvertisingModal() {
   const [items, setItems] = useState<PublicAdvertisement[]>([])
   const [open, setOpen] = useState(true)
@@ -19,8 +33,12 @@ export default function AdvertisingModal() {
 
   useEffect(() => {
     const load = async () => {
-      const response = await publicApiClient.get('/advertisements/public/landing')
-      setItems(response.data || [])
+      try {
+        const response = await publicApiClient.get('/advertisements/public/landing')
+        setItems(normalizePublicAdvertisements(response.data))
+      } catch {
+        setItems([])
+      }
       setActiveIndex(0)
     }
     load()
@@ -86,7 +104,7 @@ export default function AdvertisingModal() {
   }
 
   return (
-    <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/60 p-4">
+    <div className="fixed inset-0 z-80 flex items-center justify-center bg-black/60 p-4">
       <div className="relative w-fit max-w-[95vw] rounded-2xl bg-white p-3 shadow-2xl">
         <button
           type="button"
@@ -124,7 +142,7 @@ export default function AdvertisingModal() {
             navigation
             loop
             onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
-            className="rounded-xl [&_.swiper-pagination-bullet-active]:!bg-brand-500 [&_.swiper-button-next:after]:text-3xl [&_.swiper-button-prev:after]:text-3xl"
+            className="rounded-xl [&_.swiper-pagination-bullet-active]:bg-brand-500! [&_.swiper-button-next:after]:text-3xl [&_.swiper-button-prev:after]:text-3xl"
             style={{
               ...frameStyle,
               ['--swiper-navigation-color' as string]: '#f07f44',

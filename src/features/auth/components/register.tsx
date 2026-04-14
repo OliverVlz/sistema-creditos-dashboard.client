@@ -13,6 +13,8 @@ import {
   PRIVACY_POLICY_ROUTE,
   TERMS_AND_CONDITIONS_ROUTE,
 } from "../../../routes/routes";
+import DatePicker from "../../../components/form/date-picker";
+import { todayYmdLocal } from "../../../utils/dateLocal";
 
 export default function RegisterForm() {
   const navigate = useNavigate();
@@ -86,7 +88,8 @@ export default function RegisterForm() {
     label: org.name,
   }));
 
-  // Validaciones con useMemo para optimización
+  const birthDateMax = useMemo(() => todayYmdLocal(), []);
+
   const validations = useMemo(
     () => ({
       firstName: (value: string) => {
@@ -286,9 +289,9 @@ export default function RegisterForm() {
   const isLoading = loading;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-orange-50 flex flex-col">
+    <div className="min-h-screen bg-linear-to-br from-slate-50 via-white to-orange-50 flex flex-col">
       {/* Formulario principal */}
-      <section className="w-full my-15 flex-grow flex items-center">
+      <section className="w-full my-15 grow flex items-center">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="grid grid-cols-1 gap-8 items-start">
             {/* Indicador de paso y texto */}
@@ -338,7 +341,7 @@ export default function RegisterForm() {
 
             {/* Columna del formulario (Derecha en desktop) */}
             {/* CAMBIO 1: Aumentamos max-w-lg a max-w-2xl para dar espacio a las 2 columnas */}
-            <div className="order-1 lg:order-2 w-full max-w-3xl mx-auto bg-white/90 backdrop-blur-md rounded-3xl p-6 md:p-8 shadow-[0_20px_50px_rgba(8,_112,_184,_0.07)] border border-white/40">
+            <div className="order-1 lg:order-2 w-full max-w-3xl mx-auto bg-white/90 backdrop-blur-md rounded-3xl p-6 md:p-8 shadow-[0_20px_50px_rgba(8,112,184,0.07)] border border-white/40">
               <div className="text-center mb-6">
                 <img
                   src={logoColor}
@@ -355,7 +358,7 @@ export default function RegisterForm() {
                 <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl animate-pulse">
                   <div className="flex items-center">
                     <svg
-                      className="w-5 h-5 text-red-500 mr-3 flex-shrink-0"
+                      className="w-5 h-5 text-red-500 mr-3 shrink-0"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -500,25 +503,30 @@ export default function RegisterForm() {
                   )}
                 </div>
 
-                {/* Fecha de nacimiento */}
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1.5 ml-1">
-                    Fecha de nacimiento
-                  </label>
-                  <input
-                    type="date"
-                    value={formData.birthDate}
-                    onChange={(e) =>
-                      handleInputChange("birthDate", e.target.value)
+                <div
+                  className={
+                    errors.birthDate && touched.birthDate
+                      ? "[&_input]:border-red-300 [&_input]:focus:border-red-500"
+                      : ""
+                  }
+                >
+                  <DatePicker
+                    key={formData.birthDate || "empty-register-birth"}
+                    id="register-birthDate"
+                    label="Fecha de nacimiento"
+                    placeholder="Selecciona tu fecha de nacimiento"
+                    defaultDate={
+                      (formData.birthDate ?? "").trim()
+                        ? (formData.birthDate ?? "").trim()
+                        : undefined
                     }
-                    onBlur={() => handleBlur("birthDate")}
-                    max={new Date().toISOString().split("T")[0]}
-                    className={`h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 bg-white text-gray-800 border-gray-300 focus:border-brand-300 focus:ring-brand-500/20 dark:border-gray-700 dark:focus:border-brand-800 ${
-                      errors.birthDate && touched.birthDate
-                        ? "border-red-300 focus:border-red-500"
-                        : ""
-                    }`}
+                    maxDate={birthDateMax}
                     disabled={isLoading}
+                    onChange={(_dates, dateStr) => {
+                      handleInputChange("birthDate", dateStr);
+                      setTouched((prev) => ({ ...prev, birthDate: true }));
+                      validateField("birthDate", dateStr);
+                    }}
                   />
                   {errors.birthDate && touched.birthDate && (
                     <p className="mt-1 text-xs text-red-500 ml-1">
@@ -775,7 +783,7 @@ export default function RegisterForm() {
                     size="large"
                     fullWidth
                     disabled={isLoading || !acceptTerms || !acceptPrivacy}
-                    className="bg-gradient-to-r from-[#FF8546] to-[#FF6B35] hover:from-[#E64A2E] hover:to-[#FF5722] shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed py-3 text-lg font-semibold rounded-xl"
+                    className="bg-linear-to-r from-[#FF8546] to-[#FF6B35] hover:from-[#E64A2E] hover:to-[#FF5722] shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed py-3 text-lg font-semibold rounded-xl"
                   >
                     {isLoading ? (
                       <div className="flex items-center justify-center">

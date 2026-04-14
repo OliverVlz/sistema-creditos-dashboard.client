@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useModal } from "../../../hooks/useModal";
 import { Modal } from "../../../components/ui/modal";
 import Button from "../../../components/ui/button/Button";
@@ -8,6 +8,8 @@ import { ProfileData, ProfileUpdateData } from "../models/profileModel";
 import { useAppDispatch, useAppSelector } from "../../../store";
 import { updateMyProfile } from "../slices/operations/updateMyProfile.operation";
 import { fetchMyProfile } from "../slices/operations/fetchMyProfile.operation";
+import DatePicker from "../../../components/form/date-picker";
+import { parseDateStringForDisplay, todayYmdLocal } from "../../../utils/dateLocal";
 
 interface ProfileInfoCardProps {
   profile: ProfileData;
@@ -34,6 +36,8 @@ export default function ProfileInfoCard({ profile }: ProfileInfoCardProps) {
     });
   }, [profile]);
 
+  const birthDateMax = useMemo(() => todayYmdLocal(), []);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -50,7 +54,7 @@ export default function ProfileInfoCard({ profile }: ProfileInfoCardProps) {
 
   const formatDate = (dateString: string): string => {
     if (!dateString) return 'No especificada';
-    const date = new Date(dateString);
+    const date = parseDateStringForDisplay(dateString);
     return date.toLocaleDateString('es-CO', {
       day: '2-digit',
       month: '2-digit',
@@ -125,7 +129,7 @@ export default function ProfileInfoCard({ profile }: ProfileInfoCardProps) {
 
         <button
           onClick={openModal}
-          className="flex w-full items-center justify-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200 lg:inline-flex lg:w-auto"
+          className="flex w-full items-center justify-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/3 dark:hover:text-gray-200 lg:inline-flex lg:w-auto"
         >
           <svg
             className="fill-current"
@@ -190,12 +194,21 @@ export default function ProfileInfoCard({ profile }: ProfileInfoCardProps) {
                 </div>
 
                 <div className="col-span-2 lg:col-span-1">
-                  <Label>Fecha de Nacimiento</Label>
-                  <Input
-                    type="date"
-                    name="birthDate"
-                    value={formData.birthDate || ''}
-                    onChange={handleChange}
+                  <DatePicker
+                    key={formData.birthDate || "empty-profile-info-birth"}
+                    id="profile-info-birthDate"
+                    label="Fecha de Nacimiento"
+                    placeholder="Selecciona la fecha de nacimiento"
+                    defaultDate={
+                      (formData.birthDate ?? "").trim()
+                        ? (formData.birthDate ?? "").trim()
+                        : undefined
+                    }
+                    maxDate={birthDateMax}
+                    disabled={updateLoading}
+                    onChange={(_dates, dateStr) => {
+                      setFormData((prev) => ({ ...prev, birthDate: dateStr }));
+                    }}
                   />
                 </div>
               </div>

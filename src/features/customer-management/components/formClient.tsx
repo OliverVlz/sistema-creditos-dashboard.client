@@ -460,7 +460,11 @@ const FormClient: React.FC<FormClientProps> = ({
                 id="birthDate"
                 label="Fecha de Nacimiento *"
                 placeholder="Selecciona la fecha de nacimiento"
-                defaultDate={formData.birthDate ? new Date(formData.birthDate) : undefined}
+                defaultDate={
+                  (formData.birthDate ?? "").trim()
+                    ? (formData.birthDate ?? "").trim()
+                    : undefined
+                }
                 onChange={(_dates, currentDateString) => {
                   handleInputChange('birthDate', currentDateString);
                   handleBlur('birthDate');

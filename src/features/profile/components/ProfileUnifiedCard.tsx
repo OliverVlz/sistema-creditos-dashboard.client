@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useModal } from "../../../hooks/useModal";
 import { Modal } from "../../../components/ui/modal";
 import Button from "../../../components/ui/button/Button";
@@ -10,6 +10,8 @@ import { useAppDispatch, useAppSelector } from "../../../store";
 import { updateMyProfile } from "../slices/operations/updateMyProfile.operation";
 import { fetchMyProfile } from "../slices/operations/fetchMyProfile.operation";
 import Swal from "sweetalert2";
+import DatePicker from "../../../components/form/date-picker";
+import { parseDateStringForDisplay, todayYmdLocal } from "../../../utils/dateLocal";
 
 interface ProfileUnifiedCardProps {
   profile: ProfileData;
@@ -39,6 +41,8 @@ export default function ProfileUnifiedCard({ profile }: ProfileUnifiedCardProps)
       employmentStatus: profile.clientInfo?.employmentStatus || '',
     });
   }, [profile]);
+
+  const birthDateMax = useMemo(() => todayYmdLocal(), []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -122,7 +126,7 @@ export default function ProfileUnifiedCard({ profile }: ProfileUnifiedCardProps)
 
   const formatDate = (dateString: string): string => {
     if (!dateString) return 'No especificada';
-    const date = new Date(dateString);
+    const date = parseDateStringForDisplay(dateString);
     return date.toLocaleDateString('es-CO', {
       day: '2-digit',
       month: '2-digit',
@@ -198,7 +202,7 @@ export default function ProfileUnifiedCard({ profile }: ProfileUnifiedCardProps)
               </div>
               <button
                 onClick={openModal}
-                className="flex items-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
+                className="flex items-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/3 dark:hover:text-gray-200"
               >
                 <svg
                   className="fill-current"
@@ -369,12 +373,24 @@ export default function ProfileUnifiedCard({ profile }: ProfileUnifiedCardProps)
                 {isClientProfile ? (
                   <>
                     <div className="col-span-2 lg:col-span-1">
-                      <Label>Fecha de Nacimiento</Label>
-                      <Input
-                        type="date"
-                        name="birthDate"
-                        value={formData.birthDate || ''}
-                        onChange={handleChange}
+                      <DatePicker
+                        key={formData.birthDate || "empty-profile-unified-birth"}
+                        id="profile-unified-birthDate"
+                        label="Fecha de Nacimiento"
+                        placeholder="Selecciona la fecha de nacimiento"
+                        defaultDate={
+                          (formData.birthDate ?? "").trim()
+                            ? (formData.birthDate ?? "").trim()
+                            : undefined
+                        }
+                        maxDate={birthDateMax}
+                        disabled={updateLoading}
+                        onChange={(_dates, dateStr) => {
+                          setFormData((prev) => ({
+                            ...prev,
+                            birthDate: dateStr,
+                          }));
+                        }}
                       />
                     </div>
 

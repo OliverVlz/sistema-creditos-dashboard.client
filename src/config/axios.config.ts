@@ -5,7 +5,7 @@ import {
   authResponseInterceptor,
 } from "../core/interceptors/auth.interceptor";
 
-const getBaseUrl = () => {
+export const getBackendBaseUrl = () => {
   if (appConfig.apiUrl) return appConfig.apiUrl;
   if (
     typeof window !== "undefined" &&
@@ -17,7 +17,7 @@ const getBaseUrl = () => {
 };
 
 export const mainCustomAxios = axios.create({
-  baseURL: getBaseUrl(),
+  baseURL: getBackendBaseUrl(),
 });
 
 // Agregar interceptor de request para incluir el token automáticamente

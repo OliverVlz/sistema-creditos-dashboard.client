@@ -8,7 +8,10 @@ import {
 import { io, Socket } from "socket.io-client";
 import { useAuth } from "./auth/auth-context.provider";
 import Swal from "sweetalert2";
-import { mainCustomAxios } from "../config/axios.config";
+import {
+  getBackendBaseUrl,
+  mainCustomAxios,
+} from "../config/axios.config";
 
 const MAX_NOTIFICATIONS = 30;
 
@@ -80,15 +83,8 @@ export const NotificationsProvider = ({
   };
 
   useEffect(() => {
-    console.log("🔍 NotificationsContext - Estado:", {
-      user: user?.email || user?.name,
-      hasToken: !!token,
-    });
-
     if (!user || !token) {
-      // Si no hay usuario autenticado, desconectar socket
       if (socket) {
-        console.log("⚠️ No hay usuario/token, desconectando socket...");
         socket.disconnect();
         setSocket(null);
         setIsConnected(false);
@@ -96,14 +92,8 @@ export const NotificationsProvider = ({
       return;
     }
 
-    console.log("🚀 Iniciando conexión WebSocket...");
-
-    // Crear conexión WebSocket
-    const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000/api";
-    const socketUrl = apiUrl.replace(/\/api$/, ""); // Remove /api if present
-
-    console.log("🌐 URL del socket:", `${socketUrl}/notifications`);
-    console.log("🔑 Token:", token?.substring(0, 20) + "...");
+    const apiUrl = getBackendBaseUrl();
+    const socketUrl = apiUrl.replace(/\/api\/?$/, "");
 
     const newSocket = io(`${socketUrl}/notifications`, {
       auth: {
@@ -116,42 +106,33 @@ export const NotificationsProvider = ({
     });
 
     newSocket.on("connect", () => {
-      console.log("✅ WebSocket CONECTADO exitosamente");
-      console.log("Socket ID:", newSocket.id);
       setIsConnected(true);
     });
 
     newSocket.on("disconnect", () => {
-      console.log("❌ WebSocket DESCONECTADO");
       setIsConnected(false);
     });
 
     newSocket.on("connect_error", (error) => {
-      console.error("❌ Error de conexión WebSocket:", error);
-      console.error("Error details:", error.message);
+      console.error("WebSocket connect_error:", error.message);
     });
 
-    // Listen for loan notifications
     newSocket.on("loan:created", (notification: Notification) => {
-      console.log("📬 Evento loan:created recibido:", notification);
       handleNotification(notification);
       showInfoNotification(notification.message);
     });
 
     newSocket.on("loan:approved", (notification: Notification) => {
-      console.log("📬 Evento loan:approved recibido:", notification);
       handleNotification(notification);
       showSuccessNotification(notification.message);
     });
 
     newSocket.on("loan:preapproved", (notification: Notification) => {
-      console.log("📬 Evento loan:preapproved recibido:", notification);
       handleNotification(notification);
       showInfoNotification(notification.message);
     });
 
     newSocket.on("loan:rejected", (notification: Notification) => {
-      console.log("📬 Evento loan:rejected recibido:", notification);
       handleNotification(notification);
       showWarningNotification(
         notification.message,
@@ -160,19 +141,12 @@ export const NotificationsProvider = ({
     });
 
     newSocket.on("loan:updated", (notification: Notification) => {
-      console.log("📬 Evento loan:updated recibido:", notification);
       handleNotification(notification);
     });
 
     newSocket.on("loan:modified_by_client", (notification: Notification) => {
-      console.log("📬 Evento loan:modified_by_client recibido:", notification);
       handleNotification(notification);
       showInfoNotification(notification.message);
-    });
-
-    // Listen to ANY event for debugging
-    newSocket.onAny((eventName, ...args) => {
-      console.log("📡 Evento WebSocket recibido:", eventName, args);
     });
 
     setSocket(newSocket);
@@ -184,7 +158,6 @@ export const NotificationsProvider = ({
   }, [user, token]);
 
   const handleNotification = (notification: Notification) => {
-    // Add temporary ID if missing for key prop
     const notificationWithId = {
       ...notification,
       id: notification.id || `temp-${Date.now()}`,
@@ -194,15 +167,10 @@ export const NotificationsProvider = ({
     setNotifications((prev) => [notificationWithId, ...prev].slice(0, MAX_NOTIFICATIONS));
     setUnreadCount((prev) => prev + 1);
 
-    // Play notification sound (optional)
     try {
       const audio = new Audio("/notification.mp3");
-      audio.play().catch(() => {
-        // Ignore if sound fails to play
-      });
-    } catch {
-      // Ignore sound errors
-    }
+      audio.play().catch(() => {});
+    } catch {}
   };
 
   const showSuccessNotification = (message: string) => {
@@ -254,7 +222,6 @@ export const NotificationsProvider = ({
     try {
       await mainCustomAxios.patch("/notifications/read-all");
       setUnreadCount(0);
-      // Update local state to mark all as read
       setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
     } catch (error) {
       console.error("Error marking notifications as read:", error);

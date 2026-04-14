@@ -24,7 +24,13 @@ export const fetchClients = createAsyncThunk(
         
         const response = await mainCustomAxios.get('/clients/all', { params })
         console.log('response.data', response.data.data)
-        const clients = response.data.data.map((client: ClientApiResponse): Client => ({
+        const responseData = response.data?.data
+        const clientList: ClientApiResponse[] = Array.isArray(responseData)
+            ? responseData
+            : Array.isArray(responseData?.data)
+                ? responseData.data
+                : []
+        const clients = clientList.map((client: ClientApiResponse): Client => ({
             id: client.userId, // IMPORTANTE: Usar userId para editar, NO clientId ni documentNumber
             isActive: client.isActive,
             fullName: client.fullName || `${client.firstName || ''} ${client.lastName || ''}`.trim(),
