@@ -16,19 +16,16 @@ export default function PoliticaPrivacidadPage() {
             </h2>
             <p>
               <strong>Inversiones Murillo Martinez &amp; CIA S ENC</strong>, NIT{" "}
-              <strong>[NIT]</strong>, con domicilio en{" "}
-              <strong>[Domicilio social principal]</strong>, actúa como
-              responsable del tratamiento de datos personales que se recolecten
-              a través del sitio web, formularios, correos electrónicos,
-              canales de mensajería y demás medios digitales o físicos
-              habilitados para la gestión comercial, crediticia y de servicio al
-              cliente.
+              <strong>830147546</strong>, actúa como responsable del tratamiento
+              de datos personales que se recolecten a través del sitio web,
+              formularios, correos electrónicos, canales de mensajería y demás
+              medios digitales o físicos habilitados para la gestión comercial,
+              crediticia y de servicio al cliente.
             </p>
             <p>
-              Datos de contacto del área o persona encargada de atender
-              solicitudes sobre datos personales: correo{" "}
-              <strong>[Correo electrónico de notificaciones]</strong> y
-              teléfono <strong>[Teléfono de atención]</strong>.
+              Para consultas, reclamos o solicitudes relacionadas con datos
+              personales, el titular podrá usar los canales oficiales de
+              atención y contacto publicados en este sitio web.
             </p>
           </section>
 
@@ -231,9 +228,17 @@ export default function PoliticaPrivacidadPage() {
               10. Menores de edad
             </h2>
             <p>
-              Los tratamientos de datos de niñas, niños y adolescentes se
-              realizarán respetando sus derechos fundamentales e interés
-              superior, y con las autorizaciones que exija la ley.
+              Los productos y servicios de préstamo ofrecidos por el Proveedor
+              están dirigidos exclusivamente a personas mayores de edad. En
+              consecuencia, no se tramitan solicitudes de crédito de menores de
+              edad ni se realiza tratamiento intencional de sus datos
+              personales para estas finalidades.
+            </p>
+            <p>
+              Si se identifica información de un menor de edad cargada por
+              error en los canales de atención, el Proveedor adoptará medidas
+              razonables para su bloqueo, eliminación o anonimización, según
+              corresponda y conforme a la normatividad aplicable.
             </p>
           </section>
 

@@ -19,10 +19,10 @@ export default function TerminosCondicionesPage() {
               sitio web y canales digitales puestos a disposición por{" "}
               <strong>Inversiones Murillo Martinez &amp; CIA S ENC</strong>, en
               adelante el &quot;Proveedor&quot;, identificado con NIT{" "}
-              <strong>[NIT]</strong>, con domicilio principal en{" "}
-              <strong>[Domicilio social principal]</strong>, correo electrónico{" "}
-              <strong>[Correo electrónico de notificaciones]</strong> y teléfono
-              de contacto <strong>[Teléfono de atención]</strong>.
+              <strong>830147546</strong>. Para efectos de notificaciones,
+              peticiones, quejas y reclamos, el usuario podrá usar los canales
+              oficiales de atención publicados en este sitio web y en los medios
+              institucionales del Proveedor.
             </p>
           </section>
 
