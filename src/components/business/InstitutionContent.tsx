@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import Button from "../ui/Button";
 import pesoIcon from "../../assets_landing/images/decorative/peso.svg";
 import calendarIcon from "../../assets_landing/images/decorative/calendar.svg";
@@ -6,6 +7,7 @@ import timeIcon from "../../assets_landing/images/decorative/time.svg";
 import rayoIcon from "../../assets_landing/images/decorative/rayo.svg";
 import verifiedIcon from "../../assets_landing/images/decorative/verified.svg";
 import estrellaIcon from "../../assets_landing/images/decorative/id-estrella.svg";
+import { REGISTER_ROUTE } from "../../routes/routes";
 
 interface InstitutionContentProps {
   institutionName: string;
@@ -18,6 +20,7 @@ export const InstitutionContent: React.FC<InstitutionContentProps> = ({
   userType,
   onUserTypeChange,
 }) => {
+  const navigate = useNavigate();
   const miniCards = [
     {
       icon: pesoIcon,
@@ -83,7 +86,7 @@ export const InstitutionContent: React.FC<InstitutionContentProps> = ({
             >
               <div className="flex items-center gap-6">
                 {/* Icono SVG - 1/4 del espacio */}
-                <div className="flex-shrink-0 w-1/4">
+                <div className="shrink-0 w-1/4">
                   <img
                     src={card.icon}
                     alt={card.title}
@@ -305,7 +308,7 @@ export const InstitutionContent: React.FC<InstitutionContentProps> = ({
             </div>
 
             {/* Overlay adicional para efecto glass */}
-            <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-3xl"></div>
+            <div className="absolute inset-0 bg-linear-to-br from-white/5 to-transparent rounded-3xl"></div>
 
             <div className="relative">
               <div className="flex items-center justify-center gap-3 mb-4">
@@ -340,6 +343,7 @@ export const InstitutionContent: React.FC<InstitutionContentProps> = ({
                   variant="cta"
                   size="xlarge"
                   className="w-full sm:w-auto"
+                  onClick={() => navigate(REGISTER_ROUTE)}
                 >
                   ¡Solicitar Crédito Ahora!
                 </Button>

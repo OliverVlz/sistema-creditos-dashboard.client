@@ -19,24 +19,24 @@ const Footer = () => {
   return (
     <footer className={`w-full bg-[#333333] ${PADDING}`}>
       <div className="w-full max-w-[1440px] mx-auto">
-        <div className="flex flex-col gap-2 justify-start items-center w-full mt-[24px] sm:mt-[28px] md:mt-[32px]">
-          <div className="flex flex-col lg:flex-row justify-between w-full px-[40px] sm:px-[48px] md:px-[56px] lg:px-[64px] gap-8 lg:gap-0">
-            <div className="flex flex-col justify-start items-start w-full">
-              <div className="pl-2">
-                <h3 className={`font-plus-jakarta ${HEADING_SIZE} text-left text-white mb-8 w-full`}>
+        <div className="mt-[24px] flex w-full flex-col items-center gap-2 justify-start sm:mt-[28px] md:mt-[32px]">
+          <div className="flex w-full flex-col justify-between gap-10 px-4 text-center sm:px-6 md:px-10 lg:flex-row lg:gap-0 lg:px-[64px] lg:text-left">
+            <div className="flex w-full flex-col items-center justify-start lg:items-start">
+              <div>
+                <h3 className={`font-plus-jakarta ${HEADING_SIZE} mb-6 w-full text-white lg:mb-8`}>
                   Legales
                 </h3>
               </div>
-              <div className="flex flex-col gap-[28px]">
+              <div className="flex flex-col items-center gap-4 lg:items-start lg:gap-[28px]">
                 <Link
                   to={TERMS_AND_CONDITIONS_ROUTE}
-                  className={`font-plus-jakarta ${TEXT_SIZE} text-white/90 hover:text-white transition-colors duration-200 px-1.5 py-0.5 rounded hover:bg-white/10 w-full text-left`}
+                  className={`font-plus-jakarta ${TEXT_SIZE} w-auto rounded px-1.5 py-0.5 text-white/90 transition-colors duration-200 hover:bg-white/10 hover:text-white`}
                 >
                   Términos y Condiciones
                 </Link>
                 <Link
                   to={PRIVACY_POLICY_ROUTE}
-                  className={`font-plus-jakarta ${TEXT_SIZE} text-white/90 hover:text-white transition-colors duration-200 px-1.5 py-0.5 rounded hover:bg-white/10 w-full text-left`}
+                  className={`font-plus-jakarta ${TEXT_SIZE} w-auto rounded px-1.5 py-0.5 text-white/90 transition-colors duration-200 hover:bg-white/10 hover:text-white`}
                 >
                   Política de privacidad
                 </Link>
@@ -48,48 +48,48 @@ const Footer = () => {
                   <img
                   src={logoWhite}
                   alt="Company Logo"
-                  className="w-full max-w-[150px] h-auto lg:w-[100%] object-contain"
+                  className="w-full max-w-[150px] h-auto lg:w-full object-contain"
                 />
 
             </div>
-            <div className="flex flex-col text-right w-full">
-              <h3 className={`font-plus-jakarta ${HEADING_SIZE} text-white mb-6 w-full`}>
+            <div className="flex w-full flex-col items-center lg:items-end">
+              <h3 className={`font-plus-jakarta ${HEADING_SIZE} mb-6 w-full text-white text-center lg:text-right`}>
                 Contactanos
               </h3>
 
-              <div className="flex flex-col items-end">
-                <div className={`flex flex-row-reverse ${SPACING} justify-start items-center w-auto p-2 rounded-md hover:bg-white/5 transition-colors duration-200`}>
-                  <div className="flex-shrink-0">
+              <div className="flex flex-col items-center lg:items-end">
+                <div className={`flex ${SPACING} items-center justify-center rounded-md p-2 transition-colors duration-200 hover:bg-white/5 lg:flex-row-reverse`}>
+                  <div className="shrink-0">
                     <img src={whatsappIcon} alt="WhatsApp" className={ICON_SIZE} />
                   </div>
-                  <span className={`font-plus-jakarta ${TEXT_SIZE} leading-[18px] sm:leading-[20px] md:leading-[22px] text-right text-white`}>
+                  <span className={`font-plus-jakarta ${TEXT_SIZE} text-center leading-[18px] text-white sm:leading-[20px] md:leading-[22px] lg:text-right`}>
                     315 8008588
                   </span>
                 </div>
 
-                <div className={`flex flex-row-reverse ${SPACING} justify-start items-center w-auto p-2 rounded-md hover:bg-white/5 transition-colors duration-200`}>
-                  <div className="flex-shrink-0">
+                <div className={`flex ${SPACING} items-center justify-center rounded-md p-2 transition-colors duration-200 hover:bg-white/5 lg:flex-row-reverse`}>
+                  <div className="shrink-0">
                     <img src={facebookIcon} alt="Facebook" className={ICON_SIZE} />
                   </div>
-                  <span className={`font-plus-jakarta ${TEXT_SIZE} leading-[18px] sm:leading-[20px] md:leading-[22px] text-right text-white`}>
+                  <span className={`font-plus-jakarta ${TEXT_SIZE} text-center leading-[18px] text-white sm:leading-[20px] md:leading-[22px] lg:text-right`}>
                     Inversiones Murillo Martinez
                   </span>
                 </div>
 
-                <div className={`flex flex-row-reverse ${SPACING} justify-start items-center w-auto p-2 rounded-md hover:bg-white/5 transition-colors duration-200`}>
-                  <div className="flex-shrink-0">
+                <div className={`flex ${SPACING} items-center justify-center rounded-md p-2 transition-colors duration-200 hover:bg-white/5 lg:flex-row-reverse`}>
+                  <div className="shrink-0">
                     <img src={instagramIcon} alt="Instagram" className={ICON_SIZE} />
                   </div>
-                  <span className={`font-plus-jakarta ${TEXT_SIZE} leading-[18px] sm:leading-[20px] md:leading-[22px] text-right text-white`}>
+                  <span className={`font-plus-jakarta ${TEXT_SIZE} text-center leading-[18px] text-white sm:leading-[20px] md:leading-[22px] lg:text-right`}>
                     @Inversiones Murillo Martinez
                   </span>
                 </div>
 
-                <div className={`flex flex-row-reverse ${SPACING} justify-start items-center w-auto p-2 rounded-md hover:bg-white/5 transition-colors duration-200`}>
-                  <div className="flex-shrink-0">
+                <div className={`flex ${SPACING} items-center justify-center rounded-md p-2 transition-colors duration-200 hover:bg-white/5 lg:flex-row-reverse`}>
+                  <div className="shrink-0">
                     <img src={emailIcon} alt="Email" className={ICON_SIZE} />
                   </div>
-                  <span className={`font-plus-jakarta ${TEXT_SIZE} leading-[18px] sm:leading-[20px] md:leading-[22px] text-right text-white`}>
+                  <span className={`font-plus-jakarta ${TEXT_SIZE} text-center leading-[18px] text-white sm:leading-[20px] md:leading-[22px] lg:text-right`}>
                     inversionesmurillomartinez@outlook.es
                   </span>
                 </div>
@@ -97,7 +97,7 @@ const Footer = () => {
             </div>
           </div>
 
-          <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-gray-600 to-transparent my-3"></div>
+          <div className="w-full h-px bg-linear-to-r from-transparent via-gray-600 to-transparent my-3"></div>
 
           <div className="pt-3 pb-1">
             <p className={`font-plus-jakarta ${TEXT_SIZE} font-medium leading-[20px] sm:leading-[22px] md:leading-[24px] text-center text-white/80`}>

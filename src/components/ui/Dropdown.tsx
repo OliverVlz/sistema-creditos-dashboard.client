@@ -74,9 +74,9 @@ const Dropdown: React.FC<DropdownProps> = ({
           bg-white dark:bg-gray-800 px-3 py-2 pr-10 
           text-sm text-gray-800 dark:text-gray-200 
           transition-colors duration-200 
-          focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
+          focus:outline-none focus:ring-2 focus:ring-[#FF8546]/40 focus:border-[#FF8546]
           ${disabled ? 'bg-gray-100 dark:bg-gray-700 cursor-not-allowed opacity-50' : 'cursor-pointer hover:border-gray-400 dark:hover:border-gray-500'}
-          ${isOpen ? 'ring-2 ring-blue-500 border-blue-500' : ''}
+          ${isOpen ? 'ring-2 ring-[#FF8546]/40 border-[#FF8546]' : ''}
         `}
         onClick={() => !disabled && setIsOpen(!isOpen)}
       >
