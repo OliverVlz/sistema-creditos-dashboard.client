@@ -188,7 +188,7 @@ export default function BulkImportClientsLoansPage() {
             accept=".xlsx"
             onClick={handleFileInputClick}
             onChange={handleFileChange}
-            className="mt-4 block w-full text-sm text-gray-900 dark:text-gray-200 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-brand-600 file:text-white hover:file:bg-brand-700"
+            className="mt-4 block w-full cursor-pointer text-sm text-gray-900 dark:text-gray-200 file:mr-4 file:cursor-pointer file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-brand-600 file:text-white hover:file:bg-brand-700"
           />
 
           <div className="mt-3 rounded-md border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 py-2 text-xs text-gray-600 dark:text-gray-300">
@@ -316,7 +316,10 @@ export default function BulkImportClientsLoansPage() {
                     </td>
                     <td className="px-3 py-2 text-gray-700 dark:text-gray-300">
                       {row.status === "SUCCESS"
-                        ? `Cliente ${row.clientId} / Solicitud ${row.loanNumber}`
+                        ? row.loanNumber
+                          ? `Cliente ${row.clientId} / Solicitud ${row.loanNumber}`
+                          : row.errorMessage ||
+                            `Cliente ${row.clientId} creado sin solicitud`
                         : row.status === "VALID"
                           ? row.errorMessage || "Fila válida"
                           : row.errorMessage || "Error de validación"}
