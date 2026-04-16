@@ -232,12 +232,25 @@ export default function BulkImportClientsLoansPage() {
           <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">
             Resultado de importación
           </h2>
-          <div className="mb-4 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-900 px-3 py-2 text-sm text-blue-800 dark:text-blue-200">
-            {result.uploaded === false
-              ? "No se cargó ninguna fila porque hay errores. Revisa cuáles están OK y cuáles están mal en el detalle."
-              : result.errorRows > 0
-                ? "La importación terminó con filas por corregir. Revisa el detalle para ajustar el archivo."
-                : "Los campos fueron validados y el archivo se subió correctamente."}
+          <div
+            className={`mb-4 rounded-lg border px-3 py-2 text-sm ${
+              result.uploaded === false
+                ? "bg-red-50 text-red-700 border-red-200 dark:bg-red-900/20 dark:text-red-200 dark:border-red-900"
+                : result.errorRows > 0
+                  ? "bg-blue-50 text-blue-800 border-blue-100 dark:bg-blue-900/20 dark:text-blue-200 dark:border-blue-900"
+                  : "bg-green-50 text-green-800 border-green-200 dark:bg-green-900/20 dark:text-green-200 dark:border-green-900"
+            }`}
+          >
+            {result.uploaded === false ? (
+              "No se cargó ninguna fila porque hay errores. Revisa cuáles están OK y cuáles están mal en el detalle."
+            ) : result.errorRows > 0 ? (
+              "La importación terminó con filas por corregir. Revisa el detalle para ajustar el archivo."
+            ) : (
+              <span className="inline-flex items-center rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700 dark:bg-green-900/40 dark:text-green-300">
+                Felicitaciones, los campos fueron validados y el archivo se
+                subió correctamente.
+              </span>
+            )}
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-6 gap-3 text-sm">
