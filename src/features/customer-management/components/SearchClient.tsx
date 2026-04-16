@@ -19,12 +19,13 @@ export default function SearchClient({ onFiltersChange }: SearchClientProps) {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { organizations } = useAppSelector(
-    (state: RootState) => state.organizations
+    (state: RootState) => state.organizations,
   );
   const [filters, setFilters] = useState<SearchFilters>({
     searchTerm: "",
     employmentStatus: undefined,
     organizationId: undefined,
+    uploadedByExcel: undefined,
   });
 
   useEffect(() => {
@@ -35,12 +36,14 @@ export default function SearchClient({ onFiltersChange }: SearchClientProps) {
         searchTerm: filters.searchTerm,
         status: filters.employmentStatus ?? undefined,
         organizationId: filters.organizationId ?? undefined,
-      })
+        uploadedByExcel: filters.uploadedByExcel ?? undefined,
+      }),
     );
   }, [
     filters.searchTerm,
     filters.employmentStatus,
     filters.organizationId,
+    filters.uploadedByExcel,
     dispatch,
   ]);
 
@@ -57,17 +60,26 @@ export default function SearchClient({ onFiltersChange }: SearchClientProps) {
     (organization) => ({
       value: organization.id,
       label: organization.name,
-    })
+    }),
   );
+
+  const sourceOptions: DropdownOption[] = [
+    { value: "true", label: "Subido por Excel" },
+    { value: "false", label: "Registro manual" },
+  ];
 
   const handleStatusChange = (value: string | number | null | undefined) => {
     updateFilters({ employmentStatus: value as string | null | undefined });
   };
 
   const handleOrganizationChange = (
-    value: string | number | null | undefined
+    value: string | number | null | undefined,
   ) => {
     updateFilters({ organizationId: value as string | null | undefined });
+  };
+
+  const handleSourceChange = (value: string | number | null | undefined) => {
+    updateFilters({ uploadedByExcel: value as string | null | undefined });
   };
 
   const updateFilters = (newFilters: Partial<SearchFilters>) => {
@@ -81,13 +93,17 @@ export default function SearchClient({ onFiltersChange }: SearchClientProps) {
       searchTerm: "",
       employmentStatus: undefined,
       organizationId: undefined,
+      uploadedByExcel: undefined,
     };
     setFilters(clearedFilters);
     onFiltersChange?.(clearedFilters);
   };
 
   const hasActiveFilters =
-    filters.searchTerm || filters.employmentStatus || filters.organizationId;
+    filters.searchTerm ||
+    filters.employmentStatus ||
+    filters.organizationId ||
+    filters.uploadedByExcel;
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg sm:rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-3 sm:p-4 mb-3 sm:mb-4">
@@ -125,6 +141,17 @@ export default function SearchClient({ onFiltersChange }: SearchClientProps) {
               value={filters.organizationId}
               onChange={handleOrganizationChange}
               placeholder="Organización"
+              showClear
+              className="w-full text-sm"
+            />
+          </div>
+
+          <div className="w-full sm:w-[220px]">
+            <Dropdown
+              options={sourceOptions}
+              value={filters.uploadedByExcel}
+              onChange={handleSourceChange}
+              placeholder="Origen de registro"
               showClear
               className="w-full text-sm"
             />
@@ -168,7 +195,7 @@ export default function SearchClient({ onFiltersChange }: SearchClientProps) {
             <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300">
               {
                 employmentStatusOptions.find(
-                  (s) => s.value === filters.employmentStatus
+                  (s) => s.value === filters.employmentStatus,
                 )?.label
               }
             </span>
@@ -177,8 +204,16 @@ export default function SearchClient({ onFiltersChange }: SearchClientProps) {
             <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300">
               {
                 organizationOptions.find(
-                  (o) => o.value === filters.organizationId
+                  (o) => o.value === filters.organizationId,
                 )?.label
+              }
+            </span>
+          )}
+          {filters.uploadedByExcel && (
+            <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-300">
+              {
+                sourceOptions.find((o) => o.value === filters.uploadedByExcel)
+                  ?.label
               }
             </span>
           )}
