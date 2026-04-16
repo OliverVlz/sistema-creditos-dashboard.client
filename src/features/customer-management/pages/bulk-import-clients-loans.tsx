@@ -4,7 +4,7 @@ import { mainCustomAxios } from "@/config/axios.config";
 
 type ImportRowResult = {
   rowNumber: number;
-  status: "SUCCESS" | "ERROR";
+  status: "SUCCESS" | "ERROR" | "VALID";
   email: string;
   documentNumber: string;
   clientId?: string;
@@ -20,20 +20,62 @@ type ImportResponse = {
   processedRows: number;
   successRows: number;
   errorRows: number;
+  validRows?: number;
+  uploaded?: boolean;
   results: ImportRowResult[];
 };
 
 export default function BulkImportClientsLoansPage() {
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
+  const [preparingFile, setPreparingFile] = useState(false);
   const [downloadingTemplate, setDownloadingTemplate] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<ImportResponse | null>(null);
   const chunkSize = 20;
 
   const canSubmit = useMemo(() => {
-    return !!file && !loading;
-  }, [file, loading]);
+    return !!file && !loading && !preparingFile;
+  }, [file, loading, preparingFile]);
+
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const selectedFile = event.target.files?.[0] || null;
+
+    if (!selectedFile) {
+      return;
+    }
+
+    setPreparingFile(true);
+    setError(null);
+    setResult(null);
+
+    try {
+      // Snapshot en memoria para evitar ERR_UPLOAD_FILE_CHANGED si el archivo en disco cambia.
+      const fileBuffer = await selectedFile.arrayBuffer();
+      const fileSnapshot = new File([fileBuffer], selectedFile.name, {
+        type:
+          selectedFile.type ||
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        lastModified: Date.now(),
+      });
+
+      setFile(fileSnapshot);
+    } catch {
+      setFile(null);
+      setError(
+        "No se pudo leer el archivo seleccionado. Cierra el Excel y vuelve a seleccionarlo.",
+      );
+    } finally {
+      setPreparingFile(false);
+    }
+  };
+
+  const handleFileInputClick = (event: React.MouseEvent<HTMLInputElement>) => {
+    // Limpiar antes de abrir el selector permite elegir el mismo archivo y volver a disparar onChange.
+    event.currentTarget.value = "";
+  };
 
   const handleDownloadTemplate = async () => {
     setDownloadingTemplate(true);
@@ -44,7 +86,7 @@ export default function BulkImportClientsLoansPage() {
         "/clients/import/clients-loans/template",
         {
           responseType: "blob",
-        }
+        },
       );
 
       const blob = new Blob([response.data], {
@@ -66,9 +108,7 @@ export default function BulkImportClientsLoansPage() {
     }
   };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
+  const handleUpload = async () => {
     if (!file) {
       setError("Debes seleccionar un archivo .xlsx");
       return;
@@ -80,7 +120,7 @@ export default function BulkImportClientsLoansPage() {
 
     try {
       const formData = new FormData();
-      formData.append("file", file);
+      formData.append("file", file, file.name);
       formData.append("chunkSize", String(chunkSize));
 
       const response = await mainCustomAxios.post<ImportResponse>(
@@ -90,7 +130,7 @@ export default function BulkImportClientsLoansPage() {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        }
+        },
       );
 
       setResult(response.data);
@@ -99,8 +139,13 @@ export default function BulkImportClientsLoansPage() {
         response?: { data?: { message?: string | string[] } };
       };
       const backendMessage =
-        requestErrorTyped?.response?.data?.message || "No se pudo procesar el archivo";
-      setError(Array.isArray(backendMessage) ? backendMessage.join(", ") : backendMessage);
+        requestErrorTyped?.response?.data?.message ||
+        "No se pudo procesar el archivo";
+      setError(
+        Array.isArray(backendMessage)
+          ? backendMessage.join(", ")
+          : backendMessage,
+      );
     } finally {
       setLoading(false);
     }
@@ -122,10 +167,7 @@ export default function BulkImportClientsLoansPage() {
         ]}
       />
 
-      <form
-        onSubmit={handleSubmit}
-        className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4 sm:p-5 space-y-4"
-      >
+      <div className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4 sm:p-5 space-y-4">
         <div className="rounded-lg border border-dashed border-gray-300 dark:border-gray-700 p-5 sm:p-6 bg-gray-50/70 dark:bg-gray-800/40">
           <div className="flex items-start sm:items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-brand-100 dark:bg-brand-900/30 flex items-center justify-center">
@@ -144,15 +186,17 @@ export default function BulkImportClientsLoansPage() {
           <input
             type="file"
             accept=".xlsx"
-            onChange={(event) => {
-              const selectedFile = event.target.files?.[0] || null;
-              setFile(selectedFile);
-            }}
+            onClick={handleFileInputClick}
+            onChange={handleFileChange}
             className="mt-4 block w-full text-sm text-gray-900 dark:text-gray-200 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-brand-600 file:text-white hover:file:bg-brand-700"
           />
 
           <div className="mt-3 rounded-md border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 py-2 text-xs text-gray-600 dark:text-gray-300">
-            {file ? file.name : "No has seleccionado archivo todavía"}
+            {preparingFile
+              ? "Preparando archivo..."
+              : file
+                ? file.name
+                : "No has seleccionado archivo todavía"}
           </div>
         </div>
 
@@ -167,14 +211,15 @@ export default function BulkImportClientsLoansPage() {
           </button>
 
           <button
-            type="submit"
+            type="button"
+            onClick={handleUpload}
             disabled={!canSubmit}
             className="rounded-lg px-4 py-2 text-sm font-semibold bg-brand-600 text-white hover:bg-brand-700 disabled:opacity-60"
           >
-            {loading ? "Procesando..." : "Subir y procesar"}
+            {loading ? "Procesando..." : "Validar y subir"}
           </button>
         </div>
-      </form>
+      </div>
 
       {error && (
         <div className="mt-4 rounded-lg border border-red-200 bg-red-50 text-red-700 px-4 py-3 dark:border-red-900 dark:bg-red-950 dark:text-red-300">
@@ -188,16 +233,19 @@ export default function BulkImportClientsLoansPage() {
             Resultado de importación
           </h2>
           <div className="mb-4 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-900 px-3 py-2 text-sm text-blue-800 dark:text-blue-200">
-            {result.errorRows > 0
-              ? "La importación terminó con filas por corregir. Revisa el detalle para ajustar el archivo."
-              : "La importación finalizó correctamente sin errores."}
+            {result.uploaded === false
+              ? "No se cargó ninguna fila porque hay errores. Revisa cuáles están OK y cuáles están mal en el detalle."
+              : result.errorRows > 0
+                ? "La importación terminó con filas por corregir. Revisa el detalle para ajustar el archivo."
+                : "Los campos fueron validados y el archivo se subió correctamente."}
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-3 text-sm">
+          <div className="grid grid-cols-2 md:grid-cols-6 gap-3 text-sm">
             <StatCard label="Filas" value={result.totalRows} />
             <StatCard label="Procesadas" value={result.processedRows} />
             <StatCard label="Exitosas" value={result.successRows} />
             <StatCard label="Con error" value={result.errorRows} />
+            <StatCard label="Válidas" value={result.validRows ?? 0} />
             <StatCard label="Archivo" value={result.fileName} />
           </div>
 
@@ -224,7 +272,9 @@ export default function BulkImportClientsLoansPage() {
               </thead>
               <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
                 {result.results.map((row) => (
-                  <tr key={`${row.rowNumber}-${row.documentNumber}-${row.status}`}>
+                  <tr
+                    key={`${row.rowNumber}-${row.documentNumber}-${row.status}`}
+                  >
                     <td className="px-3 py-2 text-gray-700 dark:text-gray-300">
                       {row.rowNumber}
                     </td>
@@ -233,20 +283,30 @@ export default function BulkImportClientsLoansPage() {
                         className={
                           row.status === "SUCCESS"
                             ? "inline-flex rounded-full bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300 px-2 py-1 text-xs font-semibold"
-                            : "inline-flex rounded-full bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300 px-2 py-1 text-xs font-semibold"
+                            : row.status === "VALID"
+                              ? "inline-flex rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300 px-2 py-1 text-xs font-semibold"
+                              : "inline-flex rounded-full bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300 px-2 py-1 text-xs font-semibold"
                         }
                       >
-                        {row.status === "SUCCESS" ? "OK" : "ERROR"}
+                        {row.status === "SUCCESS"
+                          ? "OK"
+                          : row.status === "VALID"
+                            ? "VALIDA"
+                            : "ERROR"}
                       </span>
                     </td>
-                    <td className="px-3 py-2 text-gray-700 dark:text-gray-300">{row.email}</td>
+                    <td className="px-3 py-2 text-gray-700 dark:text-gray-300">
+                      {row.email}
+                    </td>
                     <td className="px-3 py-2 text-gray-700 dark:text-gray-300">
                       {row.documentNumber}
                     </td>
                     <td className="px-3 py-2 text-gray-700 dark:text-gray-300">
                       {row.status === "SUCCESS"
                         ? `Cliente ${row.clientId} / Solicitud ${row.loanNumber}`
-                        : `${row.errorCode || ""} ${row.errorMessage || ""}`.trim()}
+                        : row.status === "VALID"
+                          ? row.errorMessage || "Fila válida"
+                          : row.errorMessage || "Error de validación"}
                     </td>
                   </tr>
                 ))}
@@ -263,7 +323,9 @@ function StatCard({ label, value }: { label: string; value: string | number }) {
   return (
     <div className="rounded-lg border border-gray-200 dark:border-gray-800 p-3">
       <p className="text-xs text-gray-500 dark:text-gray-400">{label}</p>
-      <p className="mt-1 text-sm font-semibold text-gray-900 dark:text-gray-100">{value}</p>
+      <p className="mt-1 text-sm font-semibold text-gray-900 dark:text-gray-100">
+        {value}
+      </p>
     </div>
   );
 }
