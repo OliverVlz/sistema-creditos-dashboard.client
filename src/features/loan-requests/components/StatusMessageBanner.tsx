@@ -189,7 +189,7 @@ export default function StatusMessageBanner({
                   href={appConfig.loanContractTemplateUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="h-full min-h-[112px] w-full block rounded-lg border border-blue-300 dark:border-blue-700 bg-white/70 dark:bg-blue-950/30 p-3 hover:bg-white dark:hover:bg-blue-900/40 transition-colors"
+                  className="h-full min-h-80px w-full block rounded-lg border border-blue-300 dark:border-blue-700 bg-white/70 dark:bg-blue-950/30 p-3 hover:bg-white dark:hover:bg-blue-900/40 transition-colors"
                 >
                   <div className="flex items-start gap-3">
                     <i className="pi pi-file-pdf text-red-600 text-xl mt-0.5"></i>

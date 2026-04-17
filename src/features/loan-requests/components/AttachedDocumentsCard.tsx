@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { LoanRequestDetail } from '../models/loanRequestsModel'
+import { mainCustomAxios } from '../../../config/axios.config'
 
 interface AttachedDocumentsCardProps {
   loanRequest: LoanRequestDetail
@@ -79,9 +80,10 @@ interface DocumentCardProps {
   replacementFile?: File | null
   onReplace?: (file: File) => void
   onCancelReplace?: () => void
+  onView?: () => void
 }
 
-const DocumentCard = ({ doc, isEditable, replacementFile, onReplace, onCancelReplace }: DocumentCardProps) => {
+const DocumentCard = ({ doc, isEditable, replacementFile, onReplace, onCancelReplace, onView }: DocumentCardProps) => {
   const onDrop = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles.length > 0 && onReplace) {
       onReplace(acceptedFiles[0])
@@ -129,10 +131,10 @@ const DocumentCard = ({ doc, isEditable, replacementFile, onReplace, onCancelRep
   if (!isEditable) {
     return (
       <div
-        onClick={() => window.open(doc.url, '_blank', 'noopener,noreferrer')}
+        onClick={onView}
         role="button"
         tabIndex={0}
-        onKeyDown={(e) => e.key === 'Enter' && window.open(doc.url, '_blank', 'noopener,noreferrer')}
+        onKeyDown={(e) => e.key === 'Enter' && onView?.()}
         className="group flex items-center p-3 rounded-lg border border-gray-200 bg-white dark:bg-gray-700 dark:border-gray-600 hover:border-blue-400 dark:hover:border-blue-500 hover:shadow-md hover:bg-blue-50/50 dark:hover:bg-blue-900/20 active:scale-[0.98] transition-all duration-200 cursor-pointer select-none"
         title="Clic para ver documento"
       >
@@ -210,16 +212,17 @@ const DocumentCard = ({ doc, isEditable, replacementFile, onReplace, onCancelRep
           <ReplaceIcon />
         </button>
         {/* Botón para ver */}
-        <a
-          href={doc.url}
-          target="_blank"
-          rel="noreferrer"
-          onClick={(e) => e.stopPropagation()}
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation()
+            onView?.()
+          }}
           className="p-2 text-gray-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-full transition-colors"
           title="Ver documento"
         >
           <ExternalLinkIcon />
-        </a>
+        </button>
       </div>
     </div>
   )
@@ -234,6 +237,26 @@ export default function AttachedDocumentsCard({
   
   // Estado para archivos de reemplazo: { documentId: File }
   const [replacementFiles, setReplacementFiles] = useState<Record<string, File>>({})
+
+  const handleOpenDocument = async (documentId: string) => {
+    const previewWindow = window.open('', '_blank', 'noopener,noreferrer')
+    if (!previewWindow) {
+      return
+    }
+
+    try {
+      const response = await mainCustomAxios.get(`/loan-documents/${documentId}/download`, {
+        responseType: 'blob',
+      })
+      const fileUrl = URL.createObjectURL(response.data)
+      previewWindow.location.href = fileUrl
+      previewWindow.addEventListener('beforeunload', () => {
+        URL.revokeObjectURL(fileUrl)
+      }, { once: true })
+    } catch {
+      previewWindow.close()
+    }
+  }
 
   // Manejar reemplazo de documento
   const handleReplaceDocument = (documentId: string, file: File) => {
@@ -323,6 +346,7 @@ export default function AttachedDocumentsCard({
                 replacementFile={replacementFiles[doc.id] || null}
                 onReplace={(file) => handleReplaceDocument(doc.id, file)}
                 onCancelReplace={() => handleCancelReplace(doc.id)}
+                onView={() => handleOpenDocument(doc.id)}
               />
             ))}
           </div>
