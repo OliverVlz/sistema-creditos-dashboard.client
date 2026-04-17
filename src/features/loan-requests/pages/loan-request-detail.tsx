@@ -46,9 +46,6 @@ const LoanRequestDetailPage = () => {
     }) => {
       // Solo refrescar si la notificación es para este préstamo
       if (notification.data?.loanId === id) {
-        console.log(
-          "🔄 Notificación recibida para este préstamo, refrescando..."
-        );
         dispatch(fetchLoanRequestDetail(id));
       }
     };

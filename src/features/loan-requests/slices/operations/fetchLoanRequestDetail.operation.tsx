@@ -11,7 +11,6 @@ export const fetchLoanRequestDetail = createAsyncThunk(
     'loanRequests/fetchLoanRequestDetail',
     async (loanId: string): Promise<LoanRequestDetail> => {
         const response = await mainCustomAxios.get(`/loans/${loanId}`)
-        console.log('Loan request detail response:', response.data)
         return response.data
     }
 )

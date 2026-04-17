@@ -32,8 +32,7 @@ export const fetchLoanRequests = createAsyncThunk(
         if (clientId) params.clientId = clientId // Filtrar por cliente cuando es rol CLIENTE
         
         const response = await mainCustomAxios.get('/loans', { params })
-        console.log('Loan requests response:', response.data)
-        
+
         const loanRequests: LoanRequestTableItem[] = response.data.data.map((loan: LoanRequest): LoanRequestTableItem => ({
             id: loan.id,
             loanNumber: loan.loanNumber,

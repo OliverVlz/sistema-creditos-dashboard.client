@@ -93,8 +93,7 @@ export const manageLoan = createAsyncThunk(
                 },
             }
         )
-        
-        console.log('Loan managed (admin/asesor):', response.data)
+
         return response.data
     }
 )
@@ -133,8 +132,7 @@ export const updateClientDocuments = createAsyncThunk(
                 },
             }
         )
-        
-        console.log('Documents updated (client):', response.data)
+
         return response.data
     }
 )

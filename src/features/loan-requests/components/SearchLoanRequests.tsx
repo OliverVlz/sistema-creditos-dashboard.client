@@ -35,7 +35,6 @@ export default function SearchLoanRequests() {
     if (isClient && user && !profileLoading) {
       // Cargar si no hay profile o si el profile es de otro usuario
       if (!profile || profile.id !== user.id) {
-        console.log('Cargando perfil del cliente...')
         dispatch(fetchMyProfile())
       }
     }
@@ -45,23 +44,15 @@ export default function SearchLoanRequests() {
   useEffect(() => {
     // Esperar a que se cargue la información de autenticación
     if (authLoading) {
-      console.log('Esperando autenticación...')
       return
     }
 
     // Si es cliente, esperar a tener el clientId válido
     if (isClient) {
       if (!clientId) {
-        console.log('Esperando clientId válido... (clientInfo.id)')
         return
       }
-      console.log('ClientId obtenido de clientInfo.id:', clientId)
     }
-
-    console.log('Haciendo petición de loans con filtros:', {
-      ...filters,
-      clientId: clientId || '(sin filtro - ASESOR/ADMIN)'
-    })
 
     dispatch(fetchLoanRequests({ 
       page: filters.page, 

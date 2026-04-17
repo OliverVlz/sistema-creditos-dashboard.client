@@ -21,7 +21,6 @@ export default function AdvertisingManagementPage() {
   const { advertisements, loading, saving } = useAppSelector(
     (state) => state.advertising
   )
-
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [selectedItem, setSelectedItem] = useState<Advertisement | null>(null)
   const [search, setSearch] = useState('')

@@ -113,9 +113,6 @@ export default function LoanRequestsTable() {
     if (!socket) return;
 
     const handleLoanNotification = () => {
-      console.log(
-        "🔄 Notificación recibida, refrescando tabla de préstamos..."
-      );
       dispatch(fetchLoanRequests({}));
     };
 
