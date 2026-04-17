@@ -110,7 +110,7 @@ export default function BulkImportClientsLoansPage() {
 
   const handleUpload = async () => {
     if (!file) {
-      setError("Debes seleccionar un archivo .xlsx");
+      setError("Debes seleccionar un archivo .xlsx o .csv");
       return;
     }
 
@@ -178,14 +178,22 @@ export default function BulkImportClientsLoansPage() {
                 Subir archivo de carga masiva
               </p>
               <p className="text-xs text-gray-500 dark:text-gray-400">
-                Formato permitido: .xlsx
+                Formatos permitidos: .xlsx y .csv
+              </p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                Puedes repetir email y documento para cargar múltiples
+                solicitudes del mismo cliente.
+              </p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                Si fechaNacimiento, estadoLaboral u organizacion van vacíos, se
+                guardan como campos vacíos en el sistema.
               </p>
             </div>
           </div>
 
           <input
             type="file"
-            accept=".xlsx"
+            accept=".xlsx,.csv,text/csv"
             onClick={handleFileInputClick}
             onChange={handleFileChange}
             className="mt-4 block w-full cursor-pointer text-sm text-gray-900 dark:text-gray-200 file:mr-4 file:cursor-pointer file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-brand-600 file:text-white hover:file:bg-brand-700"

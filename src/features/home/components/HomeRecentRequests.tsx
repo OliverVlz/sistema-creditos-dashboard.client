@@ -8,6 +8,7 @@ interface HomeRecentRequestsProps {
 
 const statusColors: Record<string, string> = {
   pendiente: 'bg-amber-50 text-amber-700 border-amber-200',
+  preaprobado: 'bg-sky-50 text-sky-700 border-sky-200',
   aprobado: 'bg-emerald-50 text-emerald-700 border-emerald-200',
   rechazado: 'bg-rose-50 text-rose-700 border-rose-200',
   en_revision: 'bg-sky-50 text-sky-700 border-sky-200',
