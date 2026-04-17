@@ -239,10 +239,11 @@ export default function AttachedDocumentsCard({
   const [replacementFiles, setReplacementFiles] = useState<Record<string, File>>({})
 
   const handleOpenDocument = async (documentId: string) => {
-    const previewWindow = window.open('', '_blank', 'noopener,noreferrer')
+    const previewWindow = window.open('', '_blank')
     if (!previewWindow) {
       return
     }
+    previewWindow.document.write('<p>Cargando documento...</p>')
 
     try {
       const response = await mainCustomAxios.get(`/loan-documents/${documentId}/download`, {
@@ -254,7 +255,7 @@ export default function AttachedDocumentsCard({
         URL.revokeObjectURL(fileUrl)
       }, { once: true })
     } catch {
-      previewWindow.close()
+      previewWindow.document.body.innerHTML = '<p>No fue posible abrir el documento.</p>'
     }
   }
 
