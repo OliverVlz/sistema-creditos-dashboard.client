@@ -16,6 +16,8 @@ const SPACING = "gap-[10px] sm:gap-[12px] md:gap-[14px]";
 const PADDING = "pt-[16px] sm:pt-[18px] md:pt-[20px] pr-[16px] sm:pr-[18px] md:pr-[20px] pb-[16px] sm:pb-[18px] md:pb-[20px] pl-[16px] sm:pl-[18px] md:pl-[20px]";
 
 const Footer = () => {
+  const currentYear = new Date().getFullYear();
+
   return (
     <footer className={`w-full bg-[#333333] ${PADDING}`}>
       <div className="w-full max-w-[1440px] mx-auto">
@@ -100,7 +102,7 @@ atencion.cliente@inversionesmurillomartinez.com                  </span>
 
           <div className="pt-3 pb-1">
             <p className={`font-plus-jakarta ${TEXT_SIZE} font-medium leading-[20px] sm:leading-[22px] md:leading-[24px] text-center text-white/80`}>
-              ©2025 Todos los Derechos reservados
+              ©{currentYear} Todos los Derechos reservados
             </p>
           </div>
         </div>
