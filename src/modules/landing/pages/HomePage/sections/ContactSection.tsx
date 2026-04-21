@@ -12,7 +12,7 @@ export default function ContactSection() {
     {
       icon: emailIcon,
       label: "Email",
-      value: "inversionesmurillomartinez@outlook.es",
+      value: "atencion.cliente@inversionesmurillomartinez.com",
       iconClass: "w-4 h-3",
     },
     {

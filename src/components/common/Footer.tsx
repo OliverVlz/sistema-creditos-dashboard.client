@@ -90,8 +90,7 @@ const Footer = () => {
                     <img src={emailIcon} alt="Email" className={ICON_SIZE} />
                   </div>
                   <span className={`font-plus-jakarta ${TEXT_SIZE} text-center leading-[18px] text-white sm:leading-[20px] md:leading-[22px] lg:text-right`}>
-                    inversionesmurillomartinez@outlook.es
-                  </span>
+atencion.cliente@inversionesmurillomartinez.com                  </span>
                 </div>
               </div>
             </div>
