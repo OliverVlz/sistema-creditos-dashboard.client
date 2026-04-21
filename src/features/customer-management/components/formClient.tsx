@@ -482,7 +482,7 @@ const FormClient: React.FC<FormClientProps> = ({
               type="text"
               id="address"
               name="address"
-              placeholder="Calle 123 #45-67, Ciudad"
+              placeholder="Calle 25 #12 - 27 of 403"
               value={formData.address}
               onChange={(e) => handleInputChange('address', e.target.value)}
               onBlur={() => handleBlur('address')}

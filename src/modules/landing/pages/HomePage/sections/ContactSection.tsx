@@ -24,7 +24,7 @@ export default function ContactSection() {
     {
       icon: locationIcon,
       label: "Dirección",
-      value: "Calle 25 N 12-27 110110 Bogotá, Colombia",
+      value: "Calle 25 #12 - 27 of 403",
       iconClass: "w-7 h-5",
     },
   ];

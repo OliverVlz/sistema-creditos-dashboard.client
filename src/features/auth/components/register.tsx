@@ -494,7 +494,7 @@ export default function RegisterForm() {
                         : ""
                     }`}
                     disabled={isLoading}
-                    placeholder="Calle 123 # 45 - 67"
+                  placeholder="Calle 25 #12 - 27 of 403"
                   />
                   {errors.address && touched.address && (
                     <p className="mt-1 text-xs text-red-500 ml-1">
